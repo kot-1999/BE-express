@@ -4,11 +4,20 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "debug": "cross-env node -r dotenv/config src/index.ts"
   },
-  "dependencies": {},
+  "private": true,
+  "dependencies": {
+    "config": "3.3.9",
+    "cross-env": "7.0.3",
+    "dotenv": "16.3.1",
+    "express": "4.21.2"
+  },
   "devDependencies": {
-    "typescript": "^5.5.3"
-  },
-  "private": true
+    "@types/config": "3.3.0",
+    "@types/express": "4.17.17",
+    "typescript": "5.3.3",
+    "ts-node": "10.9.1"
+  }
 }
