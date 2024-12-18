@@ -1,12 +1,10 @@
-import express from 'express'
-import config from "config";
+import express from 'express';
 
-const appConfig = config.get('app')
+import api from './api';
 
+const app = express();
 
-const app = express()
+app.use(express.json());
+app.use(api());
 
-app.use(express.json())
-
-
-export default app
+export default app;

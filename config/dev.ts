@@ -1,8 +1,8 @@
-import 'dotenv/config'
+import 'dotenv/config';
+import { IConfig } from '../src/types/config';
 
-export default <{ app: { port: string, host: string} }> {
+export default <IConfig>{
     app: {
         port: process.env.PORT,
-        host: process.env.HOST,
-    }
-}
+    },
+};
