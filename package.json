@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "debug": "cross-env node -r dotenv/config -r ts-node/register src/index.ts",
+    "debug": "cross-env nodemon --watch src -L --verbose --exec \"node --watch -r dotenv/config -r ts-node/register src/index.ts\"",
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint:fix": "eslint 'src/**/*.{ts,js}' --fix"
   },
@@ -29,6 +29,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.14.0",
     "ts-node": "10.9.1",
+    "nodemon": "2.0.7",
     "typescript": "5.3.3",
     "typescript-eslint": "^8.18.1"
   }
