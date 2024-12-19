@@ -1,8 +1,11 @@
 import 'dotenv/config'
-import {IConfig} from "../src/types/config";
+import { IConfig } from '../src/types/config'
 
+const { env } = process
+const x = '2'
 export default <IConfig> {
     app: {
-        port: process.env.PORT
+        port: env.PORT,
+        asd: env.PORT && x === env.PORT ? env.PORT : env.PORT
     }
 }

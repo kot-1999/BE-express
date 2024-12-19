@@ -1,11 +1,11 @@
-import { Router } from 'express';
+import { Router } from 'express'
 
-import testRouter from './test';
+import testRouter from './test'
 
-const router = Router();
+const router = Router()
 
 export default () => {
-    router.use('/test', testRouter());
+    router.use('/test', testRouter())
 
-    return router;
-};
+    return router
+}

@@ -1,10 +1,10 @@
-import express from 'express';
+import express from 'express'
 
-import api from './api';
+import api from './api'
 
-const app = express();
+const app = express()
 
-app.use(express.json());
-app.use(api());
+app.use(express.json())
+app.use(api())
 
-export default app;
+export default app
