@@ -19,10 +19,7 @@ export default [{
     import: eslintImport
   },
   rules: {
-    // rule: +++
-    // outomatically fixable
-    // "prettier/prettier": "error",
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }], //
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "indent": ["error", 4],
     "quotes": ["error", "single"],
     "semi": ["error", "never"],
