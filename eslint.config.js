@@ -19,16 +19,20 @@ export default [{
     import: eslintImport
   },
   rules: {
-    // "prettier/prettier": "error",
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "prettier/prettier": "error",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }], //
     "indent": ["error", 4],
     "quotes": ["error", "single"],
-    "semi": ["error", "always"],
+    "semi": ["error", "never"],
     "max-len": ["warn", { "code": 120 }],
     curly: ["error", "all"],
     "no-console": "warn",
     eqeqeq: ["error", "always"],
     "no-var": "error",
+    "key-spacing": ["error", { "beforeColon": false, "afterColon": true }],
+    "object-curly-spacing": ["error", "always"],
+    "no-extra-semi": "error",
+    "comma-dangle": ["error", "never"],
     "prefer-const": "error",
     "no-duplicate-imports": "error",
     "@typescript-eslint/no-explicit-any": "warn",
