@@ -11,4 +11,7 @@ yarn-error.log*
 .vscode/*
 .idea/*
 
-.env
+.env.template
+.env.development
+.env.production
+.env.testing
