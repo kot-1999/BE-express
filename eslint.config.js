@@ -19,11 +19,36 @@ export default [{
     import: eslintImport
   },
   rules: {
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectExpression": { "multiline": true, "consistent": true },
+        "ObjectPattern": { "multiline": true, "consistent": true },
+        "ImportDeclaration": { "multiline": true, "consistent": true },
+        "ExportDeclaration": { "multiline": true, "consistent": true }
+      }
+    ],
+    "arrow-parens": ["error", "always"],
+    "object-property-newline": [
+      "error",
+      { "allowAllPropertiesOnSameLine": false }
+    ],
+    "operator-linebreak": ["error", "before"],
+    "function-paren-newline": ["error", "multiline"],
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "indent": ["error", 4],
+    "wrap-iife": ["error", "inside"],
     "quotes": ["error", "single"],
     "semi": ["error", "never"],
-    "max-len": ["warn", { "code": 120 }],
+    "max-len": ["error", {
+      "code": 120,
+      "ignoreComments": false, // Ignore long comments
+      "ignoreUrls": false, // Ignore long URLs
+      "ignoreStrings": false, // Ignore strings in the line length calculation
+      "ignoreTemplateLiterals": false, // Ignore template literals
+      "ignoreRegExpLiterals": false
+    }],
+    "newline-per-chained-call": ["error", { "ignoreChainWithDepth": 2 }],
     curly: ["error", "all"],
     "no-console": "warn",
     eqeqeq: ["error", "always"],
@@ -33,9 +58,12 @@ export default [{
     "no-extra-semi": "error",
     "comma-dangle": ["error", "never"],
     "prefer-const": "error",
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
     "no-duplicate-imports": "error",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+    "import/no-cycle": "error",
+    "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0, "maxBOF": 0 }],
     "import/order": [
       "error",
       {
