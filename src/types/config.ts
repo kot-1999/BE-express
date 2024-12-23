@@ -1,5 +1,8 @@
 export interface IConfig {
   app: {
-    port: string;
-  };
+    port: string
+  }
+  database: {
+    postgresURL: string
+  }
 }
