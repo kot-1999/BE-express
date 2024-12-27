@@ -1,15 +1,17 @@
-import express from 'express'
+import { Router } from 'express'
 
 import authorizationRouter from './b2c/AuthorizationRouter'
+import userRouter from './b2c/UserRouter'
 
-const b2cCommon = 'b2c'
-// const b2bCommon = 'b2b'
+const router = Router()
 
 export default function authorizeRouters() {
-    const router = express.Router()
+    // eslint-disable-next-line no-console
+    console.log('Routes are initialized'.green)
     
     // B2C
-    router.use(authorizationRouter(b2cCommon))
+    router.use('/b2c/v1/authorization',authorizationRouter())
+    router.use('/b2c/v1/user', userRouter())
 
     return router
 }

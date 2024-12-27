@@ -1,11 +1,10 @@
 import { UserRole } from '@prisma/client'
-import { Response, NextFunction } from 'express'
+import { Response, NextFunction, AuthUserRequest } from 'express'
 import Joi from 'joi'
 
 import prisma from '../../../services/Prisma'
 import { AbstractController } from '../../../types/AbstractController'
 import { JoiCommon } from '../../../types/JoiCommon'
-import { AuthRequest } from '../../../types/request'
 import { IError } from '../../../utils/IError'
 
 export class UsersController extends AbstractController {
@@ -15,7 +14,7 @@ export class UsersController extends AbstractController {
         lastName: JoiCommon.string.name.allow(null),
         email: JoiCommon.string.email.allow(null),
         emailVerified: Joi.boolean().required(),
-        role: Joi.string().valid(Object.values(UserRole))
+        role: Joi.string().valid(...Object.values(UserRole))
             .required(),
         createdAt: Joi.date().iso()
             .required(),
@@ -40,7 +39,7 @@ export class UsersController extends AbstractController {
         },
         response: {
             getUser: JoiCommon.object.response.keys({
-                body: Joi.object(this.userSchema.required())
+                body: this.userSchema.required()
             }),
             getUsers: JoiCommon.object.response.keys({
                 body: Joi.object({
@@ -63,7 +62,7 @@ export class UsersController extends AbstractController {
     private GetUserReqType: Joi.extractType<typeof UsersController.schemas.request.getUser>
     private GetUserResType: Joi.extractType<typeof UsersController.schemas.response.getUser>
     async getUser(
-        req: AuthRequest & typeof this.GetUserReqType,
+        req: AuthUserRequest & typeof this.GetUserReqType,
         res: Response,
         next: NextFunction
     ): Promise<void | (Response & typeof this.GetUserResType)> {
@@ -114,7 +113,7 @@ export class UsersController extends AbstractController {
     private GetUsersReqType: Joi.extractType<typeof UsersController.schemas.request.getUsers>
     private GetUsersResType: Joi.extractType<typeof UsersController.schemas.request.getUsers>
     async getUsers(
-        req: AuthRequest & typeof this.GetUsersReqType,
+        req: AuthUserRequest & typeof this.GetUsersReqType,
         res: Response,
         next: NextFunction
     ): Promise<void | (Response & typeof this.GetUsersResType)> {

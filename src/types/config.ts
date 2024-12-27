@@ -8,4 +8,9 @@ export interface IConfig {
     postgresURL: string
   }
   googleStrategy: OAuth2StrategyOptionsWithoutRequiredURLs
+  cookieSession: {
+    name: string
+    maxAge: number
+    keys: string[]
+  }
 }

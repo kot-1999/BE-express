@@ -67,8 +67,8 @@ export default [{
     "import/order": [
       "error",
       {
-        "alphabetize": { "order": "asc" },
-        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+        "alphabetize": { "order": "asc", "caseInsensitive": true },
+        "groups": ["builtin", "external", "internal", ["parent", "sibling", "index"], "object", "type"],
         "newlines-between": "always"
       }
     ],
