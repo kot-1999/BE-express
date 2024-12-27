@@ -1,3 +1,5 @@
+import { OAuth2StrategyOptionsWithoutRequiredURLs } from 'passport-google-oauth20'
+
 export interface IConfig {
   app: {
     port: string
@@ -5,4 +7,5 @@ export interface IConfig {
   database: {
     postgresURL: string
   }
+  googleStrategy: OAuth2StrategyOptionsWithoutRequiredURLs
 }
