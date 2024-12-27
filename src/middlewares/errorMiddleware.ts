@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { IError } from '../types/error'
+import { IError } from '../utils/IError'
 
 export default function errorMiddleware(err: Error, req: Request, res: Response, _next: NewableFunction) {
     // log an error

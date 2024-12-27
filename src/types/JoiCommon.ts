@@ -22,6 +22,9 @@ export class JoiCommon {
             body: Joi.object(),
             params: Joi.object(),
             headers: Joi.object()
+        }),
+        response: Joi.object({
+            body: Joi.object()
         })
     }
 }
