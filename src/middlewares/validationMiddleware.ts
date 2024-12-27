@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { Schema } from 'joi'
 
-import { IError } from '../types/error'
+import { IError } from '../utils/IError'
 
 export default function validationMiddleware(schema: Schema) {
     return (req: Request, res: Response, next: NextFunction) => {
