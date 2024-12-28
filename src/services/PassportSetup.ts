@@ -82,7 +82,7 @@ class PassportSetup {
                     }
                 }
             })
-            done(user ? new IError(401, 'User wasn\'t deserialized') : null, user)
+            done(user ? null : new IError(401, 'User wasn\'t deserialized'), user)
         })
     }
 }

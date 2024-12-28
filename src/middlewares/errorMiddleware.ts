@@ -3,8 +3,8 @@ import { Request, Response } from 'express'
 import { IError } from '../utils/IError'
 
 export default function errorMiddleware(err: Error, req: Request, res: Response, _next: NewableFunction) {
-    // log an error
-    console.log('ERROR_MIDDLEWARE:', err.message)
+    // eslint-disable-next-line no-console
+    console.log('ERROR_MIDDLEWARE:', err.message, err)
 
     let messages = []
     let code = 500

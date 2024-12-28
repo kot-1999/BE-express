@@ -2,6 +2,7 @@ import { Router } from 'express'
 import passport from 'passport'
 
 import { AuthorizationController } from '../../controllers/b2c/v1/AuthorizationController'
+import authorizationMiddleware from '../../middlewares/authorizationMiddleware'
 import validationMiddleware from '../../middlewares/validationMiddleware'
 
 // Init router and controller
@@ -18,16 +19,19 @@ export default function authorizationRouter() {
     router.get(
         '/google',
         passport.authenticate('google', { scope: ['profile', 'email'] })
-        // validationMiddleware(AuthorizationController.schemas.request.register)
-        // authorizationController.google
     )
 
     router.get(
         '/google/redirect',
         // validationMiddleware(AuthorizationController.schemas.request.register),
-        passport.authenticate('google', { scope: ['profile', 'email'] }),
+        passport.authenticate('google'),
         authorizationController.googleRedirect
     )
 
+    router.get(
+        '/logout',
+        authorizationMiddleware,
+        authorizationController.logout
+    )
     return router
 }

@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import passport from 'passport'
 
 import { UsersController } from '../../controllers/b2c/v1/UserController'
 import validationMiddleware from '../../middlewares/validationMiddleware'
@@ -12,7 +11,7 @@ export default function authorizationRouter() {
     // List endpoints
     router.get(
         '/:userID',
-        passport.authenticate('google'),
+        // passport.authenticate('google', { scope: ['profile'] }),
         validationMiddleware(UsersController.schemas.request.getUser),
         userController.getUser
     )
