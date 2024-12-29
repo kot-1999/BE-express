@@ -60,6 +60,23 @@ class PassportSetup {
 
         done(user ? null : new IError(401, 'Not authorized'), user)
     }
+
+    private serializeUser(user: User, done: (err: Error | null, id: string | null) => void): void {
+        const err = !user?.id ? new IError(401, 'Authorization id is missing') : null
+        done(err, user.id)
+    }
+
+    private async deserializeUser(id: string, done: (err: Error | null, user: User | null) => void): Promise<void> {
+        const user = await prisma.user.findFirst({
+            where: {
+                id: {
+                    equals: id
+                }
+            }
+        })
+        const err = user ? null : new IError(401, 'User wasn\'t deserialized')
+        done(err, user)
+    }
     
     constructor() {
         passport.use('google', new GoogleStrategy(
@@ -71,19 +88,8 @@ class PassportSetup {
             this.googleCallback
         ))
 
-        passport.serializeUser((user: { id: string }, done) => {
-            done(null, user.id)
-        })
-        passport.deserializeUser(async (id: string, done) => {
-            const user = await prisma.user.findFirst({
-                where: {
-                    id: {
-                        equals: id
-                    }
-                }
-            })
-            done(user ? null : new IError(401, 'User wasn\'t deserialized'), user)
-        })
+        passport.serializeUser(this.serializeUser)
+        passport.deserializeUser(this.deserializeUser)
     }
 }
 
