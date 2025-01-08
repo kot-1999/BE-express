@@ -13,4 +13,11 @@ export interface IConfig {
     maxAge: number
     keys: string[]
   }
+  jwt: {
+    secret: string,
+    expiresIn: string
+  }
+  encryption: {
+    key: string
+  }
 }

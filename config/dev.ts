@@ -27,6 +27,13 @@ export default <IConfig>{
                 return req?.cookies?.jwt // Extract JWT from cookies
             }
         ]),
-        secretOrKey: 'your_jwt_secret' // Replace with a secure key
+        secretOrKey: process.env.COOKIE_SECRET_KEY // Replace with a secure key
+    },
+    jwt: {
+        secret: process.env.JWT_SECRET,
+        expiresIn: process.env.JWT_EXPIRES_IN
+    },
+    encryption: {
+        key: process.env.ENCRYPTION_KEY
     }
 }
