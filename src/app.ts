@@ -31,8 +31,6 @@ app.use(cookieSession({
 app.use(passport.initialize())
 app.use(passport.session())
 
-// app.use('/api', api())
-
 app.use('/api', authorizeRouters())
 app.use(errorMiddleware)
 app.get('/', (req, res) => {
