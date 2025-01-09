@@ -1,6 +1,6 @@
 services:
   app:
-    image: node:22.9.0
+    image: node:22.8.0
     container_name: app
     ports:
       - ${PORT}:${PORT}
