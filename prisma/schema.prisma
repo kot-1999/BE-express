@@ -23,6 +23,6 @@ model User {
   role UserRole @default(Default)
   googleProfileID String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime? @updatedAt
   @@map("users")
 }

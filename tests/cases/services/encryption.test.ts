@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import config from 'config'
 
-import { EncryptionService } from '../../src/services/Encryption'
-import { IConfig } from '../../src/types/config'
+import { EncryptionService } from '../../../src/services/Encryption'
+import { IConfig } from '../../../src/types/config'
 
 describe('Encryption', () => {
     const encryptionConfig = config.get<IConfig['encryption']>('encryption')
