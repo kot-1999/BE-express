@@ -3,6 +3,7 @@ import Joi from 'joi'
 
 import { AbstractController } from '../../../types/AbstractController'
 import { JoiCommon } from '../../../types/JoiCommon'
+import { IError } from '../../../utils/IError'
 
 export class AuthorizationController extends AbstractController {
     public static readonly schemas = {
@@ -65,18 +66,6 @@ export class AuthorizationController extends AbstractController {
         }
     }
 
-    google(
-        req: Request & Joi.extractType<typeof AuthorizationController.schemas.request.register>,
-        res: Response, next: NextFunction
-    ) {
-        try {
-
-            return res.status(200).json({})
-        } catch (err) {
-            return next(err)
-        }
-    }
-
     googleRedirect(
         req: Request,
         res: Response,
@@ -84,6 +73,31 @@ export class AuthorizationController extends AbstractController {
     ) {
         try {
             return res.status(200).json({ message: 'callback URI' })
+        } catch (err) {
+            return next(err)
+        }
+    }
+
+    logout(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            req.logout((error) => {
+                if (error) {
+                    throw new IError(500, 'Failed to log out')
+                }
+                req.session?.destroy((error: Error) => {
+                    if (error) {
+                        throw new IError(500, 'Failed to destroy session')
+                    }
+                })
+            })
+
+            res.status(200).json({
+                message: 'User was logged out'
+            })
         } catch (err) {
             return next(err)
         }

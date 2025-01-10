@@ -4,5 +4,6 @@
         "config/**/*",
         "src/**/*",
         ".eslint.config.js",
+        "tests/**/*"
     ]
 }

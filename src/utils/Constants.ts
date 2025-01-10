@@ -1,5 +1,5 @@
 export class Constants {
-    static readonly string = {
+    static readonly number = {
         MIN_NAME_LENGTH: 2,
         MAX_STRING_LENGTH: 255
     }
