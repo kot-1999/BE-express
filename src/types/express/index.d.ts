@@ -6,6 +6,9 @@ declare module 'express' {
         body: {}
         query: {}
         params: {}
+        cookies: {
+            jwt: string | undefined
+        }
     }
 
     interface AuthUserRequest extends Request {
