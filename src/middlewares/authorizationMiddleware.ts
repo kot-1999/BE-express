@@ -1,11 +1,20 @@
 import { Request, NextFunction, Response } from 'express'
 
+import { JwtService } from '../services/Jwt'
 import { IError } from '../utils/IError'
 
 export default function authorizationMiddleware(req: Request, res: Response, next: NextFunction) {
-    if (!req.isAuthenticated()) {
-        throw new IError(401, 'Authentication required')
+    // If user is using passport-google-oauth-20
+    if (req.isAuthenticated()) {
+        return next()
     }
 
-    return next()
+    // If user is using JWT
+    const token = req.cookies.jwt
+    if (token) {
+        JwtService.verifyToken(token)
+        return next()
+    }
+
+    throw new IError(401, 'Authentication required')
 }

@@ -16,6 +16,11 @@ export default function authorizationRouter() {
         validationMiddleware(AuthorizationController.schemas.request.register),
         authorizationController.register
     )
+    router.post(
+        '/login',
+        validationMiddleware(AuthorizationController.schemas.request.login),
+        authorizationController.login
+    )
     router.get(
         '/google',
         passport.authenticate('google', { scope: ['profile', 'email'] })
