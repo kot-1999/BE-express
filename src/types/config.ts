@@ -13,6 +13,7 @@ export interface IConfig {
     name: string
     maxAge: number
     keys: string[]
+    secure: boolean
   }
   jwt: {
     secret: string,
