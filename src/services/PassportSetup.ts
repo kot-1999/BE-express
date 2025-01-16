@@ -77,6 +77,10 @@ class PassportSetup {
 
     private async b2cJwtStrategy(payload: JwtPayload, done: VerifyCallback) {
         try {
+            if (payload.aud !== 'b2c') {
+                throw new IError(401, 'Not authorized (JwtStrategy)')
+            }
+
             const user = await prisma.user.findFirst({
                 where: {
                     id: payload.id
