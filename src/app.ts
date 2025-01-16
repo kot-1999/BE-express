@@ -1,7 +1,6 @@
 import config from 'config'
-import cookieParser from 'cookie-parser'
-import cookieSession from 'cookie-session'
 import express from 'express'
+import session from 'express-session'
 import passport from 'passport'
 
 // Internal imports
@@ -20,12 +19,16 @@ const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cookieParser())
 
-app.use(cookieSession({
+app.use(session({
+    secret: cookieSessionConfig.keys,
+    resave: false,
+    saveUninitialized: false,
     name: cookieSessionConfig.name,
-    maxAge: cookieSessionConfig.maxAge,
-    keys: cookieSessionConfig.keys
+    cookie: {
+        maxAge: cookieSessionConfig.maxAge,
+        secure: cookieSessionConfig.secure
+    }
 }))
 
 app.use(passport.initialize())

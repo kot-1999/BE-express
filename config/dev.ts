@@ -11,7 +11,8 @@ export default <IConfig>{
     cookieSession: {
         name: 'session',
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
-        keys: [process.env.COOKIE_SECRET_KEY]
+        keys: [process.env.COOKIE_SECRET_KEY],
+        secure: false
     },
     database: {
         postgresURL: process.env.POSTGRES_URL
@@ -24,7 +25,8 @@ export default <IConfig>{
     passport: {
         jwtFromRequest: ExtractJwt.fromExtractors([
             (req: Request) => {
-                return req?.cookies?.jwt // Extract JWT from cookies
+                console.log('EXTRACTING JWT', req?.session?.jwt)
+                return req?.session?.jwt ?? null // Extract JWT from cookies
             }
         ]),
         secretOrKey: process.env.COOKIE_SECRET_KEY // Replace with a secure key
