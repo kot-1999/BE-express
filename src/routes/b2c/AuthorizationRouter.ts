@@ -4,6 +4,7 @@ import passport from 'passport'
 import { AuthorizationController } from '../../controllers/b2c/v1/AuthorizationController'
 import authorizationMiddleware from '../../middlewares/authorizationMiddleware'
 import validationMiddleware from '../../middlewares/validationMiddleware'
+import { PassportStrategy } from '../../utils/enums'
 
 // Init router and controller
 const router = Router()
@@ -16,6 +17,11 @@ export default function authorizationRouter() {
         validationMiddleware(AuthorizationController.schemas.request.register),
         authorizationController.register
     )
+    router.post(
+        '/login',
+        validationMiddleware(AuthorizationController.schemas.request.login),
+        authorizationController.login
+    )
     router.get(
         '/google',
         passport.authenticate('google', { scope: ['profile', 'email'] })
@@ -23,14 +29,13 @@ export default function authorizationRouter() {
 
     router.get(
         '/google/redirect',
-        // validationMiddleware(AuthorizationController.schemas.request.register),
         passport.authenticate('google'),
         authorizationController.googleRedirect
     )
 
     router.get(
         '/logout',
-        authorizationMiddleware,
+        authorizationMiddleware([PassportStrategy.jwtB2c, PassportStrategy.google]),
         authorizationController.logout
     )
     return router

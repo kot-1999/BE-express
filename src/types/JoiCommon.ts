@@ -7,8 +7,8 @@ export class JoiCommon {
         name: Joi.string().trim()
             .alphanum()
             .allow('\'', '-')
-            .min(Constants.string.MIN_NAME_LENGTH)
-            .max(Constants.string.MAX_STRING_LENGTH),
+            .min(Constants.number.MIN_NAME_LENGTH)
+            .max(Constants.number.MAX_STRING_LENGTH),
         email: Joi.string().email()
             .trim()
             .case('lower')

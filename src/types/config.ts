@@ -1,4 +1,5 @@
 import { OAuth2StrategyOptionsWithoutRequiredURLs } from 'passport-google-oauth20'
+import { JwtFromRequestFunction } from 'passport-jwt'
 
 export interface IConfig {
   app: {
@@ -12,6 +13,7 @@ export interface IConfig {
     name: string
     maxAge: number
     keys: string[]
+    secure: boolean
   }
   jwt: {
     secret: string,
@@ -19,5 +21,9 @@ export interface IConfig {
   }
   encryption: {
     key: string
+  }
+  passport: {
+    secretOrKey: string
+    jwtFromRequest: JwtFromRequestFunction
   }
 }

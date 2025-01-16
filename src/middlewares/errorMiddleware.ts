@@ -1,8 +1,8 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 
 import { IError } from '../utils/IError'
 
-export default function errorMiddleware(err: Error, req: Request, res: Response, _next: NewableFunction) {
+export default function errorMiddleware(err: Error, req: Request, res: Response, _next: NextFunction) {
     // eslint-disable-next-line no-console
     console.log('ERROR_MIDDLEWARE:', err.message, err)
 
