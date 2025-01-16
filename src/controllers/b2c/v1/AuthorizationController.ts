@@ -38,7 +38,6 @@ export class AuthorizationController extends AbstractController {
                     email: JoiCommon.string.email.required()
                 })
             }),
-
             googleRedirect: JoiCommon.object.request.keys({
                 query: Joi.object({
                     code: Joi.string().required()
@@ -92,9 +91,11 @@ export class AuthorizationController extends AbstractController {
                     password: EncryptionService.hashSHA256(EncryptionService.decryptAES(body.password))
                 }
             })
-            
+            req.session.jwt = JwtService.generateToken({
+                id: user.id,
+                aud: 'b2c'
+            })
             return res
-                .cookie('jwt', JwtService.generateToken({ id: user.id }))
                 .status(200)
                 .json({
                     user: {
@@ -134,10 +135,13 @@ export class AuthorizationController extends AbstractController {
             if (user.password !== EncryptionService.hashSHA256(decryptedPassword)) {
                 throw new IError(401, 'Password or email is incorrect')
             }
-            const token = JwtService.generateToken({ id: user.id })
-            console.log('LOGIN TOKEN: ', token)
+
+            req.session.jwt = JwtService.generateToken({
+                id: user.id,
+                aud: 'b2c'
+            })
+
             return res
-                .cookie('jwt', token)
                 .status(200)
                 .json({
                     user: {
@@ -179,7 +183,7 @@ export class AuthorizationController extends AbstractController {
             })
 
             res
-                .clearCookie('jwt')
+                .clearCookie('connect.sid')
                 .status(200)
                 .json({
                     message: 'User was logged out'

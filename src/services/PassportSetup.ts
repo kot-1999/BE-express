@@ -1,11 +1,13 @@
 import { User } from '@prisma/client'
 import config from 'config'
+import { JwtPayload } from 'jsonwebtoken'
 import passport from 'passport'
 import { Profile, Strategy as GoogleStrategy, VerifyCallback } from 'passport-google-oauth20'
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
 
 import prisma from './Prisma'
 import { IConfig } from '../types/config'
+import { PassportStrategy } from '../utils/enums'
 import { IError } from '../utils/IError'
 
 const googleStrategyConfig = config.get<IConfig['googleStrategy']>('googleStrategy')
@@ -73,7 +75,7 @@ class PassportSetup {
         }
     }
 
-    private async jwtStrategy(payload: { id: string }, done: VerifyCallback) {
+    private async b2cJwtStrategy(payload: JwtPayload, done: VerifyCallback) {
         try {
             const user = await prisma.user.findFirst({
                 where: {
@@ -108,7 +110,7 @@ class PassportSetup {
     }
     
     constructor() {
-        passport.use('google', new GoogleStrategy(
+        passport.use(PassportStrategy.google, new GoogleStrategy(
             {
                 clientID: googleStrategyConfig.clientID,
                 clientSecret: googleStrategyConfig.clientSecret,
@@ -117,12 +119,12 @@ class PassportSetup {
             this.googleStrategy
         ))
 
-        passport.use('jwt', new JwtStrategy(
+        passport.use(PassportStrategy.jwtB2c, new JwtStrategy(
             {
                 jwtFromRequest: ExtractJwt.fromExtractors([passportConfig.jwtFromRequest]),
                 secretOrKey: jwtConfig.secret
             }, 
-            this.jwtStrategy
+            this.b2cJwtStrategy
         ))
 
         passport.serializeUser(this.serializeUser)
