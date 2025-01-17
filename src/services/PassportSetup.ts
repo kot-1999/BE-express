@@ -69,14 +69,18 @@ class PassportSetup {
                 throw new IError(401, 'Not authorized (googleStrategy)')
             }
 
-            done(null, user)
+            return done(null, user)
         } catch (err) {
-            done(err, false)
+            return done(err, false)
         }
     }
 
     private async b2cJwtStrategy(payload: JwtPayload, done: VerifyCallback) {
         try {
+            if (payload.aud !== 'b2c') {
+                throw new IError(401, 'Not authorized (JwtStrategy)')
+            }
+
             const user = await prisma.user.findFirst({
                 where: {
                     id: payload.id
@@ -88,7 +92,7 @@ class PassportSetup {
             }
             return done(null, user)
         } catch (err) {
-            done(err, false)
+            return done(err, false)
         }
     }
 

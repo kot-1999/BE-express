@@ -3,10 +3,15 @@ Test project
 
 To start application run: `docker compose up`
 
+TODO: implement tests for google OAuth
 
-TODO: implement JWT authorization to be possible alongside with OAuth
+TODO: implement soft deletion for database raws
 
-TODO: implement tests
+TODO: Implement email service
 
-TODO: implement soft delete for database raws
+TODO: Implement forgot password alongside with Bearer token extraction from headers
+
+TODO: Implement seeders
+
+TODO: Create centralized point of access to DB
 

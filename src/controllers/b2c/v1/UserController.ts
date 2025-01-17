@@ -38,18 +38,16 @@ export class UsersController extends AbstractController {
             })
         },
         response: {
-            getUser: JoiCommon.object.response.keys({
-                body: this.userSchema.required()
+            getUser: Joi.object({
+                user: this.userSchema.required()
             }),
-            getUsers: JoiCommon.object.response.keys({
-                body: Joi.object({
-                    users: Joi.array().items(this.userSchema.required())
-                        .required(),
-                    pagination: Joi.object({
-                        page: Joi.number().required(),
-                        limit: Joi.number().required(),
-                        totalCount: Joi.number().required()
-                    })
+            getUsers: Joi.object({
+                users: Joi.array().items(this.userSchema.required())
+                    .required(),
+                pagination: Joi.object({
+                    page: Joi.number().required(),
+                    limit: Joi.number().required(),
+                    totalCount: Joi.number().required()
                 })
             })
         }
@@ -67,7 +65,7 @@ export class UsersController extends AbstractController {
         next: NextFunction
     ): Promise<void | (Response & typeof this.GetUserResType)> {
         try {
-            let resultUser: typeof this.GetUserResType['body'] | null = null
+            let resultUser: typeof this.GetUserResType | null = null
             const { user, params: { userID } } = req
             if (user.id === userID) {
                 resultUser = {

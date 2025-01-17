@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction, AuthUserRequest } from 'express'
 import Joi from 'joi'
 
 import { EncryptionService } from '../../../services/Encryption'
@@ -9,6 +9,13 @@ import { JoiCommon } from '../../../types/JoiCommon'
 import { IError } from '../../../utils/IError'
 
 export class AuthorizationController extends AbstractController {
+    private static readonly userSchema = Joi.object({
+        user: Joi.object({
+            id: Joi.string().uuid()
+                .required()
+        }).required()
+    })
+
     public static readonly schemas = {
         request: {
             register: JoiCommon.object.request.keys({
@@ -16,7 +23,8 @@ export class AuthorizationController extends AbstractController {
                     firstName: JoiCommon.string.name.required(),
                     lastName: JoiCommon.string.name.required(),
                     email: JoiCommon.string.email.required(),
-                    password: Joi.string().required()
+                    password: Joi.string().min(3)
+                        .required()
                 }).required()
             }).required(),
 
@@ -33,11 +41,7 @@ export class AuthorizationController extends AbstractController {
                 })
             }),
 
-            logout: JoiCommon.object.request.keys({
-                body: Joi.object({
-                    email: JoiCommon.string.email.required()
-                })
-            }),
+            logout: JoiCommon,
             googleRedirect: JoiCommon.object.request.keys({
                 query: Joi.object({
                     code: Joi.string().required()
@@ -45,15 +49,11 @@ export class AuthorizationController extends AbstractController {
             })
         },
         response: {
-            register: JoiCommon.object.response.keys({
-                body: Joi.object({
-                    user: Joi.object({
-                        id: Joi.string().uuid()
-                            .required()
-                    }),
-                    token: Joi.string().required()
-                })
-            })
+            register: AuthorizationController.userSchema.required(),
+            login: AuthorizationController.userSchema.required(),
+            logout: AuthorizationController.userSchema.keys({
+                message: Joi.string().required()
+            }).required()
         }
     }
 
@@ -67,7 +67,7 @@ export class AuthorizationController extends AbstractController {
         req: Request & typeof this.RegisterReqType,
         res: Response,
         next: NextFunction
-    ): Promise<void | (Response & typeof this.RegisterResType)> {
+    ): Promise<void | Response<typeof this.RegisterResType>> {
         try {
             const { body } = req
             let user = await prisma.user.findFirst({
@@ -108,15 +108,14 @@ export class AuthorizationController extends AbstractController {
     }
 
     private LoginReqType: Joi.extractType<typeof AuthorizationController.schemas.request.login>
-    private LoginResType: Joi.extractType<typeof AuthorizationController.schemas.response.register>
+    private LoginResType: Joi.extractType<typeof AuthorizationController.schemas.response.login>
     async login(
         req: Request & typeof this.LoginReqType,
         res: Response,
         next: NextFunction
-    ): Promise<void | (Response & typeof this.LoginResType)> {
+    ): Promise<void | Response<typeof this.LoginResType>> {
         try {
             const { body } = req
-
             // Find user
             const user = await prisma.user.findFirst({
                 where: {
@@ -127,7 +126,7 @@ export class AuthorizationController extends AbstractController {
             })
 
             if (!user) {
-                throw new IError(404, 'User not found')
+                throw new IError(401, 'Password or email is incorrect')
             }
 
             // Check password
@@ -166,11 +165,12 @@ export class AuthorizationController extends AbstractController {
     }
 
     logout(
-        req: Request,
+        req: AuthUserRequest,
         res: Response,
         next: NextFunction
     ) {
         try {
+            const userID = req.user.id
             req.logout((error) => {
                 if (error) {
                     throw new IError(500, 'Failed to log out')
@@ -186,6 +186,9 @@ export class AuthorizationController extends AbstractController {
                 .clearCookie('connect.sid')
                 .status(200)
                 .json({
+                    user: {
+                        id: userID
+                    },
                     message: 'User was logged out'
                 })
         } catch (err) {
