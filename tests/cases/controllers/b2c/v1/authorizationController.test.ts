@@ -1,4 +1,3 @@
-import { User } from '@prisma/client'
 import { expect } from 'chai'
 import supertest from 'supertest'
 
