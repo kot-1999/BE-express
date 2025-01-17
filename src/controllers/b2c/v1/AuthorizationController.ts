@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction, AuthUserRequest } from 'express'
 import Joi from 'joi'
 
 import { EncryptionService } from '../../../services/Encryption'
@@ -41,11 +41,7 @@ export class AuthorizationController extends AbstractController {
                 })
             }),
 
-            logout: JoiCommon.object.request.keys({
-                body: Joi.object({
-                    email: JoiCommon.string.email.required()
-                })
-            }),
+            logout: JoiCommon,
             googleRedirect: JoiCommon.object.request.keys({
                 query: Joi.object({
                     code: Joi.string().required()
@@ -54,7 +50,10 @@ export class AuthorizationController extends AbstractController {
         },
         response: {
             register: AuthorizationController.userSchema.required(),
-            login: AuthorizationController.userSchema.required()
+            login: AuthorizationController.userSchema.required(),
+            logout: AuthorizationController.userSchema.keys({
+                message: Joi.string().required()
+            }).required()
         }
     }
 
@@ -166,11 +165,12 @@ export class AuthorizationController extends AbstractController {
     }
 
     logout(
-        req: Request,
+        req: AuthUserRequest,
         res: Response,
         next: NextFunction
     ) {
         try {
+            const userID = req.user.id
             req.logout((error) => {
                 if (error) {
                     throw new IError(500, 'Failed to log out')
@@ -186,6 +186,9 @@ export class AuthorizationController extends AbstractController {
                 .clearCookie('connect.sid')
                 .status(200)
                 .json({
+                    user: {
+                        id: userID
+                    },
                     message: 'User was logged out'
                 })
         } catch (err) {

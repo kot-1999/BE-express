@@ -69,9 +69,9 @@ class PassportSetup {
                 throw new IError(401, 'Not authorized (googleStrategy)')
             }
 
-            done(null, user)
+            return done(null, user)
         } catch (err) {
-            done(err, false)
+            return done(err, false)
         }
     }
 
@@ -92,7 +92,7 @@ class PassportSetup {
             }
             return done(null, user)
         } catch (err) {
-            done(err, false)
+            return done(err, false)
         }
     }
 

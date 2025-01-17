@@ -13,8 +13,7 @@ export default function authorizationMiddleware(allowedStrategies: PassportStrat
 
         // If user is using some of JWT strategies
         if (allowedStrategies.includes(PassportStrategy.jwtB2c)) {
-            passport.authenticate(PassportStrategy.jwtB2c, { session: false })(req, res, next)
-            return next()
+            return passport.authenticate(PassportStrategy.jwtB2c, { session: false })(req, res, next)
         } else {
             throw new IError(401, 'Authentication required')
         }

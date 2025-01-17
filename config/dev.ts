@@ -25,7 +25,6 @@ export default <IConfig>{
     passport: {
         jwtFromRequest: ExtractJwt.fromExtractors([
             (req: Request) => {
-                console.log('EXTRACTING JWT', req?.session?.jwt)
                 return req?.session?.jwt ?? null // Extract JWT from cookies
             }
         ]),

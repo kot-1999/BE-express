@@ -65,7 +65,7 @@ export class UsersController extends AbstractController {
         next: NextFunction
     ): Promise<void | (Response & typeof this.GetUserResType)> {
         try {
-            let resultUser: typeof this.GetUserResType['body'] | null = null
+            let resultUser: typeof this.GetUserResType | null = null
             const { user, params: { userID } } = req
             if (user.id === userID) {
                 resultUser = {

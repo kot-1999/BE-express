@@ -1,10 +1,12 @@
 import { expect } from 'chai'
+import config from 'config'
 import supertest from 'supertest'
 
 import app from '../../../../../src/app'
 import { AuthorizationController } from '../../../../../src/controllers/b2c/v1/AuthorizationController'
 import { EncryptionService } from '../../../../../src/services/Encryption'
 import prisma from '../../../../../src/services/Prisma'
+import { IConfig } from '../../../../../src/types/config'
 
 const endpoint = (val: string = '') => '/api/b2c/v1/authorization' + val
 
@@ -46,6 +48,9 @@ describe(endpoint('/register'), () => {
     })
 })
 
+const cookieSessionConfig = config.get<IConfig['cookieSession']>('cookieSession')
+let sessionCookie: string
+
 describe(endpoint('/login'), () => {
     it('should login user (200)', async () => {
 
@@ -60,6 +65,12 @@ describe(endpoint('/login'), () => {
 
         const validationResult = AuthorizationController.schemas.response.login.validate(res.body)
         expect(validationResult.error).to.eq(undefined)
+
+        expect(res.headers['set-cookie']).to.exist
+
+        // Extract session cookie
+        sessionCookie = res.headers['set-cookie'][0]
+        expect(sessionCookie).to.include(cookieSessionConfig.name)
     })
 
     it('wrong email (401)', async () => {
@@ -84,5 +95,27 @@ describe(endpoint('/login'), () => {
 
         expect(res.statusCode).to.equal(401)
         expect(res.type).to.eq('application/json')
+    })
+})
+
+describe(endpoint('/logout'), () => {
+    it('should login user (200)', async () => {
+        const res = await supertest(app)
+            .get(endpoint('/logout'))
+            .set('Cookie', sessionCookie)
+
+        expect(res.statusCode).to.equal(200)
+        expect(res.type).to.eq('application/json')
+
+        const validationResult = AuthorizationController.schemas.response.logout.validate(res.body)
+        expect(validationResult.error).to.eq(undefined)
+    })
+
+    it('Logged out user does not have access to app anymore (401)', async () => {
+        const res = await supertest(app)
+            .get(endpoint('/logout'))
+            .set('Cookie', sessionCookie)
+
+        expect(res.statusCode).to.equal(401)
     })
 })
