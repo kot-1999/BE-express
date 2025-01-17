@@ -38,18 +38,16 @@ export class UsersController extends AbstractController {
             })
         },
         response: {
-            getUser: JoiCommon.object.response.keys({
-                body: this.userSchema.required()
+            getUser: Joi.object({
+                user: this.userSchema.required()
             }),
-            getUsers: JoiCommon.object.response.keys({
-                body: Joi.object({
-                    users: Joi.array().items(this.userSchema.required())
-                        .required(),
-                    pagination: Joi.object({
-                        page: Joi.number().required(),
-                        limit: Joi.number().required(),
-                        totalCount: Joi.number().required()
-                    })
+            getUsers: Joi.object({
+                users: Joi.array().items(this.userSchema.required())
+                    .required(),
+                pagination: Joi.object({
+                    page: Joi.number().required(),
+                    limit: Joi.number().required(),
+                    totalCount: Joi.number().required()
                 })
             })
         }
