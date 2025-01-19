@@ -164,24 +164,32 @@ export class AuthorizationController extends AbstractController {
         }
     }
 
-    logout(
+    async logout(
         req: AuthUserRequest,
         res: Response,
         next: NextFunction
     ) {
         try {
             const userID = req.user.id
-            req.logout((error) => {
-                if (error) {
-                    throw new IError(500, 'Failed to log out')
-                }
-                req.session?.destroy((error: Error) => {
-                    if (error) {
-                        throw new IError(500, 'Failed to destroy session')
+            // Wrap req.logout() in a Promise
+            await new Promise<void>((resolve) => {
+                req.logout((err) => {
+                    if (err) {
+                        throw err
                     }
+                    resolve()
                 })
             })
 
+            // Destroy the session after logout
+            await new Promise<void>((resolve) => {
+                req.session.destroy((err) => {
+                    if (err) {
+                        throw err
+                    }
+                    resolve()
+                })
+            })
             res
                 .clearCookie('connect.sid')
                 .status(200)

@@ -24,7 +24,7 @@ export default <IConfig>{
     passport: {
         jwtFromRequest: ExtractJwt.fromExtractors([
             (req: Request) => {
-                return req?.cookies?.jwt // Extract JWT from cookies
+                return req?.session?.jwt ?? null // Extract JWT from cookies
             }
         ]),
         secretOrKey: process.env.COOKIE_SECRET_KEY // Replace with a secure key

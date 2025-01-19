@@ -47,11 +47,8 @@ services:
     image: postgres:17.2
     profiles:
       - test
-    shm_size: 1gb
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
-    volumes:
-      - ./docker/local/postgres/pgdata/test:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
