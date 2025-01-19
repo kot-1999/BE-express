@@ -3,15 +3,13 @@ Test project
 
 To start application run: `docker compose up`
 
-TODO: implement tests for google OAuth
+### TODO list
 
-TODO: implement soft deletion for database raws
-
-TODO: Implement email service
-
-TODO: Implement forgot password alongside with Bearer token extraction from headers
-
-TODO: Implement seeders
-
-TODO: Create centralized point of access to DB
-
+- implement tests for google OAuth
+- implement soft deletion for database raws
+- Implement email service
+- Implement forgot password alongside with Bearer token extraction from headers
+- Implement seeders for database
+- Create centralized point of access to DB
+- Implement Sentry monitoring
+- Implement logging via winston or familiar library
