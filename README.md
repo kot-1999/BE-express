@@ -58,6 +58,7 @@ To run the application you need to create:
 - Implement logging via winston or familiar library
 - Add storage for session keys
 - Add Redis caching of endpoints
+- Create GitHub actions
 
 ## License
 This project is licensed under the Apache-2.0 License.
