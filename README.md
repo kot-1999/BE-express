@@ -8,8 +8,8 @@ BE-express is a test project designed to demonstrate a robust backend applicatio
 ### Running the Application
 To run the application you need to create: 
 - `.env`: for local running with `npm run start`
-- `.env.development`: for running application in docker in development mode with `npm run docker:dev`
-- `.env.test`: to run the application in a test mode `npm run docker:test`
+- `.env.development`: for running application in docker in development mode with `npm run docker:dev` or `docker compose --env-file .env.development --profile dev up`
+- `.env.test`: to run the application in a test mode `npm run docker:test` or `docker compose --env-file .env.test --profile test up`
 
 **NOTE**: there is a `.env.template` file which can be used to run application in docker in development mode. In spite of that some variables are unavailable, those are initialized with `null`
 
