@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction, AuthUserRequest } from 'express'
 import Joi from 'joi'
 
+import emailService from '../../../services/Email'
 import { EncryptionService } from '../../../services/Encryption'
 import { JwtService } from '../../../services/Jwt'
 import prisma from '../../../services/Prisma'
 import { AbstractController } from '../../../types/AbstractController'
 import { JoiCommon } from '../../../types/JoiCommon'
+import { EmailType } from '../../../utils/enums'
 import { IError } from '../../../utils/IError'
 
 export class AuthorizationController extends AbstractController {
@@ -38,20 +40,18 @@ export class AuthorizationController extends AbstractController {
             forgotPassword: JoiCommon.object.request.keys({
                 body: Joi.object({
                     email: JoiCommon.string.email.required()
-                })
+                }).required()
             }),
 
-            logout: JoiCommon,
-            googleRedirect: JoiCommon.object.request.keys({
-                query: Joi.object({
-                    code: Joi.string().required()
-                })
-            })
+            logout: JoiCommon
         },
         response: {
             register: AuthorizationController.userSchema.required(),
             login: AuthorizationController.userSchema.required(),
             logout: AuthorizationController.userSchema.keys({
+                message: Joi.string().required()
+            }).required(),
+            forgotPassword: Joi.object({
                 message: Joi.string().required()
             }).required()
         }
@@ -63,11 +63,11 @@ export class AuthorizationController extends AbstractController {
 
     private RegisterReqType: Joi.extractType<typeof AuthorizationController.schemas.request.register>
     private RegisterResType: Joi.extractType<typeof AuthorizationController.schemas.response.register>
-    async register(
+    public async register(
         req: Request & typeof this.RegisterReqType,
-        res: Response,
+        res: Response<typeof this.RegisterResType>,
         next: NextFunction
-    ): Promise<void | Response<typeof this.RegisterResType>> {
+    ) {
         try {
             const { body } = req
             let user = await prisma.user.findFirst({
@@ -109,11 +109,11 @@ export class AuthorizationController extends AbstractController {
 
     private LoginReqType: Joi.extractType<typeof AuthorizationController.schemas.request.login>
     private LoginResType: Joi.extractType<typeof AuthorizationController.schemas.response.login>
-    async login(
+    public async login(
         req: Request & typeof this.LoginReqType,
-        res: Response,
+        res: Response<typeof this.LoginResType>,
         next: NextFunction
-    ): Promise<void | Response<typeof this.LoginResType>> {
+    ) {
         try {
             const { body } = req
             // Find user
@@ -152,11 +152,11 @@ export class AuthorizationController extends AbstractController {
         }
     }
 
-    googleRedirect(
+    public googleRedirect(
         req: Request,
         res: Response,
         next: NextFunction
-    ) {
+    ): void | Response {
         try {
             return res.status(200).json({ message: 'callback URI' })
         } catch (err) {
@@ -164,9 +164,10 @@ export class AuthorizationController extends AbstractController {
         }
     }
 
-    async logout(
+    private LogoutResType: Joi.extractType<typeof AuthorizationController.schemas.response.logout>
+    public async logout(
         req: AuthUserRequest,
-        res: Response,
+        res: Response<typeof this.LogoutResType>,
         next: NextFunction
     ) {
         try {
@@ -199,6 +200,44 @@ export class AuthorizationController extends AbstractController {
                     },
                     message: 'User was logged out'
                 })
+        } catch (err) {
+            return next(err)
+        }
+    }
+
+    private ForgotPasswordReqType: Joi.extractType<typeof AuthorizationController.schemas.request.forgotPassword>
+    private ForgotPasswordResType: Joi.extractType<typeof AuthorizationController.schemas.response.forgotPassword>
+    public async forgotPassword(
+        req: Request & typeof this.ForgotPasswordReqType,
+        res: Response<typeof this.ForgotPasswordResType>,
+        next: NextFunction
+    ) {
+        try {
+            const { body: { email } } = req
+
+            const user = await prisma.user.findFirst({
+                select: {
+                    id: true,
+                    email: true,
+                    firstName: true,
+                    lastName: true
+                },
+                where: {
+                    email: {
+                        equals: email
+                    }
+                }
+            })
+
+            if (user) {
+                emailService.sendEmail(EmailType.forgotPassword, {
+                    ...user
+                })
+            }
+
+            res.status(200).json({
+                message: 'Email with password recovery link was successfully sent'
+            })
         } catch (err) {
             return next(err)
         }
