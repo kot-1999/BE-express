@@ -1,4 +1,5 @@
 import 'dotenv/config'
+
 import { Request } from 'express'
 import { ExtractJwt } from 'passport-jwt'
 
@@ -36,5 +37,12 @@ export default <IConfig>{
     },
     encryption: {
         key: process.env.ENCRYPTION_KEY
+    },
+    email: {
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_SMTP_PORT,
+        user: process.env.EMAIL_PASSWORD,
+        password: process.env.EMAIL_PASSWORD,
+        fromAddress: process.env.EMAIL_FROM_ADDRESS
     }
 }

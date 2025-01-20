@@ -26,4 +26,11 @@ export interface IConfig {
     secretOrKey: string
     jwtFromRequest: JwtFromRequestFunction
   }
+  email: {
+    host: string
+    port: string
+    user: string
+    password: string
+    fromAddress: string
+  }
 }

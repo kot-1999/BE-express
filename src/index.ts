@@ -7,7 +7,6 @@ import app from './app'
 import { IConfig } from './types/config'
 
 const appConfig = config.get<IConfig['app']>('app')
-// const dbConfig = config.get<IConfig['database']>('database')
 
 const httpServer = http.createServer(app)
 

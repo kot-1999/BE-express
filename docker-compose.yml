@@ -16,6 +16,10 @@ services:
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - COOKIE_SECRET_KEY=${COOKIE_SECRET_KEY}
+      - EMAIL_SMTP_PORT=${EMAIL_SMTP_PORT}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_FROM_ADDRESS=${EMAIL_FROM_ADDRESS}
     command: >
       sh -c '
         npm install &&
@@ -55,3 +59,17 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - PGPORT=${POSTGRES_PORT}
     restart: always
+  mailhog:
+    image: mailhog/mailhog
+    profiles:
+      - dev
+      - test
+    container_name: mailhog
+    ports:
+      - ${EMAIL_SMTP_PORT}:${EMAIL_SMTP_PORT}  # SMTP port for sending emails
+      - ${EMAIL_HTTP_PORT}:${EMAIL_HTTP_PORT}  # HTTP interface for viewing emails
+    environment:
+      - MH_STORAGE=memory
+      - MH_SMTP_AUTH=true  # Enable SMTP authentication
+      - MH_SMTP_USER=${EMAIL_USER}  # Set the SMTP username
+      - MH_SMTP_PASSWORD=${EMAIL_PASSWORD}

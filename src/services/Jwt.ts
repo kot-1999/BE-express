@@ -1,5 +1,7 @@
 import config from 'config'
+import { Request } from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
+import { ExtractJwt } from 'passport-jwt'
 
 import { IConfig } from '../types/config'
 
@@ -20,4 +22,11 @@ export class JwtService {
         // const decryptedToken = EncryptionService.decryptAES(token)
         return jwt.verify(token, jwtConfig.secret) as JwtPayload | string
     }
+
+    public static jwtExtractor = ExtractJwt.fromExtractors([
+        (req: Request) => {
+            return req?.session?.jwt ?? null // Extract JWT from cookies
+        }
+    ])
+    
 }
