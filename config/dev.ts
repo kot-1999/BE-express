@@ -5,22 +5,22 @@ import { ExtractJwt } from 'passport-jwt'
 
 import { IConfig } from '../src/types/config'
 
-export default <IConfig>{
+const options: IConfig = {
     app: {
-        port: process.env.PORT
+        port: process.env.PORT as string
     },
     cookieSession: {
         name: 'session',
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
-        keys: [process.env.COOKIE_SECRET_KEY],
+        keys: [process.env.COOKIE_SECRET_KEY as string],
         secure: false
     },
     database: {
-        postgresURL: process.env.POSTGRES_URL
+        postgresURL: process.env.POSTGRES_URL as string
     },
     googleStrategy: {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        clientID: process.env.GOOGLE_CLIENT_ID as string,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
         callbackURL: '/api/b2c/v1/authorization/google/redirect'
     },
     passport: {
@@ -28,21 +28,23 @@ export default <IConfig>{
             (req: Request) => {
                 return req?.session?.jwt ?? null // Extract JWT from cookies
             }
-        ]),
-        secretOrKey: process.env.COOKIE_SECRET_KEY // Replace with a secure key
+        ])
     },
     jwt: {
-        secret: process.env.JWT_SECRET,
-        expiresIn: process.env.JWT_EXPIRES_IN
+        secret: process.env.JWT_SECRET  as string,
+        expiresIn: process.env.JWT_EXPIRES_IN as string
     },
     encryption: {
-        key: process.env.ENCRYPTION_KEY
+        key: process.env.ENCRYPTION_KEY as string
     },
     email: {
         host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_SMTP_PORT,
-        user: process.env.EMAIL_PASSWORD,
-        password: process.env.EMAIL_PASSWORD,
-        fromAddress: process.env.EMAIL_FROM_ADDRESS
+        port: Number(process.env.EMAIL_SMTP_PORT),
+        secure: false,
+        auth: {
+            user: process.env.EMAIL_PASSWORD  as string,
+            pass: process.env.EMAIL_PASSWORD as string
+        }
     }
 }
+export default options

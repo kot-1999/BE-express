@@ -1,3 +1,4 @@
+import SMTPConnection from 'nodemailer/lib/smtp-connection'
 import { OAuth2StrategyOptionsWithoutRequiredURLs } from 'passport-google-oauth20'
 import { JwtFromRequestFunction } from 'passport-jwt'
 
@@ -23,14 +24,7 @@ export interface IConfig {
     key: string
   }
   passport: {
-    secretOrKey: string
     jwtFromRequest: JwtFromRequestFunction
   }
-  email: {
-    host: string
-    port: string
-    user: string
-    password: string
-    fromAddress: string
-  }
+  email: SMTPConnection. Options & { auth: { pass: string, user: string } }
 }
