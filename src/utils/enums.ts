@@ -9,3 +9,9 @@ export enum EmailType {
     forgotPassword = 'forgotPassword',
     registered = 'registered'
 }
+
+export enum JwtAudience {
+    b2c ='b2c',
+    b2b = 'b2b',
+    forgotPassword = 'fps'
+}
