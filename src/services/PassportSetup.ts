@@ -7,7 +7,7 @@ import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
 
 import prisma from './Prisma'
 import { IConfig } from '../types/config'
-import { PassportStrategy } from '../utils/enums'
+import { JwtAudience, PassportStrategy } from '../utils/enums'
 import { IError } from '../utils/IError'
 
 const googleStrategyConfig = config.get<IConfig['googleStrategy']>('googleStrategy')
@@ -15,13 +15,43 @@ const jwtConfig = config.get<IConfig['jwt']>('jwt')
 const passportConfig = config.get<IConfig['passport']>('passport')
 
 class PassportSetup {
+    constructor() {
+        passport.use(PassportStrategy.google, new GoogleStrategy(
+            {
+                clientID: googleStrategyConfig.clientID,
+                clientSecret: googleStrategyConfig.clientSecret,
+                callbackURL: googleStrategyConfig.callbackURL
+            },
+            this.googleStrategy
+        ))
+
+        passport.use(PassportStrategy.jwtB2c, new JwtStrategy(
+            {
+                jwtFromRequest: ExtractJwt.fromExtractors([passportConfig.jwtFromCookie]),
+                secretOrKey: jwtConfig.secret
+            }, 
+            this.b2cJwtStrategy
+        ))
+
+        passport.use(PassportStrategy.jwtB2cForgotPassword, new JwtStrategy(
+            {
+                jwtFromRequest: ExtractJwt.fromExtractors([passportConfig.jwtFromRequestHeader]),
+                secretOrKey: jwtConfig.secret
+            },
+            this.b2cJwtForgotPasswordStrategy
+        ))
+
+        passport.serializeUser(this.serializeUser)
+        passport.deserializeUser(this.deserializeUser)
+    }
+
     /**
      * - Save user to DB if such doesn't exist
      * - Update user's googleProfileID if such doesn't exist
      * */
     private async googleStrategy(
         accessToken: string,
-        refreshToken: string, 
+        refreshToken: string,
         profile: Profile,
         done: VerifyCallback
     ): Promise<void> {
@@ -96,6 +126,27 @@ class PassportSetup {
         }
     }
 
+    private async b2cJwtForgotPasswordStrategy(payload: JwtPayload, done: VerifyCallback) {
+        try {
+            if (payload.aud !== JwtAudience.forgotPassword) {
+                throw new IError(401, 'Not authorized (JwtForgotPasswordStrategy)')
+            }
+
+            const user = await prisma.user.findFirst({
+                where: {
+                    id: payload.id
+                }
+            })
+
+            if (!user) {
+                throw new IError(401, 'Not authorized (JwtForgotPasswordStrategy)')
+            }
+            return done(null, user)
+        } catch (err) {
+            return done(err, false)
+        }
+    }
+
     private serializeUser(user: User, done: (err: Error | null, id: string | null) => void): void {
         const err = !user?.id ? new IError(401, 'Authorization id is missing') : null
         done(err, user.id)
@@ -111,28 +162,6 @@ class PassportSetup {
         })
         const err = user ? null : new IError(401, 'User wasn\'t deserialized')
         done(err, user)
-    }
-    
-    constructor() {
-        passport.use(PassportStrategy.google, new GoogleStrategy(
-            {
-                clientID: googleStrategyConfig.clientID,
-                clientSecret: googleStrategyConfig.clientSecret,
-                callbackURL: googleStrategyConfig.callbackURL
-            },
-            this.googleStrategy
-        ))
-
-        passport.use(PassportStrategy.jwtB2c, new JwtStrategy(
-            {
-                jwtFromRequest: ExtractJwt.fromExtractors([passportConfig.jwtFromRequest]),
-                secretOrKey: jwtConfig.secret
-            }, 
-            this.b2cJwtStrategy
-        ))
-
-        passport.serializeUser(this.serializeUser)
-        passport.deserializeUser(this.deserializeUser)
     }
 }
 

@@ -1,5 +1,7 @@
 import config from 'config'
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import { Request } from 'express'
+import jwt, { JwtPayload }from 'jsonwebtoken'
+import { ExtractJwt } from 'passport-jwt'
 
 import { IConfig } from '../types/config'
 
@@ -7,10 +9,7 @@ const jwtConfig = config.get<IConfig['jwt']>('jwt')
 
 export class JwtService {
 
-    public static generateToken(payload: {
-        id: string,
-        aud: 'b2c' | 'b2b' | 'fps',
-    }) {
+    public static generateToken(payload: JwtPayload) {
         const token =  jwt.sign(payload, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
         // return EncryptionService.encryptAES(token)
         return token
@@ -20,4 +19,11 @@ export class JwtService {
         // const decryptedToken = EncryptionService.decryptAES(token)
         return jwt.verify(token, jwtConfig.secret) as JwtPayload | string
     }
+
+    public static jwtExtractor = ExtractJwt.fromExtractors([
+        (req: Request) => {
+            return req?.session?.jwt ?? null // Extract JWT from cookies
+        }
+    ])
+    
 }

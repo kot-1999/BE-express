@@ -53,7 +53,6 @@ let sessionCookie: string
 
 describe(endpoint('/login'), () => {
     it('should login user (200)', async () => {
-
         const res = await supertest(app).post(endpoint('/login'))
             .send({
                 email: newUserData.email,
@@ -99,11 +98,12 @@ describe(endpoint('/login'), () => {
 })
 
 describe(endpoint('/logout'), () => {
-    it('should login user (200)', async () => {
+    it('should logout user (200)', async () => {
         const res = await supertest(app)
             .get(endpoint('/logout'))
             .set('Cookie', sessionCookie)
 
+        console.log(res.error)
         expect(res.statusCode).to.equal(200)
         expect(res.type).to.eq('application/json')
 
@@ -111,7 +111,7 @@ describe(endpoint('/logout'), () => {
         expect(validationResult.error).to.eq(undefined)
     })
 
-    it('Logged out user does not have access to app anymore (401)', async () => {
+    it('logged out user does not have access to app anymore (401)', async () => {
         const res = await supertest(app)
             .get(endpoint('/logout'))
             .set('Cookie', sessionCookie)
