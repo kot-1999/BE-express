@@ -42,8 +42,12 @@ export class AuthorizationController extends AbstractController {
                     email: JoiCommon.string.email.required()
                 }).required()
             }),
-
-            logout: JoiCommon
+            logout: JoiCommon,
+            resetPassword: JoiCommon.object.request.keys({
+                body: Joi.object({
+                    newPassword: Joi.string().required()
+                }).required()
+            })
         },
         response: {
             register: AuthorizationController.userSchema.required(),
@@ -53,7 +57,8 @@ export class AuthorizationController extends AbstractController {
             }).required(),
             forgotPassword: Joi.object({
                 message: Joi.string().required()
-            }).required()
+            }).required(),
+            resetPassword: AuthorizationController.userSchema.required()
         }
     }
 
@@ -241,5 +246,37 @@ export class AuthorizationController extends AbstractController {
         } catch (err) {
             return next(err)
         }
+    }
+    private ResetPasswordReqType: Joi.extractType<typeof AuthorizationController.schemas.request.resetPassword>
+    private ResetPasswordResType: Joi.extractType<typeof AuthorizationController.schemas.response.resetPassword>
+    public async resetPassword(
+        req: AuthUserRequest & typeof this.ResetPasswordReqType,
+        res: Response<typeof this.ResetPasswordResType>,
+        next: NextFunction
+    ) {
+        try {
+            const { body: { newPassword }, user } = req
+
+            const updatedUser = await prisma.user.update({
+                data: {
+                    password: EncryptionService.hashSHA256(EncryptionService.encryptAES(newPassword))
+                },
+                where: {
+                    id: user.id
+                },
+                select: {
+                    id: true
+                }
+            })
+
+            res.status(200).json({
+                user: {
+                    id: updatedUser.id
+                }
+            })
+        } catch (err) {
+            return next(err)
+        }
+    
     }
 }
