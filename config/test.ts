@@ -29,7 +29,7 @@ const options: IConfig = {
                 return req?.session?.jwt ?? null // Extract JWT from cookies
             }
         ]),
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
+        jwtFromRequestHeader: ExtractJwt.fromAuthHeaderAsBearerToken()
     },
     jwt: {
         secret: process.env.JWT_SECRET as string,
