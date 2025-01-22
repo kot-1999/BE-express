@@ -24,6 +24,7 @@ export interface IConfig {
     key: string
   }
   passport: {
+    jwtFromCookie: JwtFromRequestFunction,
     jwtFromRequest: JwtFromRequestFunction
   }
   email: SMTPConnection. Options & { auth: { pass: string, user: string } }

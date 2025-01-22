@@ -24,11 +24,12 @@ const options: IConfig = {
         callbackURL: '/api/b2c/v1/authorization/google/redirect'
     },
     passport: {
-        jwtFromRequest: ExtractJwt.fromExtractors([
+        jwtFromCookie: ExtractJwt.fromExtractors([
             (req: Request) => {
                 return req?.session?.jwt ?? null // Extract JWT from cookies
             }
-        ])
+        ]),
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
     },
     jwt: {
         secret: process.env.JWT_SECRET as string,
