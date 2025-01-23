@@ -20,6 +20,7 @@ services:
       - EMAIL_USER=${EMAIL_USER}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
       - EMAIL_FROM_ADDRESS=${EMAIL_FROM_ADDRESS}
+      - EMAIL_HOST=${EMAIL_HOST}
     command: >
       sh -c '
         npm install &&
