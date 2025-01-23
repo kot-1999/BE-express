@@ -27,5 +27,5 @@ export interface IConfig {
     jwtFromCookie: JwtFromRequestFunction,
     jwtFromRequestHeader: JwtFromRequestFunction
   }
-  email: SMTPConnection. Options & { auth: { pass: string, user: string } }
+  email: SMTPConnection. Options & { auth: { pass: string, user: string }, fromAddress: string }
 }

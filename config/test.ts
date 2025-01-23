@@ -45,7 +45,8 @@ const options: IConfig = {
         auth: {
             user: process.env.EMAIL_PASSWORD as string,
             pass: process.env.EMAIL_PASSWORD as string
-        }
+        },
+        fromAddress: process.env.EMAIL_FROM_ADDRESS as string
     }
 }
 
