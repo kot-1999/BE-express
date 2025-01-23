@@ -100,6 +100,15 @@ export class AuthorizationController extends AbstractController {
                 id: user.id,
                 aud: 'b2c'
             })
+
+            if (user) {
+                emailService.sendEmail(EmailType.registered, {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email
+                })
+            }
+
             return res
                 .status(200)
                 .json({
@@ -236,7 +245,10 @@ export class AuthorizationController extends AbstractController {
 
             if (user) {
                 emailService.sendEmail(EmailType.forgotPassword, {
-                    ...user
+                    id: user.id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email
                 })
             }
 
