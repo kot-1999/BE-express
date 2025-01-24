@@ -9,7 +9,7 @@ const jwtConfig = config.get<IConfig['jwt']>('jwt')
 
 export class JwtService {
 
-    public static generateToken(payload: JwtPayload) {
+    public static generateToken(payload: JwtPayload): string {
         const token =  jwt.sign(payload, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
         // return EncryptionService.encryptAES(token)
         return token

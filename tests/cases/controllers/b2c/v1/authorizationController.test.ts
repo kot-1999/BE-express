@@ -1,3 +1,4 @@
+import { User } from '@prisma/client'
 import { expect } from 'chai'
 import config from 'config'
 import supertest from 'supertest'
@@ -5,8 +6,10 @@ import supertest from 'supertest'
 import app from '../../../../../src/app'
 import { AuthorizationController } from '../../../../../src/controllers/b2c/v1/AuthorizationController'
 import { EncryptionService } from '../../../../../src/services/Encryption'
+import { JwtService } from '../../../../../src/services/Jwt'
 import prisma from '../../../../../src/services/Prisma'
 import { IConfig } from '../../../../../src/types/config'
+import { JwtAudience } from '../../../../../src/utils/enums'
 
 const endpoint = (val: string = '') => '/api/b2c/v1/authorization' + val
 
@@ -20,6 +23,7 @@ describe(endpoint('/register'), () => {
     it('should register user (200)', async () => {
         
         const res = await supertest(app).post(endpoint('/register'))
+            .set('Content-Type', 'application/json')
             .send(newUserData)
         expect(res.statusCode).to.equal(200)
         expect(res.type).to.eq('application/json')
@@ -41,6 +45,7 @@ describe(endpoint('/register'), () => {
     it('user already exists (409)', async () => {
 
         const res = await supertest(app).post(endpoint('/register'))
+            .set('Content-Type', 'application/json')
             .send(newUserData)
 
         expect(res.statusCode).to.equal(409)
@@ -54,6 +59,7 @@ let sessionCookie: string
 describe(endpoint('/login'), () => {
     it('should login user (200)', async () => {
         const res = await supertest(app).post(endpoint('/login'))
+            .set('Content-Type', 'application/json')
             .send({
                 email: newUserData.email,
                 password: newUserData.password
@@ -75,6 +81,7 @@ describe(endpoint('/login'), () => {
     it('wrong email (401)', async () => {
 
         const res = await supertest(app).post(endpoint('/login'))
+            .set('Content-Type', 'application/json')
             .send({
                 email: 'test@gmail.com',
                 password: newUserData.password
@@ -87,6 +94,7 @@ describe(endpoint('/login'), () => {
     it('wrong password (401)', async () => {
 
         const res = await supertest(app).post(endpoint('/login'))
+            .set('Content-Type', 'application/json')
             .send({
                 email: newUserData.email,
                 password: EncryptionService.encryptAES('Test123.wrong')
@@ -101,9 +109,9 @@ describe(endpoint('/logout'), () => {
     it('should logout user (200)', async () => {
         const res = await supertest(app)
             .get(endpoint('/logout'))
+            .set('Content-Type', 'application/json')
             .set('Cookie', sessionCookie)
 
-        console.log(res.error)
         expect(res.statusCode).to.equal(200)
         expect(res.type).to.eq('application/json')
 
@@ -114,8 +122,95 @@ describe(endpoint('/logout'), () => {
     it('logged out user does not have access to app anymore (401)', async () => {
         const res = await supertest(app)
             .get(endpoint('/logout'))
+            .set('Content-Type', 'application/json')
             .set('Cookie', sessionCookie)
 
         expect(res.statusCode).to.equal(401)
+    })
+})
+
+describe(endpoint('/forgot-password'), () => {
+    it('should send email to given address (200)', async () => {
+        const res = await supertest(app)
+            .post(endpoint('/forgot-password'))
+            .set('Content-Type', 'application/json')
+            .send({
+                email: newUserData.email
+            })
+
+        expect(res.statusCode).to.equal(200)
+        expect(res.type).to.eq('application/json')
+
+        const validationResult = AuthorizationController.schemas.response.forgotPassword.validate(res.body)
+        expect(validationResult.error).to.eq(undefined)
+    })
+
+    it('should not send email as email address is unknown (200)', async () => {
+        const res = await supertest(app)
+            .post(endpoint('/forgot-password'))
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'random.test.email@gmail.com'
+            })
+
+        expect(res.statusCode).to.equal(200)
+        expect(res.type).to.eq('application/json')
+
+        const validationResult = AuthorizationController.schemas.response.forgotPassword.validate(res.body)
+        expect(validationResult.error).to.eq(undefined)
+    })
+})
+
+describe(endpoint('/reset-password'), () => {
+    let user: User
+    before(async () => {
+        const dbUser = await prisma.user.findFirst({
+            where: {
+                email: newUserData.email
+            }
+        })
+
+        if (!dbUser) {
+            throw new Error('User not found reset-password test')
+        } else {
+            user = dbUser
+        }
+    })
+    
+    it('should reset password (200)', async () => {
+        const newPassword = EncryptionService.encryptAES('Test123.newPassword')
+        const res = await supertest(app)
+            .post(endpoint('/reset-password'))
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${JwtService.generateToken({
+                id: user.id,
+                aud: JwtAudience.forgotPassword
+            })}`)
+            .send({
+                newPassword
+            })
+
+        expect(res.statusCode).to.equal(200)
+        expect(res.type).to.eq('application/json')
+
+        const validationResult = AuthorizationController.schemas.response.resetPassword.validate(res.body)
+        expect(validationResult.error).to.eq(undefined)
+    })
+
+    it('wrong aud in jwt token (401)', async () => {
+        const newPassword = EncryptionService.encryptAES('Test123.newPassword')
+        const res = await supertest(app)
+            .post(endpoint('/reset-password'))
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${JwtService.generateToken({
+                id: user.id,
+                aud: JwtAudience.b2c
+            })}`)
+            .send({
+                newPassword
+            })
+
+        expect(res.statusCode).to.equal(401)
+        expect(res.type).to.eq('application/json')
     })
 })
