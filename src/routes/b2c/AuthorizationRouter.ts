@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import passport from 'passport'
 
-import { AuthorizationController } from '../../controllers/b2c/v1/AuthorizationController'
+import { AuthorizationController } from '../../controllers/b2c/v1/authorization/AuthorizationController'
 import authorizationMiddleware from '../../middlewares/authorizationMiddleware'
 import validationMiddleware from '../../middlewares/validationMiddleware'
 import { PassportStrategy } from '../../utils/enums'

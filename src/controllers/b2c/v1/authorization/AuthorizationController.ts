@@ -1,14 +1,15 @@
 import { Request, Response, NextFunction, AuthUserRequest } from 'express'
 import Joi from 'joi'
 
-import emailService from '../../../services/Email'
-import { EncryptionService } from '../../../services/Encryption'
-import { JwtService } from '../../../services/Jwt'
-import prisma from '../../../services/Prisma'
-import { AbstractController } from '../../../types/AbstractController'
-import { JoiCommon } from '../../../types/JoiCommon'
-import { EmailType } from '../../../utils/enums'
-import { IError } from '../../../utils/IError'
+import emailService from '../../../../services/Email'
+import { EncryptionService } from '../../../../services/Encryption'
+import { JwtService } from '../../../../services/Jwt'
+import prisma from '../../../../services/Prisma'
+import { AbstractController } from '../../../../types/AbstractController'
+import { JoiCommon } from '../../../../types/JoiCommon'
+import { EmailType, JwtAudience } from '../../../../utils/enums'
+import { IError } from '../../../../utils/IError'
+import { UserQueries } from '../user/UserQueries'
 
 export class AuthorizationController extends AbstractController {
     private static readonly userSchema = Joi.object({
@@ -75,13 +76,14 @@ export class AuthorizationController extends AbstractController {
     ) {
         try {
             const { body } = req
-            let user = await prisma.user.findFirst({
-                where: {
+            let user = await UserQueries.selectUser(
+                null,
+                {
                     email: {
                         equals: body.email
                     }
                 }
-            })
+            )
 
             if (user) {
                 throw new IError(409, 'User already exists. Try to login again, or use forgot password')
@@ -98,7 +100,7 @@ export class AuthorizationController extends AbstractController {
             })
             req.session.jwt = JwtService.generateToken({
                 id: user.id,
-                aud: 'b2c'
+                aud: JwtAudience.b2c
             })
 
             if (user) {
@@ -131,13 +133,14 @@ export class AuthorizationController extends AbstractController {
         try {
             const { body } = req
             // Find user
-            const user = await prisma.user.findFirst({
-                where: {
+            const user = await UserQueries.selectUser(
+                null,
+                {
                     email: {
                         equals: body.email
                     }
                 }
-            })
+            )
 
             if (!user) {
                 throw new IError(401, 'Password or email is incorrect')
@@ -145,14 +148,13 @@ export class AuthorizationController extends AbstractController {
 
             // Check password
             const decryptedPassword = EncryptionService.decryptAES(body.password)
-            console.log('DECRYPTED PASSWORD', decryptedPassword)
             if (user.password !== EncryptionService.hashSHA256(decryptedPassword)) {
                 throw new IError(401, 'Password or email is incorrect')
             }
 
             req.session.jwt = JwtService.generateToken({
                 id: user.id,
-                aud: 'b2c'
+                aud: JwtAudience.b2c
             })
 
             return res
@@ -230,17 +232,14 @@ export class AuthorizationController extends AbstractController {
         try {
             const { body: { email } } = req
 
-            const user = await prisma.user.findFirst({
-                select: {
-                    id: true,
-                    email: true,
-                    firstName: true,
-                    lastName: true
-                },
-                where: {
-                    email: {
-                        equals: email
-                    }
+            const user = await UserQueries.selectUser({
+                id: true,
+                email: true,
+                firstName: true,
+                lastName: true
+            },{
+                email: {
+                    equals: email
                 }
             })
 

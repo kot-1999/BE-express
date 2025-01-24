@@ -2,10 +2,10 @@ import { UserRole } from '@prisma/client'
 import { Response, NextFunction, AuthUserRequest } from 'express'
 import Joi from 'joi'
 
-import prisma from '../../../services/Prisma'
-import { AbstractController } from '../../../types/AbstractController'
-import { JoiCommon } from '../../../types/JoiCommon'
-import { IError } from '../../../utils/IError'
+import { UserQueries } from './UserQueries'
+import { AbstractController } from '../../../../types/AbstractController'
+import { JoiCommon } from '../../../../types/JoiCommon'
+import { IError } from '../../../../utils/IError'
 
 export class UsersController extends AbstractController {
     private static readonly userSchema = Joi.object({
@@ -89,21 +89,18 @@ export class UsersController extends AbstractController {
                     updatedAt: user.updatedAt
                 }
             } else {
-                resultUser = await prisma.user.findFirst({
-                    where: {
-                        id: {
-                            equals: userID
-                        }
-                    },
-                    select: {
-                        id: true,
-                        firstName: true,
-                        lastName: true,
-                        email: true,
-                        emailVerified: true,
-                        role: true,
-                        createdAt: true,
-                        updatedAt: true
+                resultUser = await UserQueries.selectUser({
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                    emailVerified: true,
+                    role: true,
+                    createdAt: true,
+                    updatedAt: true
+                }, {
+                    id: {
+                        equals: userID
                     }
                 })
             }
@@ -150,11 +147,7 @@ export class UsersController extends AbstractController {
         try {
             const { user } = req
 
-            await prisma.user.delete({
-                where: {
-                    id: user.id
-                }
-            })
+            await UserQueries.deleteUser(user.id)
 
             return res.status(200).json({
                 user: {
