@@ -1,7 +1,9 @@
 import { Router } from 'express'
 
 import { UsersController } from '../../controllers/b2c/v1/UserController'
+import authorizationMiddleware from '../../middlewares/authorizationMiddleware'
 import validationMiddleware from '../../middlewares/validationMiddleware'
+import { PassportStrategy } from '../../utils/enums'
 
 // Init router and controller
 const router = Router()
@@ -11,9 +13,16 @@ export default function authorizationRouter() {
     // List endpoints
     router.get(
         '/:userID',
-        // passport.authenticate('google', { scope: ['profile'] }),
+        authorizationMiddleware([PassportStrategy.jwtB2c, PassportStrategy.google]),
         validationMiddleware(UsersController.schemas.request.getUser),
         userController.getUser
+    )
+
+    router.delete(
+        '/:userID',
+        authorizationMiddleware([PassportStrategy.jwtB2c, PassportStrategy.google]),
+        validationMiddleware(UsersController.schemas.request.deleteUser),
+        userController.deleteUser
     )
 
     return router
