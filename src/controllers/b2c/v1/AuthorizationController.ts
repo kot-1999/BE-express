@@ -145,6 +145,7 @@ export class AuthorizationController extends AbstractController {
 
             // Check password
             const decryptedPassword = EncryptionService.decryptAES(body.password)
+            console.log('DECRYPTED PASSWORD', decryptedPassword)
             if (user.password !== EncryptionService.hashSHA256(decryptedPassword)) {
                 throw new IError(401, 'Password or email is incorrect')
             }
@@ -271,7 +272,7 @@ export class AuthorizationController extends AbstractController {
 
             const updatedUser = await prisma.user.update({
                 data: {
-                    password: EncryptionService.hashSHA256(EncryptionService.encryptAES(newPassword))
+                    password: EncryptionService.hashSHA256(EncryptionService.decryptAES(newPassword))
                 },
                 where: {
                     id: user.id
