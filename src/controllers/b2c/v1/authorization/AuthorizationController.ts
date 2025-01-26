@@ -9,7 +9,6 @@ import { AbstractController } from '../../../../types/AbstractController'
 import { JoiCommon } from '../../../../types/JoiCommon'
 import { EmailType, JwtAudience } from '../../../../utils/enums'
 import { IError } from '../../../../utils/IError'
-import { UserQueries } from '../user/UserQueries'
 
 export class AuthorizationController extends AbstractController {
     private static readonly userSchema = Joi.object({
@@ -76,7 +75,7 @@ export class AuthorizationController extends AbstractController {
     ) {
         try {
             const { body } = req
-            let user = await UserQueries.selectUser(
+            let user = await prisma.user.findOne(
                 null,
                 {
                     email: {
@@ -133,7 +132,7 @@ export class AuthorizationController extends AbstractController {
         try {
             const { body } = req
             // Find user
-            const user = await UserQueries.selectUser(
+            const user = await prisma.user.findOne(
                 null,
                 {
                     email: {
@@ -232,7 +231,7 @@ export class AuthorizationController extends AbstractController {
         try {
             const { body: { email } } = req
 
-            const user = await UserQueries.selectUser({
+            const user = await prisma.user.findOne({
                 id: true,
                 email: true,
                 firstName: true,

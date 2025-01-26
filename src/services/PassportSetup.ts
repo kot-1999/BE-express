@@ -6,7 +6,6 @@ import { Profile, Strategy as GoogleStrategy, VerifyCallback } from 'passport-go
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
 
 import prisma from './Prisma'
-import { UserQueries } from '../controllers/b2c/v1/user/UserQueries'
 import { IConfig } from '../types/config'
 import { JwtAudience, PassportStrategy } from '../utils/enums'
 import { IError } from '../utils/IError'
@@ -60,7 +59,7 @@ class PassportSetup {
             if (!profile.emails?.length) {
                 throw new IError(401, 'No email provided by google response')
             }
-            let user = await UserQueries.selectUser(null, {
+            let user = await prisma.user.findOne(null, {
                 OR: [{
                     email: {
                         equals: profile.emails[0].value
@@ -110,7 +109,7 @@ class PassportSetup {
                 throw new IError(401, 'Not authorized (JwtStrategy)')
             }
 
-            const user = await UserQueries.selectUser(null,  {
+            const user = await prisma.user.findOne(null,  {
                 id: payload.id
             })
 
@@ -129,7 +128,7 @@ class PassportSetup {
                 throw new IError(401, 'Not authorized (JwtForgotPasswordStrategy)')
             }
 
-            const user = await UserQueries.selectUser(
+            const user = await prisma.user.findOne(
                 null,
                 {
                     id: payload.id
@@ -151,7 +150,7 @@ class PassportSetup {
     }
 
     private async deserializeUser(id: string, done: (err: Error | null, user: User | null) => void): Promise<void> {
-        const user = await UserQueries.selectUser(null, {
+        const user = await prisma.user.findOne(null, {
             id
         })
         const err = user ? null : new IError(401, 'User wasn\'t deserialized')

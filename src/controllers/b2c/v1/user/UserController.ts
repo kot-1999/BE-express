@@ -2,7 +2,7 @@ import { UserRole } from '@prisma/client'
 import { Response, NextFunction, AuthUserRequest } from 'express'
 import Joi from 'joi'
 
-import { UserQueries } from './UserQueries'
+import prisma from '../../../../services/Prisma'
 import { AbstractController } from '../../../../types/AbstractController'
 import { JoiCommon } from '../../../../types/JoiCommon'
 import { IError } from '../../../../utils/IError'
@@ -89,7 +89,7 @@ export class UsersController extends AbstractController {
                     updatedAt: user.updatedAt
                 }
             } else {
-                resultUser = await UserQueries.selectUser({
+                resultUser = await prisma.user.findOne({
                     id: true,
                     firstName: true,
                     lastName: true,
@@ -140,14 +140,14 @@ export class UsersController extends AbstractController {
     private DeleteUserReqType: Joi.extractType<typeof UsersController.schemas.request.deleteUser>
     private DeleteUserResType: Joi.extractType<typeof UsersController.schemas.response.deleteUser>
     public async deleteUser(
-        req: AuthUserRequest & typeof this.DeleteUserResType,
+        req: AuthUserRequest & typeof this.DeleteUserReqType,
         res: Response<typeof this.DeleteUserResType>,
         next: NextFunction
     ) {
         try {
             const { user } = req
 
-            await UserQueries.deleteUser(user.id)
+            await prisma.user.softDelete(user.id)
 
             return res.status(200).json({
                 user: {

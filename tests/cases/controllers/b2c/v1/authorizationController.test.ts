@@ -5,9 +5,9 @@ import supertest from 'supertest'
 
 import app from '../../../../../src/app'
 import { AuthorizationController } from '../../../../../src/controllers/b2c/v1/authorization/AuthorizationController'
-import { UserQueries } from '../../../../../src/controllers/b2c/v1/user/UserQueries'
 import { EncryptionService } from '../../../../../src/services/Encryption'
 import { JwtService } from '../../../../../src/services/Jwt'
+import prisma from '../../../../../src/services/Prisma'
 import { IConfig } from '../../../../../src/types/config'
 import { JwtAudience } from '../../../../../src/utils/enums'
 
@@ -32,7 +32,7 @@ describe(endpoint('/register'), () => {
         const validationResult = AuthorizationController.schemas.response.register.validate(res.body)
         expect(validationResult.error).to.eq(undefined)
 
-        const newUser = await UserQueries.selectUser(null, {
+        const newUser = await prisma.user.findOne(null, {
             id: res.body.user.id
         })
 
@@ -162,7 +162,7 @@ describe(endpoint('/forgot-password'), () => {
 describe(endpoint('/reset-password'), () => {
     let user: User
     before(async () => {
-        const dbUser = await UserQueries.selectUser(null, {
+        const dbUser = await prisma.user.findOne(null, {
             email: newUserData.email
         })
 
