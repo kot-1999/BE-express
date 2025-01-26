@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 
 import prisma from '../../../../services/Prisma'
 
-export class UserQueries {
+export default class UserQueries {
     /**
      * Select one user from database
      * @param select {Prisma.UserSelect | null} default prisma
@@ -11,7 +11,7 @@ export class UserQueries {
      * @param where {Prisma.UserWhereInput} default prisma where options
      * @param options additional search options
      * */
-    public static selectUser(
+    public findOne(
         select: Prisma.UserSelect | null,
         where: Prisma.UserWhereInput,
         options = {
@@ -35,7 +35,7 @@ export class UserQueries {
      * Soft delete of user
      * @param userID {string} ID of user which should be soft-deleted
      * */
-    public static deleteUser(userID: string) {
+    public softDelete(userID: string) {
         return prisma.user.update({
             where: {
                 id: userID
