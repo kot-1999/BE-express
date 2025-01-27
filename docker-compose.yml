@@ -60,6 +60,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - PGPORT=${POSTGRES_PORT}
     restart: always
+
   mailhog:
     image: mailhog/mailhog
     profiles:
@@ -74,3 +75,14 @@ services:
       - MH_SMTP_AUTH=true  # Enable SMTP authentication
       - MH_SMTP_USER=${EMAIL_USER}  # Set the SMTP username
       - MH_SMTP_PASSWORD=${EMAIL_PASSWORD}
+  redis:
+    image: redis:7.4
+    container_name: redis
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+    restart: always
