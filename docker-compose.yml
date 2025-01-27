@@ -21,6 +21,9 @@ services:
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
       - EMAIL_FROM_ADDRESS=${EMAIL_FROM_ADDRESS}
       - EMAIL_HOST=${EMAIL_HOST}
+    depends_on:
+      - mailhog
+      - redis
     command: >
       sh -c '
         npm install &&
@@ -80,9 +83,10 @@ services:
     container_name: redis
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
-    volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
-    environment:
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
-    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+    command: >
+      redis-server
+      --requirepass "${REDIS_PASSWORD}"
+      --user "${REDIS_USER}"
+      --port "${REDIS_PORT}"
+      --maxmemory "${REDIS_MAX_MEMORY}mb"
     restart: always
