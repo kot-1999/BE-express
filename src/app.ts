@@ -1,4 +1,5 @@
 import config from 'config'
+import { RedisStore } from 'connect-redis'
 import express from 'express'
 import session from 'express-session'
 import passport from 'passport'
@@ -11,6 +12,7 @@ import authorizeRouters from './routes'
 import './services/PassportSetup'
 import './services/Prisma'
 
+import redis from './services/Redis'
 import { IConfig } from './types/config'
 
 const cookieSessionConfig = config.get<IConfig['cookieSession']>('cookieSession')
@@ -20,9 +22,15 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+const redisStore = new RedisStore({
+    client: redis.getRedisClient(),
+    prefix: 'redis_app'
+})
+
 app.use(session({
     secret: cookieSessionConfig.keys,
     resave: false,
+    store: redisStore,
     saveUninitialized: false,
     name: cookieSessionConfig.name,
     cookie: {
@@ -30,7 +38,6 @@ app.use(session({
         secure: cookieSessionConfig.secure
     }
 }))
-
 app.use(passport.initialize())
 app.use(passport.session())
 

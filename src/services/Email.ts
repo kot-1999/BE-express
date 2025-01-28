@@ -28,7 +28,6 @@ class EmailService {
             }
         }).on('error', (err) => {
             console.error('Email Service error', err)
-            this.initTransporter()
         })
     }
 

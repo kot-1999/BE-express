@@ -21,6 +21,9 @@ services:
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
       - EMAIL_FROM_ADDRESS=${EMAIL_FROM_ADDRESS}
       - EMAIL_HOST=${EMAIL_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     depends_on:
       - mailhog
       - redis
@@ -85,8 +88,7 @@ services:
       - ${REDIS_PORT}:${REDIS_PORT}
     command: >
       redis-server
-      --requirepass "${REDIS_PASSWORD}"
-      --user "${REDIS_USER}"
-      --port "${REDIS_PORT}"
-      --maxmemory "${REDIS_MAX_MEMORY}mb"
+      --requirepass ${REDIS_PASSWORD}
+      --port ${REDIS_PORT}
+      --maxmemory 256mb
     restart: always
