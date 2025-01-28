@@ -59,17 +59,15 @@ class PassportSetup {
             if (!profile.emails?.length) {
                 throw new IError(401, 'No email provided by google response')
             }
-            let user = await prisma.user.findFirst({
-                where: {
-                    OR: [{
-                        email: {
-                            equals: profile.emails[0].value
-                        }
-                    },
-                    {
-                        googleProfileID: profile.id
-                    }]
-                }
+            let user = await prisma.user.findOne(null, {
+                OR: [{
+                    email: {
+                        equals: profile.emails[0].value
+                    }
+                },
+                {
+                    googleProfileID: profile.id
+                }]
             })
 
             if (user) {
@@ -111,10 +109,8 @@ class PassportSetup {
                 throw new IError(401, 'Not authorized (JwtStrategy)')
             }
 
-            const user = await prisma.user.findFirst({
-                where: {
-                    id: payload.id
-                }
+            const user = await prisma.user.findOne(null,  {
+                id: payload.id
             })
 
             if (!user) {
@@ -132,11 +128,12 @@ class PassportSetup {
                 throw new IError(401, 'Not authorized (JwtForgotPasswordStrategy)')
             }
 
-            const user = await prisma.user.findFirst({
-                where: {
+            const user = await prisma.user.findOne(
+                null,
+                {
                     id: payload.id
                 }
-            })
+            )
 
             if (!user) {
                 throw new IError(401, 'Not authorized (JwtForgotPasswordStrategy)')
@@ -153,12 +150,8 @@ class PassportSetup {
     }
 
     private async deserializeUser(id: string, done: (err: Error | null, user: User | null) => void): Promise<void> {
-        const user = await prisma.user.findFirst({
-            where: {
-                id: {
-                    equals: id
-                }
-            }
+        const user = await prisma.user.findOne(null, {
+            id
         })
         const err = user ? null : new IError(401, 'User wasn\'t deserialized')
         done(err, user)

@@ -1,6 +1,7 @@
 import SMTPConnection from 'nodemailer/lib/smtp-connection'
 import { OAuth2StrategyOptionsWithoutRequiredURLs } from 'passport-google-oauth20'
 import { JwtFromRequestFunction } from 'passport-jwt'
+import { RedisClientOptions } from 'redis'
 
 export interface IConfig {
   app: {
@@ -27,5 +28,11 @@ export interface IConfig {
     jwtFromCookie: JwtFromRequestFunction,
     jwtFromRequestHeader: JwtFromRequestFunction
   }
-  email: SMTPConnection. Options & { auth: { pass: string, user: string }, fromAddress: string }
+  email: SMTPConnection. Options & { auth: { pass: string, user: string }, fromAddress: string },
+  redis: {
+    socket: {
+      host: string,
+      port: number
+    }
+  } & RedisClientOptions
 }

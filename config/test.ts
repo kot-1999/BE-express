@@ -47,6 +47,15 @@ const options: IConfig = {
             pass: process.env.EMAIL_PASSWORD as string
         },
         fromAddress: process.env.EMAIL_FROM_ADDRESS as string
+    },
+    redis: {
+        name: 'redis_' + process.env.NODE_ENV,
+        password: process.env.REDIS_PASSWORD,
+        username: process.env.REDIS_USER,
+        socket: {
+            host: process.env.REDIS_HOST as string,
+            port: Number(process.env.REDIS_PORT)
+        }
     }
 }
 
