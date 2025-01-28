@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }))
 
 const redisStore = new RedisStore({
     client: redis.getRedisClient(),
-    prefix: 'redis_app'
+    prefix: 'app_session: '
 })
 
 app.use(session({
