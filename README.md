@@ -55,10 +55,20 @@ To run the application you need to create:
 - Create centralized point of access to DB
 - Implement Sentry monitoring
 - Implement logging via winston or familiar library
-- Add storage for session keys
 - Add middleware for caching of endpoints
 - Create GitHub actions
 - Send analytics to google ads
+
+- Update BE structure specification. Start using Function Overloads
+- Update user controller
+- Provide an example of V2 endpoint
+
+### Completed TODOs
+
+- Add storage for session keys
+- Implement soft deletion for database raws
+- Implement email service
+- Implement forgot password alongside with Bearer token extraction from headers
 
 ## License
 This project is licensed under the Apache-2.0 License.
