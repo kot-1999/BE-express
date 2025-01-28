@@ -29,5 +29,10 @@ export interface IConfig {
     jwtFromRequestHeader: JwtFromRequestFunction
   }
   email: SMTPConnection. Options & { auth: { pass: string, user: string }, fromAddress: string },
-  redis: RedisClientOptions
+  redis: {
+    socket: {
+      host: string,
+      port: number
+    }
+  } & RedisClientOptions
 }

@@ -49,9 +49,13 @@ const options: IConfig = {
         fromAddress: process.env.EMAIL_FROM_ADDRESS as string
     },
     redis: {
-        name: process.env.NODE_ENV + '_' + process.env.NODE_ENV,
-        // eslint-disable-next-line max-len
-        url: `redis://${process.env.REDIS_USER}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
+        name: 'redis_' + process.env.NODE_ENV,
+        password: process.env.REDIS_PASSWORD,
+        username: process.env.REDIS_USER,
+        socket: {
+            host: process.env.REDIS_HOST as string,
+            port: Number(process.env.REDIS_PORT)
+        }
     }
 }
 export default options
