@@ -21,6 +21,11 @@ services:
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
       - EMAIL_FROM_ADDRESS=${EMAIL_FROM_ADDRESS}
       - EMAIL_HOST=${EMAIL_HOST}
+      - REDIS_USER=${REDIS_USER}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     depends_on:
       - mailhog
       - redis
