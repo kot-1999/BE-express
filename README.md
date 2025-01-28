@@ -19,8 +19,8 @@ To run the application you need to create:
 - **Authentication:**
   - **Google OAuth:** Enables users to authenticate using their Google accounts.
   - **JWT Authentication:** Implements JSON Web Token (JWT) authentication for stateless and secure user sessions.
-  - **Session Management:** Manages authentication sessions with cookies for persistent user sessions.
-
+  - **Session Management:** Manages authentication sessions with cookies for persistent user sessions. Ass session key storage is used Redis
+  - **Forgot Password Workflow**: Secure forgot-password mechanism with token-based authentication and email verification.
 - **Prisma ORM:** Utilizes Prisma as the Object-Relational Mapping tool, facilitating seamless database interactions and migrations.
 - **Security:**
   - **AES Encryption:** Protects sensitive data which are sent via HTTP TCP connection by encrypting it using the AES algorithm.
@@ -30,7 +30,9 @@ To run the application you need to create:
 - **Input Validation with Joi:** Uses Joi for validating request inputs, ensuring data integrity and reliability. Additionally, leverages @goodrequest/joi-type-extract to extract TypeScript types from Joi schemas.
 - **Environment Configuration:** Manages configuration using a .env file, allowing for easy environment variable management.
 - **Husky**: Runs `npm run lint` and `npm run db:validate` scripts before each commit to ensure code quality and schema validity.
-
+- **Soft Deletion**: Implements logical deletion for database records using a deletedAt column, ensuring data integrity while maintaining recoverability.
+- **Email Service**: Built-in email functionality for sending transactional emails, including support for password recovery.
+- **RESTful API Design:**: Clean and intuitive API endpoints.
 ## Scripts
 
 - `prestart`: Generates the Prisma client before starting the app.
@@ -49,16 +51,14 @@ To run the application you need to create:
 ## TODO list
 
 - Implement tests for google OAuth
-- Implement soft deletion for database raws
-- Implement email service
-- Implement forgot password alongside with Bearer token extraction from headers
 - Implement seeders for database
 - Create centralized point of access to DB
 - Implement Sentry monitoring
 - Implement logging via winston or familiar library
 - Add storage for session keys
-- Add Redis caching of endpoints
+- Add middleware for caching of endpoints
 - Create GitHub actions
+- Send analytics to google ads
 
 ## License
 This project is licensed under the Apache-2.0 License.
