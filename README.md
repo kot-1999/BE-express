@@ -58,7 +58,7 @@ To run the application you need to create:
 - Add middleware for caching of endpoints
 - Create GitHub actions
 - Send analytics to google ads
-
+- Implement XSS attack protection
 - Update BE structure specification. Start using Function Overloads
 - Update user controller
 - Provide an example of V2 endpoint
