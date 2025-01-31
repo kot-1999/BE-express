@@ -59,7 +59,6 @@ To run the application you need to create:
 - Implement logging via winston or familiar library
 - Add middleware for caching of endpoints
 - Create GitHub actions
-- Send analytics to google ads
 - Update BE structure specification. Start using Function Overloads
 - Update user controller
 - Provide an example of V2 endpoint
