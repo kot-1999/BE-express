@@ -1,3 +1,4 @@
+import { SessionOptions } from 'express-session'
 import SMTPConnection from 'nodemailer/lib/smtp-connection'
 import { OAuth2StrategyOptionsWithoutRequiredURLs } from 'passport-google-oauth20'
 import { JwtFromRequestFunction } from 'passport-jwt'
@@ -11,12 +12,7 @@ export interface IConfig {
     postgresURL: string
   }
   googleStrategy: OAuth2StrategyOptionsWithoutRequiredURLs
-  cookieSession: {
-    name: string
-    maxAge: number
-    keys: string[]
-    secure: boolean
-  }
+  cookieSession: SessionOptions & { cookie: NonNullable<SessionOptions['cookie']> }
   jwt: {
     secret: string,
     expiresIn: string

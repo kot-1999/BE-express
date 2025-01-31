@@ -28,14 +28,15 @@ const redisStore = new RedisStore({
 })
 
 app.use(session({
-    secret: cookieSessionConfig.keys,
+    secret: cookieSessionConfig.secret,
     resave: false,
     store: redisStore,
     saveUninitialized: false,
     name: cookieSessionConfig.name,
     cookie: {
-        maxAge: cookieSessionConfig.maxAge,
-        secure: cookieSessionConfig.secure
+        maxAge: cookieSessionConfig.cookie.maxAge,
+        secure: cookieSessionConfig.cookie.secure,
+        httpOnly: cookieSessionConfig.cookie.httpOnly
     }
 }))
 app.use(passport.initialize())

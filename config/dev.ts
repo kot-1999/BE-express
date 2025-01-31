@@ -4,6 +4,9 @@ import { Request } from 'express'
 import { ExtractJwt } from 'passport-jwt'
 
 import { IConfig } from '../src/types/config'
+import { NodeEnv } from '../src/utils/enums'
+
+const isProd = process.env.NODE_ENV === NodeEnv.Prod
 
 const options: IConfig = {
     app: {
@@ -11,9 +14,12 @@ const options: IConfig = {
     },
     cookieSession: {
         name: 'session',
-        maxAge: 24 * 60 * 60 * 1000, // 24 hours
-        keys: [process.env.COOKIE_SECRET_KEY as string],
-        secure: false
+        secret: [process.env.COOKIE_SECRET_KEY as string],
+        cookie: {
+            maxAge: 24 * 60 * 60 * 1000, // 24 hours
+            secure: isProd,
+            httpOnly: isProd
+        }
     },
     database: {
         postgresURL: process.env.POSTGRES_URL as string

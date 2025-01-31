@@ -15,3 +15,9 @@ export enum JwtAudience {
     b2b = 'b2b',
     forgotPassword = 'fps'
 }
+
+export enum NodeEnv {
+    Dev = 'dev',
+    Prod = 'prod',
+    Test = 'test',
+}

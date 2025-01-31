@@ -11,9 +11,12 @@ const options: IConfig = {
     },
     cookieSession: {
         name: 'session',
-        maxAge: 60 * 60 * 1000, // 1 hour
-        keys: [process.env.COOKIE_SECRET_KEY as string],
-        secure: false
+        secret: [process.env.COOKIE_SECRET_KEY as string],
+        cookie: {
+            maxAge: 24 * 60 * 60 * 1000, // 24 hours
+            secure: false,
+            httpOnly: false
+        }
     },
     database: {
         postgresURL: process.env.POSTGRES_URL as string
