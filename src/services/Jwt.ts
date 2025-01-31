@@ -10,7 +10,10 @@ const jwtConfig = config.get<IConfig['jwt']>('jwt')
 export class JwtService {
 
     public static generateToken(payload: JwtPayload): string {
-        const token =  jwt.sign(payload, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
+        const token =  jwt.sign(payload, jwtConfig.secret, {
+            expiresIn: jwtConfig.expiresIn,
+            algorithm: 'HS256' 
+        })
         // return EncryptionService.encryptAES(token)
         return token
     }
