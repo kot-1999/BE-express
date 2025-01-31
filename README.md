@@ -70,6 +70,7 @@ To run the application you need to create:
 - Implement soft deletion for database raws
 - Implement email service
 - Implement forgot password alongside with Bearer token extraction from headers
+- Implement XSS attack protection
 
 ## License
 This project is licensed under the Apache-2.0 License.
