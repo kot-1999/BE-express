@@ -1,3 +1,4 @@
+import { Options as RateLimitRedisOptions } from 'express-rate-limit';
 import { SessionOptions } from 'express-session'
 import helmet from 'helmet';
 import SMTPConnection from 'nodemailer/lib/smtp-connection'
@@ -34,5 +35,6 @@ export interface IConfig {
   } & RedisClientOptions
   helmet: {
     contentSecurity: Parameters<typeof helmet.contentSecurityPolicy>[0]
-  }
+  },
+  rateLimiter: Partial<RateLimitRedisOptions>
 }
