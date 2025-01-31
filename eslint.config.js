@@ -38,8 +38,7 @@ export default [{
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "indent": ["error", 4],
     "wrap-iife": ["error", "inside"],
-    "quotes": ["error", "single"],
-    "semi": ["error", "never"],
+    "quotes": ["error", "single", { "avoidEscape": true }],
     "max-len": ["error", {
       "code": 120,
       "ignoreComments": false, // Ignore long comments

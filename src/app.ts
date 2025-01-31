@@ -1,8 +1,11 @@
 import config from 'config'
-import { RedisStore } from 'connect-redis'
+import { RedisStore as RedisSessionStore } from 'connect-redis'
 import express from 'express'
+import rateLimit from 'express-rate-limit';
 import session from 'express-session'
+import helmet from 'helmet'
 import passport from 'passport'
+import { RedisStore as RedisRateLimitStore } from 'rate-limit-redis'
 
 // Internal imports
 import errorMiddleware from './middlewares/errorMiddleware' // eslint-disable-next-line import/order
@@ -15,35 +18,66 @@ import './services/Prisma'
 import redis from './services/Redis'
 import { IConfig } from './types/config'
 
+// Configs
 const cookieSessionConfig = config.get<IConfig['cookieSession']>('cookieSession')
+const helmetConfig = config.get<IConfig['helmet']>('helmet')
 
+// Local variables
 const app = express()
+const redisClient = redis.getRedisClient()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const redisStore = new RedisStore({
-    client: redis.getRedisClient(),
-    prefix: 'app_session: '
-})
+// Create and use security policy middleware
+app.use(helmet.contentSecurityPolicy(helmetConfig.contentSecurity))
 
+// Create and use the rate limiter
+app.use(rateLimit({
+    // Rate limiter configuration
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+
+    // Redis store configuration
+    store: new RedisRateLimitStore({
+        sendCommand: (...args: string[]) => redisClient.sendCommand(args)
+    })
+}));
+
+// Create and express-session middleware
 app.use(session({
-    secret: cookieSessionConfig.keys,
-    resave: false,
-    store: redisStore,
-    saveUninitialized: false,
+    secret: cookieSessionConfig.secret,
+    resave: cookieSessionConfig.resave,
+    store: new RedisSessionStore({
+        client: redisClient,
+        prefix: 'app_session: '
+    }),
+    saveUninitialized: cookieSessionConfig.saveUninitialized,
     name: cookieSessionConfig.name,
     cookie: {
-        maxAge: cookieSessionConfig.maxAge,
-        secure: cookieSessionConfig.secure
+        maxAge: cookieSessionConfig.cookie.maxAge,
+        secure: cookieSessionConfig.cookie.secure,
+        httpOnly: cookieSessionConfig.cookie.httpOnly
     }
 }))
+
+// Initialize passport and passport-session (express-session should be initialized before).
 app.use(passport.initialize())
 app.use(passport.session())
 
+// Routes initialization
 app.use('/api', authorizeRouters())
+
+// Error middleware initialization.
+// NOTE: Should be defined as the last middleware to prevent
+// losing information about bugs and errors
 app.use(errorMiddleware)
+
+// Default route
 app.get('/', (req, res) => {
     res.status(200).send('Welcome to the BE-Proj-01')
 })
+
 export default app

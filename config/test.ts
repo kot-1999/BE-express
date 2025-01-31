@@ -11,9 +11,14 @@ const options: IConfig = {
     },
     cookieSession: {
         name: 'session',
-        maxAge: 60 * 60 * 1000, // 1 hour
-        keys: [process.env.COOKIE_SECRET_KEY as string],
-        secure: false
+        secret: [process.env.COOKIE_SECRET_KEY as string],
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 24 * 60 * 60 * 1000, // 24 hours
+            secure: false,
+            httpOnly: false
+        }
     },
     database: {
         postgresURL: process.env.POSTGRES_URL as string
@@ -56,6 +61,25 @@ const options: IConfig = {
             host: process.env.REDIS_HOST as string,
             port: Number(process.env.REDIS_PORT)
         }
+    },
+    helmet: {
+        contentSecurity: {
+            useDefaults: false,
+            directives: {
+                defaultSrc: ["'self'"], // Allow resources to be loaded
+                scriptSrc: ["'self'", 'apis.google.com'], // Allows JavaScript to be loaded
+                styleSrc: ["'self'", 'fonts.googleapis.com'], // Allows CSS stylesheets to be loaded
+                fontSrc: ["'self'", 'fonts.gstatic.com'], // Allows font files to be loaded
+                imgSrc: ["'self'", 'lh3.googleusercontent.com'] // Allows images to be loaded
+            }
+        }
+    },
+    rateLimiter: {
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+        standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+        legacyHeaders: false // Disable the `X-RateLimit-*` headers
+        // NOTE: 'store' option will be defined in app.ts
     }
 }
 
