@@ -17,22 +17,14 @@ import redis from './services/Redis'
 import { IConfig } from './types/config'
 
 const cookieSessionConfig = config.get<IConfig['cookieSession']>('cookieSession')
+const helmetConfig = config.get<IConfig['helmet']>('helmet')
 
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.use(helmet.contentSecurityPolicy({
-    useDefaults: false,
-    directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", 'apis.google.com'], // Allow Google OAuth
-        styleSrc: ["'self'", 'fonts.googleapis.com'],
-        fontSrc: ["'self'", 'fonts.gstatic.com'],
-        imgSrc: ["'self'", 'lh3.googleusercontent.com']
-    }
-}))
+app.use(helmet.contentSecurityPolicy(helmetConfig.contentSecurity))
 
 const redisStore = new RedisStore({
     client: redis.getRedisClient(),

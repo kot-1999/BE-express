@@ -64,6 +64,18 @@ const options: IConfig = {
             host: process.env.REDIS_HOST as string,
             port: Number(process.env.REDIS_PORT)
         }
-    }
+    },
+    helmet: {
+        contentSecurity: {
+            useDefaults: false,
+            directives: {
+                defaultSrc: ["'self'"], // Allow resources to be loaded
+                scriptSrc: ["'self'", 'apis.google.com'], // Allows JavaScript to be loaded
+                styleSrc: ["'self'", 'fonts.googleapis.com'], // Allows CSS stylesheets to be loaded
+                fontSrc: ["'self'", 'fonts.gstatic.com'], // Allows font files to be loaded
+                imgSrc: ["'self'", 'lh3.googleusercontent.com'] // Allows images to be loaded
+            }
+        }
+    },
 }
 export default options

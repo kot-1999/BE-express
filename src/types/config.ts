@@ -1,4 +1,5 @@
 import { SessionOptions } from 'express-session'
+import helmet from 'helmet';
 import SMTPConnection from 'nodemailer/lib/smtp-connection'
 import { OAuth2StrategyOptionsWithoutRequiredURLs } from 'passport-google-oauth20'
 import { JwtFromRequestFunction } from 'passport-jwt'
@@ -31,4 +32,7 @@ export interface IConfig {
       port: number
     }
   } & RedisClientOptions
+  helmet: {
+    contentSecurity: Parameters<typeof helmet.contentSecurityPolicy>[0]
+  }
 }
