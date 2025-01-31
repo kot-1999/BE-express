@@ -25,6 +25,8 @@ To run the application you need to create:
 - **Security:**
   - **AES Encryption:** Protects sensitive data which are sent via HTTP TCP connection by encrypting it using the AES algorithm.
   - **SHA256 Hashing:** Ensures data integrity and security through the SHA256 hashing algorithm.
+  - **Rate Limiting with Redis**: Limits the number of incoming requests. Use Redis as storage
+  - **Content Security Policy (CSP) with Helmet**:  A strict Content Security Policy is set using helmet to prevent malicious content from being loaded (Prevents XSS attacks for example). Allows only trusted sources for scripts, styles, fonts, and images.
 - **Centralized Error Handling:** Implements a centralized mechanism to handle errors consistently across the application.
 - **Testing with Mocha and Chai:** Sets up testing frameworks Mocha and Chai for writing and running unit and integration tests. Tests can also be executed within Docker containers for consistency.
 - **Input Validation with Joi:** Uses Joi for validating request inputs, ensuring data integrity and reliability. Additionally, leverages @goodrequest/joi-type-extract to extract TypeScript types from Joi schemas.
@@ -58,7 +60,6 @@ To run the application you need to create:
 - Add middleware for caching of endpoints
 - Create GitHub actions
 - Send analytics to google ads
-- Implement XSS attack protection
 - Update BE structure specification. Start using Function Overloads
 - Update user controller
 - Provide an example of V2 endpoint
