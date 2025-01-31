@@ -2,6 +2,7 @@ import config from 'config'
 import { RedisStore } from 'connect-redis'
 import express from 'express'
 import session from 'express-session'
+import helmet from 'helmet'
 import passport from 'passport'
 
 // Internal imports
@@ -22,6 +23,17 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+app.use(helmet.contentSecurityPolicy({
+    useDefaults: false,
+    directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", 'apis.google.com'], // Allow Google OAuth
+        styleSrc: ["'self'", 'fonts.googleapis.com'],
+        fontSrc: ["'self'", 'fonts.gstatic.com'],
+        imgSrc: ["'self'", 'lh3.googleusercontent.com']
+    }
+}))
+
 const redisStore = new RedisStore({
     client: redis.getRedisClient(),
     prefix: 'app_session: '
@@ -29,9 +41,9 @@ const redisStore = new RedisStore({
 
 app.use(session({
     secret: cookieSessionConfig.secret,
-    resave: false,
+    resave: cookieSessionConfig.resave,
     store: redisStore,
-    saveUninitialized: false,
+    saveUninitialized: cookieSessionConfig.saveUninitialized,
     name: cookieSessionConfig.name,
     cookie: {
         maxAge: cookieSessionConfig.cookie.maxAge,

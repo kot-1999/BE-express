@@ -12,6 +12,8 @@ const options: IConfig = {
     cookieSession: {
         name: 'session',
         secret: [process.env.COOKIE_SECRET_KEY as string],
+        resave: false,
+        saveUninitialized: false,
         cookie: {
             maxAge: 24 * 60 * 60 * 1000, // 24 hours
             secure: false,
