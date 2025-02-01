@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
+import logger from './logger';
 import UserQueries from '../controllers/b2c/v1/user/UserQueries'
 
 class PrismaService {
@@ -7,8 +8,8 @@ class PrismaService {
     private userQueries: UserQueries
     constructor(userQueries: UserQueries) {
         this.userQueries = userQueries
-        // eslint-disable-next-line no-console
-        console.log('Prisma client was created'.green)
+         
+        logger.info('Prisma client was created')
 
         this.client = new PrismaClient().$extends({
             model: {
