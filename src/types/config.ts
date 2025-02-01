@@ -6,9 +6,12 @@ import { OAuth2StrategyOptionsWithoutRequiredURLs } from 'passport-google-oauth2
 import { JwtFromRequestFunction } from 'passport-jwt'
 import { RedisClientOptions } from 'redis'
 
+import { NodeEnv } from '../utils/enums';
+
 export interface IConfig {
   app: {
     port: string
+    env: NodeEnv
   }
   database: {
     postgresURL: string

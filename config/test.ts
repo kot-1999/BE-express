@@ -4,10 +4,12 @@ import { Request } from 'express'
 import { ExtractJwt } from 'passport-jwt'
 
 import { IConfig } from '../src/types/config'
+import { NodeEnv } from '../src/utils/enums';
 
 const options: IConfig = {
     app: {
-        port: process.env.PORT as string
+        port: process.env.PORT as string,
+        env: process.env.NODE_ENV as NodeEnv
     },
     cookieSession: {
         name: 'session',

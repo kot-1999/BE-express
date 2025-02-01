@@ -10,7 +10,8 @@ const isProd = process.env.NODE_ENV === NodeEnv.Prod
 
 const options: IConfig = {
     app: {
-        port: process.env.PORT as string
+        port: process.env.PORT as string,
+        env: process.env.NODE_ENV as NodeEnv
     },
     cookieSession: {
         name: 'session',
