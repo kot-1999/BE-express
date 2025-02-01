@@ -62,7 +62,7 @@ To run the application you need to create:
 - Update BE structure specification. Start using Function Overloads
 - Update user controller
 - Provide an example of V2 endpoint
-
+- Implement other security policies which could be required in a modern application
 ### Completed TODOs
 
 - Add storage for session keys
