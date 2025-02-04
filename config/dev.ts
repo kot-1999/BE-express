@@ -90,16 +90,16 @@ const options: IConfig = {
     },
     logger: {
         debug: {
-            logToConsole: true
+            isLoggedToConsole: true
         },
         error: {
-            logToConsole: true
+            isLoggedToConsole: true
         },
         info: {
-            logToConsole: true
+            isLoggedToConsole: true
         },
         warn: {
-            logToConsole: true
+            isLoggedToConsole: true
         }
     }
 }

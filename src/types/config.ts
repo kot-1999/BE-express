@@ -9,7 +9,7 @@ import { RedisClientOptions } from 'redis'
 import { NodeEnv } from '../utils/enums';
 
 interface LoggerCommonConfig {
-  logToConsole: boolean
+  isLoggedToConsole: boolean
 }
 
 export interface IConfig {
