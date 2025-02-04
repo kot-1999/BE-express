@@ -1,4 +1,3 @@
-import 'colors'
 import http from 'http'
 
 import config from 'config'
