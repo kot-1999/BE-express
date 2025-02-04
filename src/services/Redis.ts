@@ -1,7 +1,7 @@
 import config from 'config'
 import { createClient } from 'redis'
 
-import logger from './logger';
+import logger from './Logger';
 import { IConfig } from '../types/config'
 
 export class RedisService {

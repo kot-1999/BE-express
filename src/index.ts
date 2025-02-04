@@ -3,7 +3,7 @@ import http from 'http'
 import config from 'config'
 
 import app from './app'
-import logger from './services/logger';
+import logger from './services/Logger';
 import { IConfig } from './types/config'
 
 const appConfig = config.get<IConfig['app']>('app')

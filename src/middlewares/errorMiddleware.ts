@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import logger from '../services/logger';
+import logger from '../services/Logger';
 import { IError } from '../utils/IError'
 
 export default function errorMiddleware(err: Error, req: Request, res: Response, _next: NextFunction) {

@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
-import logger from './logger';
+import logger from './Logger';
 import UserQueries from '../controllers/b2c/v1/user/UserQueries'
 
 class PrismaService {

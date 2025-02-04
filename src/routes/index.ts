@@ -2,7 +2,7 @@ import { Router } from 'express'
 
 import authorizationRouter from './b2c/AuthorizationRouter'
 import userRouter from './b2c/UserRouter'
-import logger from '../services/logger';
+import logger from '../services/Logger';
 
 const router = Router()
 

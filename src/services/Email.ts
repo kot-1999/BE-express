@@ -7,7 +7,7 @@ import nodemailer from 'nodemailer'
 import Mail from 'nodemailer/lib/mailer'
 
 import { JwtService } from './Jwt'
-import logger from './logger';
+import logger from './Logger';
 import { IConfig } from '../types/config'
 import { EmailDataType } from '../types/types'
 import { EmailType, JwtAudience } from '../utils/enums'
