@@ -49,7 +49,7 @@ export default [{
     }],
     "newline-per-chained-call": ["error", { "ignoreChainWithDepth": 2 }],
     curly: ["error", "all"],
-    "no-console": "warn",
+    "no-console": "error",
     eqeqeq: ["error", "always"],
     "no-var": "error",
     "key-spacing": ["error", { "beforeColon": false, "afterColon": true }],
