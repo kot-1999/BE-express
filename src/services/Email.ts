@@ -36,6 +36,10 @@ class EmailService {
         this.config = config
         this.initTransporter()
         this.htmlToTextCompiler = compile()
+        logger.info(`Connected to email server at PORT ${config.port}`)
+        if (!config.secure) {
+            logger.warn('Email service is running in unsecured mode')
+        }
     }
      
     private async buildRegistered(data: EmailDataType<EmailType.registered>): Promise<Mail.Options & { html: string }> {
