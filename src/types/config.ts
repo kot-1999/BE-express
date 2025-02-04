@@ -8,6 +8,10 @@ import { RedisClientOptions } from 'redis'
 
 import { NodeEnv } from '../utils/enums';
 
+interface LoggerCommonConfig {
+  logToConsole: boolean
+}
+
 export interface IConfig {
   app: {
     port: string
@@ -39,5 +43,11 @@ export interface IConfig {
   helmet: {
     contentSecurity: Parameters<typeof helmet.contentSecurityPolicy>[0]
   },
-  rateLimiter: Partial<RateLimitRedisOptions>
+  rateLimiter: Partial<RateLimitRedisOptions>,
+  logger: {
+    info: LoggerCommonConfig,
+    warn: LoggerCommonConfig,
+    error: LoggerCommonConfig,
+    debug: LoggerCommonConfig,
+  }
 }

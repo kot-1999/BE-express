@@ -82,6 +82,20 @@ const options: IConfig = {
         standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
         legacyHeaders: false // Disable the `X-RateLimit-*` headers
         // NOTE: 'store' option will be defined in app.ts
+    },
+    logger: {
+        debug: {
+            logToConsole: true
+        },
+        error: {
+            logToConsole: false
+        },
+        info: {
+            logToConsole: true
+        },
+        warn: {
+            logToConsole: true
+        }
     }
 }
 

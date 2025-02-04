@@ -1,5 +1,7 @@
 import 'dotenv/config'
 
+import * as process from 'node:process';
+
 import { Request } from 'express'
 import { ExtractJwt } from 'passport-jwt'
 
@@ -85,6 +87,20 @@ const options: IConfig = {
         standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
         legacyHeaders: false // Disable the `X-RateLimit-*` headers
         // NOTE: 'store' option will be defined in app.ts
+    },
+    logger: {
+        debug: {
+            logToConsole: true
+        },
+        error: {
+            logToConsole: true
+        },
+        info: {
+            logToConsole: true
+        },
+        warn: {
+            logToConsole: true
+        }
     }
 }
 export default options
