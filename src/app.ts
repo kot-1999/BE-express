@@ -12,7 +12,7 @@ import errorMiddleware from './middlewares/errorMiddleware' // eslint-disable-ne
 import authorizeRouters from './routes'
 
 // Initialize services
-import './services/PassportSetup'
+import './services/Passport'
 import './services/Prisma'
 
 import redis from './services/Redis'
