@@ -44,8 +44,9 @@ const options: IConfig = {
         jwtFromRequestHeader: ExtractJwt.fromAuthHeaderAsBearerToken()
     },
     jwt: {
-        secret: process.env.JWT_SECRET  as string,
-        expiresIn: process.env.JWT_EXPIRES_IN as string
+        secret: process.env.JWT_SECRET as string,
+        expiresIn: 24 * 60 * 60 * 1000, // 24 hours
+        algorithm: 'HS256'
     },
     encryption: {
         key: process.env.ENCRYPTION_KEY as string

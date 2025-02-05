@@ -1,5 +1,7 @@
 import 'dotenv/config'
 
+import process from 'node:process';
+
 import { Request } from 'express'
 import { ExtractJwt } from 'passport-jwt'
 
@@ -40,7 +42,8 @@ const options: IConfig = {
     },
     jwt: {
         secret: process.env.JWT_SECRET as string,
-        expiresIn: process.env.JWT_EXPIRES_IN as string
+        expiresIn: 24 * 60 * 60 * 1000, // 24 hours
+        algorithm: 'HS256'
     },
     encryption: {
         key: process.env.ENCRYPTION_KEY as string

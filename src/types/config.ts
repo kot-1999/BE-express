@@ -1,6 +1,7 @@
 import { Options as RateLimitRedisOptions } from 'express-rate-limit';
 import { SessionOptions } from 'express-session'
 import helmet from 'helmet';
+import { Algorithm } from 'jsonwebtoken';
 import SMTPConnection from 'nodemailer/lib/smtp-connection'
 import { OAuth2StrategyOptionsWithoutRequiredURLs } from 'passport-google-oauth20'
 import { JwtFromRequestFunction } from 'passport-jwt'
@@ -24,7 +25,8 @@ export interface IConfig {
   cookieSession: SessionOptions & { cookie: NonNullable<SessionOptions['cookie']> }
   jwt: {
     secret: string,
-    expiresIn: string
+    expiresIn: number
+    algorithm: Algorithm
   }
   encryption: {
     key: string
