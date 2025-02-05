@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
 
+import logger from '../services/Logger';
 import { IError } from '../utils/IError'
 
 export default function errorMiddleware(err: Error, req: Request, res: Response, _next: NextFunction) {
-    // eslint-disable-next-line no-console
-    console.log('ERROR_MIDDLEWARE:', err.message, err)
+    logger.error(err.message, err)
 
     let messages = []
     let code = 500

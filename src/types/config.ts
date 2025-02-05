@@ -1,14 +1,22 @@
 import { Options as RateLimitRedisOptions } from 'express-rate-limit';
 import { SessionOptions } from 'express-session'
 import helmet from 'helmet';
+import { Algorithm } from 'jsonwebtoken';
 import SMTPConnection from 'nodemailer/lib/smtp-connection'
 import { OAuth2StrategyOptionsWithoutRequiredURLs } from 'passport-google-oauth20'
 import { JwtFromRequestFunction } from 'passport-jwt'
 import { RedisClientOptions } from 'redis'
 
+import { NodeEnv } from '../utils/enums';
+
+interface LoggerCommonConfig {
+  isLoggedToConsole: boolean
+}
+
 export interface IConfig {
   app: {
     port: string
+    env: NodeEnv
   }
   database: {
     postgresURL: string
@@ -17,7 +25,8 @@ export interface IConfig {
   cookieSession: SessionOptions & { cookie: NonNullable<SessionOptions['cookie']> }
   jwt: {
     secret: string,
-    expiresIn: string
+    expiresIn: number
+    algorithm: Algorithm
   }
   encryption: {
     key: string
@@ -36,5 +45,11 @@ export interface IConfig {
   helmet: {
     contentSecurity: Parameters<typeof helmet.contentSecurityPolicy>[0]
   },
-  rateLimiter: Partial<RateLimitRedisOptions>
+  rateLimiter: Partial<RateLimitRedisOptions>,
+  logger: {
+    info: LoggerCommonConfig,
+    warn: LoggerCommonConfig,
+    error: LoggerCommonConfig,
+    debug: LoggerCommonConfig,
+  }
 }

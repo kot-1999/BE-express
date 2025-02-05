@@ -1,5 +1,6 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 
+import logger from './Logger';
 import UserQueries from '../controllers/b2c/v1/user/UserQueries'
 
 class PrismaService {
@@ -7,10 +8,35 @@ class PrismaService {
     private userQueries: UserQueries
     constructor(userQueries: UserQueries) {
         this.userQueries = userQueries
-        // eslint-disable-next-line no-console
-        console.log('Prisma client was created'.green)
 
-        this.client = new PrismaClient().$extends({
+        const client = new PrismaClient({
+            log: [{
+                level: 'warn',
+                emit: 'event'
+            }, {
+                level: 'error',
+                emit: 'event'
+            },{
+                level: 'info',
+                emit: 'event'
+            }]
+        })
+
+        client.$on('warn', (e: Prisma.LogEvent) => {
+            logger.warn(`[Prisma] ${e.message}`);
+        })
+
+        client.$on('error', (e: Prisma.LogEvent) => {
+            logger.error(`[Prisma] ${e.message}`);
+        })
+
+        client.$on('info', (e: Prisma.LogEvent) => {
+            logger.info(`[Prisma] ${e.message}`);
+        })
+
+        // NOTE: $extends client method should be used after $on
+        // as extended client doesnt support $on and $use
+        this.client = client.$extends({
             model: {
                 user: {
                     findOne: this.userQueries.findOne,
@@ -18,6 +44,8 @@ class PrismaService {
                 }
             }
         })
+
+        logger.info('Prisma client was created')
     }
 
     public getPrismaClient() {

@@ -1,13 +1,17 @@
 import 'dotenv/config'
 
+import process from 'node:process';
+
 import { Request } from 'express'
 import { ExtractJwt } from 'passport-jwt'
 
 import { IConfig } from '../src/types/config'
+import { NodeEnv } from '../src/utils/enums';
 
 const options: IConfig = {
     app: {
-        port: process.env.PORT as string
+        port: process.env.PORT as string,
+        env: process.env.NODE_ENV as NodeEnv
     },
     cookieSession: {
         name: 'session',
@@ -38,7 +42,8 @@ const options: IConfig = {
     },
     jwt: {
         secret: process.env.JWT_SECRET as string,
-        expiresIn: process.env.JWT_EXPIRES_IN as string
+        expiresIn: 24 * 60 * 60 * 1000, // 24 hours
+        algorithm: 'HS256'
     },
     encryption: {
         key: process.env.ENCRYPTION_KEY as string
@@ -80,6 +85,20 @@ const options: IConfig = {
         standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
         legacyHeaders: false // Disable the `X-RateLimit-*` headers
         // NOTE: 'store' option will be defined in app.ts
+    },
+    logger: {
+        debug: {
+            isLoggedToConsole: true
+        },
+        error: {
+            isLoggedToConsole: false
+        },
+        info: {
+            isLoggedToConsole: true
+        },
+        warn: {
+            isLoggedToConsole: true
+        }
     }
 }
 

@@ -35,6 +35,10 @@ To run the application you need to create:
 - **Soft Deletion**: Implements logical deletion for database records using a deletedAt column, ensuring data integrity while maintaining recoverability.
 - **Email Service**: Built-in email functionality for sending transactional emails, including support for password recovery.
 - **RESTful API Design:**: Clean and intuitive API endpoints.
+- **Logging**: The application uses Winston with DailyRotateFile for logging. Logs are stored based on severity levels (`info`, `warn`, `error`, `debug`) and are rotated daily.
+  - Logs are stored in the `logs/{env}/{level}/%DATE%.log` directory.
+  - Console logging is configurable per log level using isLoggedToConsole.
+
 ## Scripts
 
 - `prestart`: Generates the Prisma client before starting the app.
@@ -56,12 +60,13 @@ To run the application you need to create:
 - Implement seeders for database
 - Create centralized point of access to DB
 - Implement Sentry monitoring
-- Implement logging via winston or familiar library
 - Add middleware for caching of endpoints
 - Create GitHub actions
 - Update BE structure specification. Start using Function Overloads
 - Update user controller
 - Provide an example of V2 endpoint
+- Implement other security policies which could be required in a modern application
+- Divide docker-compose file into several ones
 
 ### Completed TODOs
 
@@ -70,6 +75,7 @@ To run the application you need to create:
 - Implement email service
 - Implement forgot password alongside with Bearer token extraction from headers
 - Implement XSS attack protection
+- Implement logging via winston or familiar library
 
 ## License
 This project is licensed under the Apache-2.0 License.

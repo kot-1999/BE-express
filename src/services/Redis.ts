@@ -1,6 +1,7 @@
 import config from 'config'
 import { createClient } from 'redis'
 
+import logger from './Logger';
 import { IConfig } from '../types/config'
 
 export class RedisService {
@@ -21,11 +22,11 @@ export class RedisService {
         })
 
         this.redisClient.on('connect', () => {
-            console.log(`Connected to Redis at PORT ${this.redisConfig.socket.port}`.green)
+            logger.info(`Connected to Redis at PORT ${this.redisConfig.socket.port}`)
         })
 
         this.redisClient.on('error', (err) => {
-            console.error('Redis connection error:', err)
+            logger.error('Redis connection error', err)
         })
 
         this.redisClient.connect()

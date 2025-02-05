@@ -7,6 +7,7 @@ import nodemailer from 'nodemailer'
 import Mail from 'nodemailer/lib/mailer'
 
 import { JwtService } from './Jwt'
+import logger from './Logger';
 import { IConfig } from '../types/config'
 import { EmailDataType } from '../types/types'
 import { EmailType, JwtAudience } from '../utils/enums'
@@ -27,7 +28,7 @@ class EmailService {
                 pass: this.config.auth.pass
             }
         }).on('error', (err) => {
-            console.error('Email Service error', err)
+            logger.error('Email Service error', err)
         })
     }
 
@@ -35,6 +36,10 @@ class EmailService {
         this.config = config
         this.initTransporter()
         this.htmlToTextCompiler = compile()
+        logger.info(`Connected to email server at PORT ${config.port}`)
+        if (!config.secure) {
+            logger.warn('Email service is running in unsecured mode')
+        }
     }
      
     private async buildRegistered(data: EmailDataType<EmailType.registered>): Promise<Mail.Options & { html: string }> {
@@ -100,7 +105,7 @@ class EmailService {
             ...mailOptions,
             text: this.htmlToTextCompiler(mailOptions.html) // text version of html
         }).catch((err) => {
-            console.error('SENDING EMAIL ERROR', err)
+            logger.error('Email sending error', err)
         })
     }
 }

@@ -12,7 +12,7 @@ export class JwtService {
     public static generateToken(payload: JwtPayload): string {
         const token =  jwt.sign(payload, jwtConfig.secret, {
             expiresIn: jwtConfig.expiresIn,
-            algorithm: 'HS256' 
+            algorithm: jwtConfig.algorithm 
         })
         // return EncryptionService.encryptAES(token)
         return token

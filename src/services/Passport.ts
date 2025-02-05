@@ -10,33 +10,41 @@ import { IConfig } from '../types/config'
 import { JwtAudience, PassportStrategy } from '../utils/enums'
 import { IError } from '../utils/IError'
 
-const googleStrategyConfig = config.get<IConfig['googleStrategy']>('googleStrategy')
-const jwtConfig = config.get<IConfig['jwt']>('jwt')
-const passportConfig = config.get<IConfig['passport']>('passport')
-
 class PassportSetup {
-    constructor() {
+    private googleStrategyConfig: IConfig['googleStrategy']
+    private jwtConfig: IConfig['jwt']
+    private passportConfig: IConfig['passport']
+
+    constructor(
+        googleStrategyConfig: IConfig['googleStrategy'],
+        jwtConfig: IConfig['jwt'],
+        passportConfig: IConfig['passport']
+    ) {
+        this.googleStrategyConfig = googleStrategyConfig
+        this.jwtConfig = jwtConfig
+        this.passportConfig = passportConfig
+
         passport.use(PassportStrategy.google, new GoogleStrategy(
             {
-                clientID: googleStrategyConfig.clientID,
-                clientSecret: googleStrategyConfig.clientSecret,
-                callbackURL: googleStrategyConfig.callbackURL
+                clientID: this.googleStrategyConfig.clientID,
+                clientSecret: this.googleStrategyConfig.clientSecret,
+                callbackURL: this.googleStrategyConfig.callbackURL
             },
             this.googleStrategy
         ))
 
         passport.use(PassportStrategy.jwtB2c, new JwtStrategy(
             {
-                jwtFromRequest: ExtractJwt.fromExtractors([passportConfig.jwtFromCookie]),
-                secretOrKey: jwtConfig.secret
+                jwtFromRequest: ExtractJwt.fromExtractors([this.passportConfig.jwtFromCookie]),
+                secretOrKey: this.jwtConfig.secret
             }, 
             this.b2cJwtStrategy
         ))
 
         passport.use(PassportStrategy.jwtB2cForgotPassword, new JwtStrategy(
             {
-                jwtFromRequest: ExtractJwt.fromExtractors([passportConfig.jwtFromRequestHeader]),
-                secretOrKey: jwtConfig.secret
+                jwtFromRequest: ExtractJwt.fromExtractors([this.passportConfig.jwtFromRequestHeader]),
+                secretOrKey: this.jwtConfig.secret
             },
             this.b2cJwtForgotPasswordStrategy
         ))
@@ -158,5 +166,13 @@ class PassportSetup {
     }
 }
 
-const passportSetup = new PassportSetup()
+const googleStrategyConfig = config.get<IConfig['googleStrategy']>('googleStrategy')
+const jwtConfig = config.get<IConfig['jwt']>('jwt')
+const passportConfig = config.get<IConfig['passport']>('passport')
+
+const passportSetup = new PassportSetup(
+    googleStrategyConfig,
+    jwtConfig,
+    passportConfig
+)
 export default passportSetup
