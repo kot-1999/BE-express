@@ -8,8 +8,6 @@ class PrismaService {
     private userQueries: UserQueries
     constructor(userQueries: UserQueries) {
         this.userQueries = userQueries
-         
-        logger.info('Prisma client was created')
 
         const client = new PrismaClient({
             log: [{
@@ -47,6 +45,7 @@ class PrismaService {
             }
         })
 
+        logger.info('Prisma client was created')
     }
 
     public getPrismaClient() {
