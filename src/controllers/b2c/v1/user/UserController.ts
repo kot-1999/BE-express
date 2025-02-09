@@ -9,7 +9,7 @@ import { IError } from '../../../../utils/IError'
 
 export class UsersController extends AbstractController {
     private static readonly userSchema = Joi.object({
-        id: Joi.string().required(),
+        id: JoiCommon.string.id,
         firstName: JoiCommon.string.name.allow(null),
         lastName: JoiCommon.string.name.allow(null),
         email: JoiCommon.string.email,
@@ -26,7 +26,7 @@ export class UsersController extends AbstractController {
         request: {
             getUser: JoiCommon.object.request.keys({
                 params: Joi.object({
-                    userID: Joi.string().required()
+                    userID: JoiCommon.string.id
                 }).required()
             }).required(),
 
@@ -56,7 +56,7 @@ export class UsersController extends AbstractController {
 
             deleteUser: Joi.object({
                 user: Joi.object({
-                    id: Joi.string().required()
+                    id: JoiCommon.string.id
                 }),
                 message: Joi.string().required()
             }).required()

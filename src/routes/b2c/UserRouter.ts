@@ -13,15 +13,15 @@ export default function authorizationRouter() {
     // List endpoints
     router.get(
         '/:userID',
-        authorizationMiddleware([PassportStrategy.jwtB2c, PassportStrategy.google]),
         validationMiddleware(UsersController.schemas.request.getUser),
+        authorizationMiddleware([PassportStrategy.jwtB2c, PassportStrategy.google]),
         userController.getUser
     )
 
     router.delete(
         '/:userID',
-        authorizationMiddleware([PassportStrategy.jwtB2c, PassportStrategy.google]),
         validationMiddleware(UsersController.schemas.request.deleteUser),
+        authorizationMiddleware([PassportStrategy.jwtB2c, PassportStrategy.google]),
         userController.deleteUser
     )
 

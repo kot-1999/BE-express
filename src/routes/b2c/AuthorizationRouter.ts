@@ -47,8 +47,8 @@ export default function authorizationRouter() {
 
     router.post(
         '/reset-password',
-        authorizationMiddleware([PassportStrategy.jwtB2cForgotPassword, PassportStrategy.google]),
         validationMiddleware(AuthorizationController.schemas.request.resetPassword),
+        authorizationMiddleware([PassportStrategy.jwtB2cForgotPassword, PassportStrategy.google]),
         authorizationController.resetPassword
     )
     return router
