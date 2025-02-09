@@ -52,6 +52,7 @@
   "devDependencies": {
     "@eslint/js": "9.17.0",
     "@faker-js/faker": "9.3.0",
+    "@sentry/types": "8.54.0",
     "@types/chai": "5.0.1",
     "@types/config": "3.3.0",
     "@types/crypto-js": "4.2.2",
