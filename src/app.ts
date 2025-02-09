@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node';
 import config from 'config'
 import { RedisStore as RedisSessionStore } from 'connect-redis'
 import express from 'express'
@@ -14,6 +15,7 @@ import authorizeRouters from './routes'
 // Initialize services
 import './services/Passport'
 import './services/Prisma'
+import './services/Sentry'
 
 import logger from './services/Logger';
 import redis from './services/Redis'
@@ -74,6 +76,9 @@ app.use(passport.session())
 
 // Routes initialization
 app.use('/api', authorizeRouters())
+
+// The error handler must be registered before any other error middleware and after all controllers
+Sentry.setupExpressErrorHandler(app)
 
 // Error middleware initialization.
 // NOTE: Should be defined as the last middleware to prevent
