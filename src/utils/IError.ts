@@ -1,7 +1,5 @@
 import { ValidationError, ValidationErrorItem } from 'joi'
 
-import logger from '../services/Logger';
-
 export class IError extends Error {
     isJoi: boolean
     statusCode: number
@@ -11,7 +9,6 @@ export class IError extends Error {
     constructor(statusCode: number, error: string | ValidationError) {
         super()
         this.statusCode = statusCode
-        logger.debug(error instanceof ValidationError)
 
         if (typeof error === 'string') {
             this.message = error
