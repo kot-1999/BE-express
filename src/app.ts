@@ -1,3 +1,4 @@
+import './services/Sentry'
 import * as Sentry from '@sentry/node';
 import config from 'config'
 import { RedisStore as RedisSessionStore } from 'connect-redis'
@@ -15,7 +16,6 @@ import authorizeRouters from './routes'
 // Initialize services
 import './services/Passport'
 import './services/Prisma'
-import './services/Sentry'
 
 import logger from './services/Logger';
 import redis from './services/Redis'
