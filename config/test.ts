@@ -2,7 +2,6 @@ import 'dotenv/config'
 
 import process from 'node:process';
 
-import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { Request } from 'express'
 import { ExtractJwt } from 'passport-jwt'
 
@@ -104,11 +103,8 @@ const options: IConfig = {
     sentry: {
         environment: process.env.NODE_ENV as NodeEnv,
         dsn: process.env.SENTRY_DNS as string,
-        integrations: [
-            nodeProfilingIntegration()
-        ],
-        // Tracing
-        tracesSampleRate: 1.0 //  Capture 100% of the transactions
+        tracesSampleRate: 1.0, //  Capture 100% of the transactions
+        profilesSampleRate: 1.0
     }
 }
 

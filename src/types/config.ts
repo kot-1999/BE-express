@@ -1,4 +1,3 @@
-import { Integration } from '@sentry/core';
 import { Options as RateLimitRedisOptions } from 'express-rate-limit';
 import { SessionOptions } from 'express-session'
 import helmet from 'helmet';
@@ -56,7 +55,7 @@ export interface IConfig {
   sentry: {
     environment: NodeEnv,
     dsn: string,
-    integrations:  Integration[],
-    tracesSampleRate: number
+    tracesSampleRate: number,
+    profilesSampleRate: number
   }
 }

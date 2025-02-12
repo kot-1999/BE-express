@@ -1,26 +1,39 @@
 import * as Sentry from '@sentry/node'
 import config from 'config';
+import { Router } from 'express'
 
 import logger from './Logger';
-import { IConfig } from '../types/config';
+import prisma from './Prisma'
+import { IConfig } from '../types/config'
 
 const sentryConfig = config.get<IConfig['sentry']>('sentry')
+logger.debug(sentryConfig.dsn)
 
-class SentryService {
-    private sentryConfig: IConfig['sentry']
+function sentryInit(app: Router) {
+    Sentry.init({
+        debug: true,
+        environment: sentryConfig.environment,
+        dsn: sentryConfig.dsn,
+        integrations: [
+            new Sentry.Integrations.Http({ tracing: true }),
+            new Sentry.Integrations.Postgres(),
+            new Sentry.Integrations.Express({ app }),
+            new Sentry.Integrations.Prisma({ client: prisma })
+        ],
+        // includeLocalVariables: true,
+        // spotlight: true,
+        tracesSampleRate: sentryConfig.tracesSampleRate,
+        release: 'latest'
+    })
+    logger.info(`Sentry was initialized: ${Sentry.getCurrentHub().getClient() !== undefined}`)
 
-    constructor(sentryConfig: IConfig['sentry']) {
-        this.sentryConfig = sentryConfig
-        logger.debug(JSON.stringify(sentryConfig))
-        Sentry.init({
-            environment: this.sentryConfig.environment.toString(),
-            dsn: this.sentryConfig.dsn.toString(),
-            integrations: this.sentryConfig.integrations,
-            tracesSampleRate: this.sentryConfig.tracesSampleRate
-        })
-        logger.info(`SentryService initialized with ${this.sentryConfig.tracesSampleRate} traces sample rate`)
-    }
+    // Sentry.captureException(new Error('Manual test error'));
+    //
+    // Sentry.flush(2000).then(() => {
+    //     logger.debug('Flushed events, exiting.');
+    //     process.exit();
+    // });
+    return Sentry
 }
 
-const sentryService = new SentryService(sentryConfig)
-export default sentryService
+export default sentryInit;
