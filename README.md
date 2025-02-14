@@ -64,7 +64,6 @@ To run the application you need to create:
 - Implement tests for google OAuth
 - Implement seeders for database
 - Create centralized point of access to DB
-- Implement Sentry monitoring
 - Add middleware for caching of endpoints
 - Create GitHub actions
 - Update BE structure specification. Start using Function Overloads
@@ -81,6 +80,7 @@ To run the application you need to create:
 - Implement forgot password alongside with Bearer token extraction from headers
 - Implement XSS attack protection
 - Implement logging via winston or familiar library
+- Implement Sentry monitoring
 
 ## License
 This project is licensed under the Apache-2.0 License.
