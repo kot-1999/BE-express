@@ -38,6 +38,11 @@ To run the application you need to create:
 - **Logging**: The application uses Winston with DailyRotateFile for logging. Logs are stored based on severity levels (`info`, `warn`, `error`, `debug`) and are rotated daily.
   - Logs are stored in the `logs/{env}/{level}/%DATE%.log` directory.
   - Console logging is configurable per log level using isLoggedToConsole.
+- **Sentry**: Application uses Sentry for:
+  - Performance Monitoring: Tracks API request performance and latency.
+  - Request Tracing: Provides insights into slow endpoints and bottlenecks.
+  - Error Tracking: Automatically captures and reports unhandled exceptions and errors.
+  - Custom Error Logging: Supports manual error reporting with contextual information.
 
 ## Scripts
 

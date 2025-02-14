@@ -15,7 +15,7 @@ import authorizeRouters from './routes'
 import './services/Passport'
 import './services/Prisma'
 
-import logger from './services/Logger';
+import logger from './services/Logger'
 import redis from './services/Redis'
 import { IConfig } from './types/config'
 
@@ -74,6 +74,11 @@ app.use(passport.session())
 
 // Routes initialization
 app.use('/api', authorizeRouters())
+app.get('/api/test/sentry', (req, res) => {
+    res.status(200).json({ message: 'done' })
+})
+
+// The error handler must be registered before any other error middleware and after all controllers
 
 // Error middleware initialization.
 // NOTE: Should be defined as the last middleware to prevent

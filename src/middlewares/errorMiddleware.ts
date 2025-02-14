@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 
 import logger from '../services/Logger';
+import Sentry from '../services/Sentry';
 import { IError } from '../utils/IError'
 
 export default function errorMiddleware(err: Error, req: Request, res: Response, _next: NextFunction) {
@@ -8,7 +9,7 @@ export default function errorMiddleware(err: Error, req: Request, res: Response,
 
     let messages = []
     let code = 500
-
+    Sentry.captureException(err)
     if (err instanceof IError) {
         code = err.statusCode
 

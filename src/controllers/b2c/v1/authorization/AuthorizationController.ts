@@ -13,8 +13,7 @@ import { IError } from '../../../../utils/IError'
 export class AuthorizationController extends AbstractController {
     private static readonly userSchema = Joi.object({
         user: Joi.object({
-            id: Joi.string().uuid()
-                .required()
+            id: JoiCommon.string.id
         }).required()
     })
 

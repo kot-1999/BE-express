@@ -1,3 +1,4 @@
+import { NodeOptions } from '@sentry/node';
 import { Options as RateLimitRedisOptions } from 'express-rate-limit';
 import { SessionOptions } from 'express-session'
 import helmet from 'helmet';
@@ -51,5 +52,12 @@ export interface IConfig {
     warn: LoggerCommonConfig,
     error: LoggerCommonConfig,
     debug: LoggerCommonConfig,
+  },
+  sentry:  NodeOptions & {
+    environment: NodeEnv,
+    dsn: string,
+    tracesSampleRate: number,
+    profilesSampleRate: number,
+    release: string
   }
 }

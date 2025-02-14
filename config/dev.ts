@@ -1,6 +1,5 @@
 import 'dotenv/config'
-
-import * as process from 'node:process';
+import process from 'node:process';
 
 import { Request } from 'express'
 import { ExtractJwt } from 'passport-jwt'
@@ -102,6 +101,13 @@ const options: IConfig = {
         warn: {
             isLoggedToConsole: true
         }
+    },
+    sentry: {
+        environment: process.env.NODE_ENV as NodeEnv,
+        dsn: process.env.SENTRY_DNS as string,
+        tracesSampleRate: 1.0, //  Capture 100% of the transactions
+        profilesSampleRate: 1.0,
+        release: 'latest'
     }
 }
 export default options

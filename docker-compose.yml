@@ -24,6 +24,7 @@ services:
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - SENTRY_DNS=${SENTRY_DNS}
     depends_on:
       - mailhog
       - redis

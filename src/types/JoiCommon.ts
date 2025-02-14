@@ -4,6 +4,8 @@ import { Constants } from '../utils/Constants'
 
 export class JoiCommon {
     static readonly string = {
+        id: Joi.string().uuid()
+            .required(),
         name: Joi.string().trim()
             .alphanum()
             .allow('\'', '-')

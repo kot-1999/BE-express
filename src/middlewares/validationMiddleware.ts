@@ -25,7 +25,7 @@ export default function validationMiddleware(schema: Schema) {
 
         // Throw an error in case of unsuccessful validation
         if (result.error) {
-            throw new IError(400, result.error.details)
+            throw new IError(400, result.error)
         }
 
         req.body = result.value.body
