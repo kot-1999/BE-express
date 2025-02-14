@@ -1,3 +1,4 @@
+import './services/Sentry'
 import http from 'http'
 
 import config from 'config'

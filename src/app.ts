@@ -15,10 +15,10 @@ import authorizeRouters from './routes'
 import './services/Passport'
 import './services/Prisma'
 
-import logger from './services/Logger';
+import logger from './services/Logger'
 import redis from './services/Redis'
-import sentryInit from './services/Sentry';
 import { IConfig } from './types/config'
+
 // Configs
 const cookieSessionConfig = config.get<IConfig['cookieSession']>('cookieSession')
 const helmetConfig = config.get<IConfig['helmet']>('helmet')
@@ -26,7 +26,6 @@ const helmetConfig = config.get<IConfig['helmet']>('helmet')
 // Local variables
 const app = express()
 const redisClient = redis.getRedisClient()
-const Sentry = sentryInit(app)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -76,18 +75,10 @@ app.use(passport.session())
 // Routes initialization
 app.use('/api', authorizeRouters())
 app.get('/api/test/sentry', (req, res) => {
-    Sentry.captureException(new Error('Test error from backend'));
     res.status(200).json({ message: 'done' })
-});
-
-// app.use((err: Error, req: Request | AuthUserRequest, res: Response, next: NextFunction) {
-//
-// })
+})
 
 // The error handler must be registered before any other error middleware and after all controllers
-app.use(Sentry.Handlers.errorHandler({ 
-    shouldHandleError: (error) => !error.status || error.status === 400
-}))
 
 // Error middleware initialization.
 // NOTE: Should be defined as the last middleware to prevent
@@ -99,8 +90,4 @@ app.get('/', (req, res) => {
     res.status(200).send('Welcome to the BE-Proj-01')
 })
 
-const transaction = Sentry.startTransaction({ name: 'Test Transaction' });
-setTimeout(() => {
-    transaction.finish();
-}, 1000);
 export default app
