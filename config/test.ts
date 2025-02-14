@@ -103,8 +103,9 @@ const options: IConfig = {
     sentry: {
         environment: process.env.NODE_ENV as NodeEnv,
         dsn: process.env.SENTRY_DNS as string,
-        tracesSampleRate: 1.0, //  Capture 100% of the transactions
-        profilesSampleRate: 1.0
+        tracesSampleRate: 0, //  Sentry will be initialized, but any errors or tracing won't be followed
+        profilesSampleRate: 0,
+        release: 'test'
     }
 }
 
