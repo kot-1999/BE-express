@@ -23,7 +23,7 @@ jobs:
 
       # Print the contents of .env.test for debugging
       - name: Print .env.test
-        run: cat .env.test
+        run: cat .env.test && cat "${{ secrets.ENV_TEST }}"
 
       # Buildx is an advanced Docker builder that supports multi-platform builds and caching
       - name: Set up Docker Buildx
