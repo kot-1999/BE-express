@@ -19,17 +19,6 @@ jobs:
 
       # Write the secret to .env.test
       - name: Write env variables to file
-        run: echo "$SECRETS" >> .env
-
-      # Print the contents of .env.test for debugging
-      - name: Print .env.test
-        run: cat .env.test
-
-      # Buildx is an advanced Docker builder that supports multi-platform builds and caching
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Run Tests
         env:
           SECRETS: |
             NODE_ENV=${{ secrets.NODE_ENV }}
@@ -55,6 +44,17 @@ jobs:
             REDIS_HOST=${{ secrets.REDIS_HOST }}
             REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
             SENTRY_DNS=${{ secrets.SENTRY_DNS }}
+        run: echo "$SECRETS" >> .env.test
+
+      # Print the contents of .env.test for debugging
+      - name: Print .env.test
+        run: cat .env.test
+
+      # Buildx is an advanced Docker builder that supports multi-platform builds and caching
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Run Tests
         run: |
           docker compose --env-file .env.test --profile test up
 
