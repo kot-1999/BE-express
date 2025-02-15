@@ -11,16 +11,17 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-22.04
-    env:
-      ENV: ${{ vars }}
     steps:
       # Clone repository into the GitHub Actions runner
       - name: Checkout Repository
         uses: actions/checkout@v4
 
       # Write the secret to .env.test
-      - name: Create .env.test File
-        run: echo "${{ ENV }}" > .env.test
+      - name: Write env variables to file
+        run: |
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
 
       # Print the contents of .env.test for debugging
       - name: Print .env.test
