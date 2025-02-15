@@ -12,6 +12,7 @@ on:
 jobs:
   build-and-test:
       runs-on: ubuntu-latest
+      environment: ENV_TEST
       steps:
       # Clone repository into the GitHub Actions runner
       - name: Checkout Repository
