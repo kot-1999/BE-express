@@ -16,7 +16,9 @@ jobs:
       # Clone repository into the GitHub Actions runner
       - name: Checkout Repository
         uses: actions/checkout@v4
-
+      # Test output a single secret for debugging
+      - name: Test printing a single secret
+        run: echo "NODE_ENV=${{ secrets.NODE_ENV }}"
       # Write the secret to .env.test
       - name: Write env variables to file
         run: |
