@@ -19,33 +19,31 @@ jobs:
 
       # Write the secret to .env.test
       - name: Write env variables to file
-        env:
-          SECRETS: |
-            NODE_ENV=${{ secrets.NODE_ENV }}
-            PORT=${{ secrets.PORT }}
-            ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}
-            COOKIE_SECRET_KEY=${{ secrets.COOKIE_SECRET_KEY }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}
-            POSTGRES_URL=${{ secrets.POSTGRES_URL }}
-            POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
-            POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            POSTGRES_DB=${{ secrets.POSTGRES_DB }}
-            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
-            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
-            EMAIL_HOST=${{ secrets.EMAIL_HOST }}
-            EMAIL_SMTP_PORT=${{ secrets.EMAIL_SMTP_PORT }}
-            EMAIL_HTTP_PORT=${{ secrets.EMAIL_HTTP_PORT }}
-            EMAIL_USER=${{ secrets.EMAIL_USER }}
-            EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
-            EMAIL_FROM_ADDRESS=${{ secrets.EMAIL_FROM_ADDRESS }}
-            REDIS_PORT=${{ secrets.REDIS_PORT }}
-            REDIS_HOST=${{ secrets.REDIS_HOST }}
-            REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
-            REDIS_MAX_MEMORY=${{ secrets.REDIS_MAX_MEMORY }}
-            SENTRY_DNS=${{ secrets.SENTRY_DNS }}
-        run: echo "$SECRETS" >> .env.test
+        run: |
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env.test
+          echo "PORT=${{ secrets.PORT }}" >> .env.test
+          echo "ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}" >> .env.test
+          echo "COOKIE_SECRET_KEY=${{ secrets.COOKIE_SECRET_KEY }}" >> .env.test
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.test
+          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> .env.test
+          echo "POSTGRES_URL=${{ secrets.POSTGRES_URL }}" >> .env.test
+          echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> .env.test
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env.test
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env.test
+          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env.test
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env.test
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env.test
+          echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> .env.test
+          echo "EMAIL_SMTP_PORT=${{ secrets.EMAIL_SMTP_PORT }}" >> .env.test
+          echo "EMAIL_HTTP_PORT=${{ secrets.EMAIL_HTTP_PORT }}" >> .env.test
+          echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> .env.test
+          echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env.test
+          echo "EMAIL_FROM_ADDRESS=${{ secrets.EMAIL_FROM_ADDRESS }}" >> .env.test
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env.test
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env.test
+          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env.test
+          echo "REDIS_MAX_MEMORY=${{ secrets.REDIS_MAX_MEMORY }}" >> .env.test
+          echo "SENTRY_DNS=${{ secrets.SENTRY_DNS }}" >> .env.test
 
       # Print the contents of .env.test for debugging
       - name: Print .env.test
