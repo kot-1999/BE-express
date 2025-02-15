@@ -61,7 +61,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          docker compose --env-file .env.test --profile test up
+          docker compose --env-file .env.test --profile test up -d
 
       - name: Wait for Tests to Finish
         run: |
