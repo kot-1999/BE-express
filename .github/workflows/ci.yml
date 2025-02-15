@@ -19,9 +19,9 @@ jobs:
       # Write the secret to .env.test
       - name: Write env variables to file
         run: |
-          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env.test
-          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env.test
-          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env.test
+          echo "${{ secrets }}" >> .env.test
+#          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env.test
+#          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env.test
 
       # Print the contents of .env.test for debugging
       - name: Print .env.test
