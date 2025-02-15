@@ -11,7 +11,8 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-22.04
-    environment: ENV_TEST
+    env:
+      ENV: ${{ vars }}
     steps:
       # Clone repository into the GitHub Actions runner
       - name: Checkout Repository
@@ -19,7 +20,7 @@ jobs:
 
       # Write the secret to .env.test
       - name: Create .env.test File
-        run: echo "${{ secrets.ENV_TEST }}" > .env.test
+        run: echo "${{ ENV }}" > .env.test
 
       # Print the contents of .env.test for debugging
       - name: Print .env.test
