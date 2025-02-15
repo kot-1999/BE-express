@@ -19,7 +19,7 @@ jobs:
 
       # Write the secret to .env.test
       - name: Create .env.test File
-        run: echo "${{ env.NODE_ENV }}" > .env.test
+        run: echo "${{ secrets.ENV_TEST }}" > .env.test
 
       # Print the contents of .env.test for debugging
       - name: Print .env.test
