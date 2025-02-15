@@ -1,10 +1,12 @@
 name: CI/CD Pipeline
 
 on:
-  push:
+  push:  # Runs on push to any branch
     branches:
-      - main  # Runs on push to the main branch
-      - develop  # Runs on push to develop branch (optional)
+      - '**'
+  pull_request:  # Runs on all PRs before merging
+    branches:
+      - '**'
 
 jobs:
   build-and-test:
