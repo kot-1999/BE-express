@@ -1,0 +1,31 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Runs on push to the main branch
+      - develop  # Runs on push to develop branch (optional)
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-22.04
+
+    steps:
+      # Clone repository into the GitHub Actions runner
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Buildx is an advanced Docker builder that supports multi-platform builds and caching
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Run Tests
+        run: |
+          docker compose --env-file .env.test --profile test up
+
+      - name: Wait for Tests to Finish
+        run: |
+          docker wait app
+
+      - name: Stop and Clean Up
+        run: docker-compose down
