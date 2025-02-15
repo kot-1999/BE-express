@@ -26,9 +26,9 @@ jobs:
       # Write the secret to .env.test
       - name: Write env variables to file
         run: |
-#          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env.test
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env.test
           echo "PORT=${{ secrets.PORT }}" >> .env.test
-#          echo "ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}" >> .env.test
+          echo "ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}" >> .env.test
           echo "COOKIE_SECRET_KEY=${{ secrets.COOKIE_SECRET_KEY }}" >> .env.test
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.test
           echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> .env.test
