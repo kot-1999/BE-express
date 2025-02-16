@@ -1,6 +1,6 @@
 # BE-express
 
-BE-express is a test project designed to demonstrate a robust backend application using modern technologies and best practices. The project is built with Express.js and TypeScript, providing a solid foundation for scalable and maintainable server-side applications.
+BE-express is a project designed to demonstrate a robust backend application using modern technologies and best practices. The project is built with Express.js and TypeScript, providing a solid foundation for scalable and maintainable server-side applications.
 
 ## Getting started
 ### Prerequisites
