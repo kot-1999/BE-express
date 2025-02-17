@@ -27,6 +27,7 @@ class PrismaService {
         })
 
         client.$on('error', (e: Prisma.LogEvent) => {
+            console.log('!!!!!!!!!!!!!!', e)
             logger.error(`[Prisma] ${e.message}`);
         })
 

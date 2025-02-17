@@ -17,67 +17,39 @@ jobs:
       # Clone repository into the GitHub Actions runner
       - name: Checkout Repository
         uses: actions/checkout@v4
-      - name: Make envfile
-        uses: SpicyPizza/create-envfile@v2.0
+      #
+      - name: Create .env file
+        run: |
+          echo "NODE_ENV=${{ vars.NODE_ENV }}" >> .env
+          echo "PORT=${{ vars.PORT }}" >> .env
+          echo "ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}" >> .env
+          echo "COOKIE_SECRET_KEY=${{ secrets.COOKIE_SECRET_KEY }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> .env
+          echo "POSTGRES_URL=postgresql://test:test@host.docker.internal:54322/test" >> .env
+          echo "POSTGRES_PORT=54322" >> .env
+          echo "POSTGRES_USER=test" >> .env
+          echo "POSTGRES_PASSWORD=test" >> .env
+          echo "POSTGRES_DB=test" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> .env
+          echo "EMAIL_SMTP_PORT=${{ secrets.EMAIL_SMTP_PORT }}" >> .env
+          echo "EMAIL_HTTP_PORT=${{ secrets.EMAIL_HTTP_PORT }}" >> .env
+          echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> .env
+          echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env
+          echo "EMAIL_FROM_ADDRESS=${{ secrets.EMAIL_FROM_ADDRESS }}" >> .env
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
+          echo "REDIS_MAX_MEMORY=${{ secrets.REDIS_MAX_MEMORY }}" >> .env
+          echo "SENTRY_DNS=${{ secrets.SENTRY_DNS }}" >> .env`
+      #
+      - name: Upload .env file
+        uses: actions/upload-artifact@v4
         with:
-          NODE_ENV: ${{ vars.NODE_ENV }}
-          PORT: ${{ vars.PORT }}
-          ENCRYPTION_KEY: ${{ vars.ENCRYPTION_KEY }}
-          COOKIE_SECRET_KEY: ${{ vars.COOKIE_SECRET_KEY }}
-          JWT_SECRET: ${{ vars.JWT_SECRET }}
-          JWT_EXPIRES_IN: ${{ vars.JWT_EXPIRES_IN }}
-          POSTGRES_URL: ${{ vars.POSTGRES_URL }}
-          POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
-          POSTGRES_USER: ${{ vars.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ vars.POSTGRES_PASSWORD }}
-          GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ vars.GOOGLE_CLIENT_SECRET }}
-          EMAIL_HOST: ${{ vars.EMAIL_HOST }}
-          EMAIL_SMTP_PORT: ${{ vars.EMAIL_SMTP_PORT }}
-          EMAIL_HTTP_PORT: ${{ vars.EMAIL_HTTP_PORT }}
-          EMAIL_USER: ${{ vars.EMAIL_USER }}
-          EMAIL_PASSWORD: ${{ vars.EMAIL_PASSWORD }}
-          EMAIL_FROM_ADDRESS: ${{ vars.EMAIL_FROM_ADDRESS }}
-          REDIS_PORT: ${{ vars.REDIS_PORT }}
-          REDIS_HOST: ${{ vars.REDIS_HOST }}
-          REDIS_PASSWORD: ${{ vars.REDIS_PASSWORD }}
-          REDIS_MAX_MEMORY: ${{ vars.REDIS_MAX_MEMORY }}
-          SENTRY_DNS: ${{ vars.SENTRY_DNS }}
-          file_name: .env
-      #
-#      - name: Create .env file
-#        run: |
-#          touch .env
-#          echo "NODE_ENV=${{ vars.NODE_ENV }}" >> .env
-#          echo "PORT=${{ vars.PORT }}" >> .env
-#          echo "ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}" >> .env
-#          echo "COOKIE_SECRET_KEY=${{ secrets.COOKIE_SECRET_KEY }}" >> .env
-#          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-#          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> .env
-#          echo "POSTGRES_URL=postgresql://test:test@host.docker.internal:54322/test" >> .env
-#          echo "POSTGRES_PORT=54322" >> .env
-#          echo "POSTGRES_USER=test" >> .env
-#          echo "POSTGRES_PASSWORD=test" >> .env
-#          echo "POSTGRES_DB=test" >> .env
-#          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
-#          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
-#          echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> .env
-#          echo "EMAIL_SMTP_PORT=${{ secrets.EMAIL_SMTP_PORT }}" >> .env
-#          echo "EMAIL_HTTP_PORT=${{ secrets.EMAIL_HTTP_PORT }}" >> .env
-#          echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> .env
-#          echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env
-#          echo "EMAIL_FROM_ADDRESS=${{ secrets.EMAIL_FROM_ADDRESS }}" >> .env
-#          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
-#          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
-#          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
-#          echo "REDIS_MAX_MEMORY=${{ secrets.REDIS_MAX_MEMORY }}" >> .env
-#          echo "SENTRY_DNS=${{ secrets.SENTRY_DNS }}" >> .env`
-      #
-#      - name: Upload .env file
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: .env
-#          path: .env
+          name: .env
+          path: .env
 #      # Write the secret to .env
 #      - name: Write env variables to file
 #        run: |
