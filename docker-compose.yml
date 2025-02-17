@@ -33,6 +33,11 @@ services:
       sh -c '
         npm install --legacy-peer-deps &&
         if [ "$NODE_ENV" = "test" ]; then
+          echo "Waiting for PostgreSQL to be ready...";
+          until nc -z postgres_test ${POSTGRES_PORT}; do
+            sleep 1;
+          done;
+          echo "PostgreSQL is up!";
           npx prisma db push;
           npm run test;
         else
