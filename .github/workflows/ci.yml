@@ -20,6 +20,7 @@ jobs:
       #
       - name: Create .env file
         run: |
+          touch .env
           echo "NODE_ENV=${{ vars.NODE_ENV }}" >> .env
           echo "PORT=${{ vars.PORT }}" >> .env
           echo "ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}" >> .env
@@ -43,13 +44,13 @@ jobs:
           echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
           echo "REDIS_MAX_MEMORY=${{ secrets.REDIS_MAX_MEMORY }}" >> .env
-          echo "SENTRY_DNS=${{ secrets.SENTRY_DNS }}" >> .env
+          echo "SENTRY_DNS=${{ secrets.SENTRY_DNS }}" >> .env`
       #
-      - name: Upload .env file
-        uses: actions/upload-artifact@v4
-        with:
-          name: .env
-          path: .env
+#      - name: Upload .env file
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: .env
+#          path: .env
 #      # Write the secret to .env
 #      - name: Write env variables to file
 #        run: |
