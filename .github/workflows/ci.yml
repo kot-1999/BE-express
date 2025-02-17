@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
       # Test output a single secret for debugging
       - name: Test printing a single secret
-        run: echo "values $NODE_ENV $ENCRYPTION_KEY"
+        run: echo "values ::remove-mask::$NODE_ENV ::remove-mask::$ENCRYPTION_KEY"
       # Write the secret to .env.test
       - name: Write env variables to file
         run: |
@@ -61,7 +61,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          docker compose --env-file .env.test --profile test up -d
+          sudo docker compose --env-file .env.test --profile test up -d
       # Attach current terminal to app container
       - name: Attach terminal to app container
         run: docker attach app
