@@ -31,7 +31,12 @@ services:
       - postgres_test
     command: >
       sh -c '
-        ./wait-for-it.sh postgres_test:${POSTGRES_PORT} --timeout=30 --strict -- echo "PostgreSQL is up!";
+        apt-get update && apt-get install -y netcat-openbsd;
+        echo "Waiting for PostgreSQL to be ready...";
+              until ncat -z postgres_test ${POSTGRES_PORT}; do
+                sleep 1;
+              done;
+              echo "PostgreSQL is up!";
         npm install --legacy-peer-deps &&
         if [ "$NODE_ENV" = "test" ]; then
           npx prisma db push;
