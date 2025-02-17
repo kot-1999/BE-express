@@ -14,7 +14,7 @@ jobs:
       runs-on: ubuntu-latest
       environment: ENV_TEST
       env:
-        NODE_ENV: test_env
+        NODE_ENV: test
         ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
       steps:
       # Clone repository into the GitHub Actions runner

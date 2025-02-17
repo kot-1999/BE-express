@@ -10,7 +10,9 @@ import { IConfig } from './types/config'
 const appConfig = config.get<IConfig['app']>('app')
 
 const httpServer = http.createServer(app)
-    
+
+console.log('ENV_VARIABLES: ', process.env)
+
 httpServer.listen(appConfig.port)
     .on('listening', () => {
         logger.info(`Server started in ${process.env.NODE_ENV} mode at PORT ${appConfig.port}`)
