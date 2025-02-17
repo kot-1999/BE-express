@@ -31,12 +31,6 @@ services:
       - postgres_test
     command: >
       sh -c '
-        apt-get update && apt-get install -y netcat-openbsd;
-        echo "Waiting for PostgreSQL to be ready...";
-              until ncat -z host.docker.internal ${POSTGRES_PORT}; do
-                sleep 1;
-              done;
-              echo "PostgreSQL is up!";
         npm install --legacy-peer-deps &&
         if [ "$NODE_ENV" = "test" ]; then
           npx prisma db push;
