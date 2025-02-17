@@ -20,6 +20,7 @@ jobs:
       #
       - name: Create .env file
         run: |
+          touch .env
           echo "NODE_ENV=${{ vars.NODE_ENV }}" >> .env
           echo "PORT=${{ vars.PORT }}" >> .env
           echo "ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}" >> .env
