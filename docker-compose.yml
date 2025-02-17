@@ -31,9 +31,9 @@ services:
       - postgres_test
     command: >
       sh -c '
+        ./wait-for-it.sh postgres_test:${POSTGRES_PORT} --timeout=30 --strict -- echo "PostgreSQL is up!";
         npm install --legacy-peer-deps &&
         if [ "$NODE_ENV" = "test" ]; then
-          ./wait-for-it.sh postgres_test:${POSTGRES_PORT} --timeout=30 --strict -- echo "PostgreSQL is up!";
           npx prisma db push;
           npm run test;
         else
