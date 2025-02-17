@@ -30,7 +30,7 @@ services:
       - redis
     command: >
       sh -c '
-        npm install &&
+        npm install --legacy-peer-deps &&
         if [ "$NODE_ENV" = "test" ]; then
           npx prisma db push;
           npm run test;
