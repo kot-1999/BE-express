@@ -14,8 +14,8 @@ jobs:
       runs-on: ubuntu-latest
       environment: ENV_TEST
       env:
-        NODE_ENV: ${{vars.NODE_ENV}}
-        ENCRYPTION_KEY: ${{secrets.ENCRYPTION_KEY}}
+        NODE_ENV: test_env
+        ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
       steps:
       # Clone repository into the GitHub Actions runner
       - name: Checkout Repository
@@ -68,4 +68,4 @@ jobs:
           docker wait app
 
       - name: Stop and Clean Up
-        run: docker-compose down
+        run: docker compose down
