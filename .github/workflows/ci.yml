@@ -62,6 +62,9 @@ jobs:
       - name: Run Tests
         run: |
           docker compose --env-file .env.test --profile test up -d
+      # Attach current terminal to app container
+      - name: Attach terminal to app container
+        run: docker attach app
 
       - name: Wait for Tests to Finish
         run: |
