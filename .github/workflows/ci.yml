@@ -23,6 +23,9 @@ jobs:
       # Test output a single secret for debugging
       - name: Test printing a single secret
         run: echo "values ::remove-mask::$NODE_ENV ::remove-mask::$ENCRYPTION_KEY"
+      # 
+      - name: sudo npm install --legacy-peer-deps
+        run: echo "values ::remove-mask::$NODE_ENV ::remove-mask::$ENCRYPTION_KEY"
       # Write the secret to .env.test
       - name: Write env variables to file
         run: |
