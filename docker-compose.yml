@@ -28,6 +28,7 @@ services:
     depends_on:
       - mailhog
       - redis
+      - postgres_test
     command: >
       sh -c '
         npm install --legacy-peer-deps &&
