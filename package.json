@@ -4,12 +4,13 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "prestart": "tsc && npx prisma generate",
+    "prestart": "npx prisma generate",
     "start": "npm run prestart && cross-env nodemon --watch src -L --verbose --exec \"node --watch -r dotenv/config -r ts-node/register src/index.ts\"",
     "test": "npm run prestart && mocha -r dotenv/config -r ts-node/register --config .mocharc.js",
-    "docker:dev": "docker compose --env-file .env.development --profile dev up",
-    "docker:test": "docker compose --env-file .env.test --profile test up",
-    "docker:prod": "docker compose --env-file .env.production up",
+    "docker:dev": "docker compose --env-file .env.dev --profile dev up -d && docker attach dev_app",
+    "docker:test": "docker compose --env-file .env.test --profile test up -d && docker attach test_app",
+    "docker:local:dev": "docker compose --env-file .env.local.dev --profile localDev up",
+    "docker:local:test": "docker compose --env-file .env.local.test --profile localTest up",
     "type:check": "tsc --project tsconfig.json --noEmit",
     "db:pull": "npx prisma db pull",
     "db:push": "npx prisma db push",
@@ -17,7 +18,7 @@
     "db:validate": "npx prisma validate",
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint:fix": "eslint 'src/**/*.{ts,js}' --fix",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org null-a63 --project node-express ./dist && sentry-cli sourcemaps upload --org null-a63 --project node-express ./dist"
+    "sentry:sourcemaps": "tsc && sentry-cli sourcemaps inject --org null-a63 --project node-express ./dist && sentry-cli sourcemaps upload --org null-a63 --project node-express ./dist"
   },
   "private": true,
   "dependencies": {
