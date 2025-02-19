@@ -8,6 +8,7 @@ class PrismaService {
     private userQueries: UserQueries
     constructor(userQueries: UserQueries) {
         this.userQueries = userQueries
+
         let client
         try {
             client = new PrismaClient({
@@ -25,7 +26,6 @@ class PrismaService {
         } catch (error) {
             console.log('!!!!!!!!!!', error)
             console.error('!!!!!!!!!!', error)
-
             throw error
         }
 

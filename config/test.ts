@@ -8,6 +8,14 @@ import { ExtractJwt } from 'passport-jwt'
 import { IConfig } from '../src/types/config'
 import { NodeEnv } from '../src/utils/enums';
 
+console.log(
+    'DB SETTINGS:',
+    process.env.POSTGRES_PORT = '54322',
+    process.env.POSTGRES_USER = 'test',
+    process.env.POSTGRES_PASSWORD = 'test',
+    process.env.POSTGRES_DB = 'test'
+)
+
 const options: IConfig = {
     app: {
         port: process.env.PORT as string,
