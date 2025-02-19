@@ -59,5 +59,6 @@ export interface IConfig {
     tracesSampleRate: number,
     profilesSampleRate: number,
     release: string
+    debug: boolean
   }
 }
