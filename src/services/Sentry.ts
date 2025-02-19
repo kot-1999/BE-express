@@ -9,7 +9,7 @@ const sentryConfig = config.get<IConfig['sentry']>('sentry')
 
 function sentryInit() {
     SentryNode.init({
-        debug: true,
+        debug: sentryConfig.debug,
         environment: sentryConfig.environment,
         dsn: sentryConfig.dsn,
         integrations: [
@@ -24,6 +24,7 @@ function sentryInit() {
     logger.info('Sentry was initialized')
     return SentryNode
 }
+
 const Sentry = sentryInit()
 
 export default Sentry
