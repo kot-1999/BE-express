@@ -29,7 +29,6 @@ services:
     command: >
       sh -c '
         npm ci;
-        npx prisma db push;
         npm run test;
       '
 

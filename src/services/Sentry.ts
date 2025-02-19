@@ -9,7 +9,7 @@ const sentryConfig = config.get<IConfig['sentry']>('sentry')
 
 function sentryInit() {
     SentryNode.init({
-        debug: sentryConfig.debug,
+        debug: true,
         environment: sentryConfig.environment,
         dsn: sentryConfig.dsn,
         integrations: [

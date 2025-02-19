@@ -6,7 +6,7 @@
   "scripts": {
     "prestart": "npx prisma generate",
     "start": "npm run prestart && cross-env nodemon --watch src -L --verbose --exec \"node --watch -r dotenv/config -r ts-node/register src/index.ts\"",
-    "test": "npm run prestart && mocha -r dotenv/config -r ts-node/register --config .mocharc.js",
+    "test": "npm run prestart && npm run db:push && mocha -r dotenv/config -r ts-node/register --config .mocharc.js",
     "docker:dev": "docker compose --env-file .env.dev --profile dev up -d && docker attach dev_app",
     "docker:test": "docker compose --env-file .env.test --profile test up -d && docker attach test_app",
     "docker:local:dev": "docker compose --env-file .env.local.dev --profile localDev up",
