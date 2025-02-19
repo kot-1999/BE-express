@@ -24,6 +24,7 @@ function sentryInit() {
     logger.info('Sentry was initialized')
     return SentryNode
 }
+
 const Sentry = sentryInit()
 
 export default Sentry
