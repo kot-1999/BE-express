@@ -78,9 +78,7 @@ jobs:
         run: cat .env
       - name: Run Tests
         run:
-          docker compose --env-file .env --profile test up -d &&
-          docker ps -a &&
-          docker attach test_app
+          docker compose --env-file .env --profile test up
       # Attach current terminal to app container
       - name: Attach terminal to app container
         run: docker attach app
