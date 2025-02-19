@@ -44,7 +44,7 @@ jobs:
         uses: actions/checkout@v4
       # Print the contents of .env.test for debugging
       - name: Print .env
-        run: cat .env
+        run: cat ${{env}}
 #      # Buildx is an advanced Docker builder that supports multi-platform builds and caching
 #      - name: Set up Docker Buildx
 #        uses: docker/setup-buildx-action@v2
