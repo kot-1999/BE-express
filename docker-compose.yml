@@ -28,6 +28,7 @@ services:
       - test_postgres
     command: >
       sh -c '
+        sleep 30
         npm ci;
         npm run test;
       '
