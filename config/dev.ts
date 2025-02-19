@@ -107,7 +107,8 @@ const options: IConfig = {
         dsn: process.env.SENTRY_DNS as string,
         tracesSampleRate: 1.0, //  Capture 100% of the transactions
         profilesSampleRate: 1.0,
-        release: 'latest'
+        release: 'latest',
+        debug: false
     }
 }
 export default options

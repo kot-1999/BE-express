@@ -105,7 +105,8 @@ const options: IConfig = {
         dsn: process.env.SENTRY_DNS as string,
         tracesSampleRate: 0, //  Sentry will be initialized, but any errors or tracing won't be followed
         profilesSampleRate: 0,
-        release: 'test'
+        release: 'test',
+        debug: false
     }
 }
 
