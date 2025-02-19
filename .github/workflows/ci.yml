@@ -11,14 +11,20 @@ on:
 
 jobs:
   build-and-test:
-      runs-on: ubuntu-latest
-#      environment: ENV_TEST
-      steps:
+    runs-on: ubuntu-latest
+    #      environment: ENV_TEST
+    steps:
       # Clone repository into the GitHub Actions runner
       - name: Checkout Repository
         uses: actions/checkout@v4
-      #
-      - name: Create .env file
+      # Print the contents of .env.test for debugging
+      - name: Print .env
+        run: cat .env
+      # Buildx is an advanced Docker builder that supports multi-platform builds and caching
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Run Tests
         run: |
           touch .env
           echo "NODE_ENV=${{ vars.NODE_ENV }}" >> .env
@@ -27,11 +33,11 @@ jobs:
           echo "COOKIE_SECRET_KEY=${{ secrets.COOKIE_SECRET_KEY }}" >> .env
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
           echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> .env
-          echo "POSTGRES_URL=postgresql://test:test@host.docker.internal:54322/test" >> .env
-          echo "POSTGRES_PORT=54322" >> .env
-          echo "POSTGRES_USER=test" >> .env
-          echo "POSTGRES_PASSWORD=test" >> .env
-          echo "POSTGRES_DB=test" >> .env
+          echo "POSTGRES_URL=${{ secrets.POSTGRES_URL }}" >> .env
+          echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> .env
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
           echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
           echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> .env
@@ -45,24 +51,10 @@ jobs:
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
           echo "REDIS_MAX_MEMORY=${{ secrets.REDIS_MAX_MEMORY }}" >> .env
           echo "SENTRY_DNS=${{ secrets.SENTRY_DNS }}" >> .env
-      #
-      - name: Upload .env file
-        uses: actions/upload-artifact@v4
-        with:
-          name: .env
-          path: .env
-      # Print the contents of .env.test for debugging
-      - name: Print .env
-        run: cat .env
-
-      # Buildx is an advanced Docker builder that supports multi-platform builds and caching
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Run Tests
-        run: |
-          sudo docker compose --env-file .env --profile test up -d
+          cat .env
+          docker compose --env-file .env --profile test up -d
           docker ps -a
+          docker attach test_app
       # Attach current terminal to app container
       - name: Attach terminal to app container
         run: docker attach app
