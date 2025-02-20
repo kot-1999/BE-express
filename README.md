@@ -6,12 +6,32 @@ BE-express is a project designed to demonstrate a robust backend application usi
 ### Prerequisites
 - Ensure that Docker and Docker Compose are installed on your system.
 ### Running the Application
+
 To run the application you need to create: 
+
 - `.env`: for local running with `npm run start`
 - `.env.development`: for running application in docker in development mode with `npm run docker:dev` or `docker compose --env-file .env.development --profile dev up`
 - `.env.test`: to run the application in a test mode `npm run docker:test` or `docker compose --env-file .env.test --profile test up`
 
 **NOTE**: there is a `.env.template` file which can be used to run application in docker in development mode. In spite of that some variables are unavailable, those are initialized with `null`
+
+Use the following npm scripts to start the application in various environments (or use docker commands directly):
+
+- `npm run docker:dev`: Starts the application in Docker using the `dev` profile with the `.env.dev` environment file. This command runs `docker compose --env-file .env.dev --profile dev up -d` and attaches to the `dev_app` container.
+- `npm run docker:test`: Starts the application in Docker using the `test` profile with the `.env.test` environment file. This command runs `docker compose --env-file .env.test --profile test up -d` and attaches to the `test_app` container.
+- `npm run docker:local:dev`: Starts the application in Docker using the `localDev` profile with the `.env.local.dev` environment file. This command runs `docker compose --env-file .env.local.dev --profile localDev up`.
+- `npm run docker:local:test`: Starts the application in Docker using the `localTest` profile with the `.env.local.test` environment file. This command runs `docker compose --env-file .env.local.test --profile localTest up`.
+
+Ensure the corresponding environment files are properly configured before running these commands.
+
+### Docker Compose Profiles
+
+This project utilizes Docker Compose profiles to manage different service configurations based on the environment. Profiles allow for selective activation of services, enabling a tailored setup for development, testing, and local development scenarios.
+
+- `dev`: Activates services required for development and runs backend app.
+- `test`: Activates services required for testing and run tests.
+- `localDev`: Activates services for local development.
+- `localTest`: Activates services for local testing.
 
 ## Features
 - **Full Dockerization:** The entire application is containerized using Docker, allowing for seamless setup and deployment. With Docker, you can run the project without worrying about environment configurations.
@@ -43,7 +63,7 @@ To run the application you need to create:
   - Request Tracing: Provides insights into slow endpoints and bottlenecks.
   - Error Tracking: Automatically captures and reports unhandled exceptions and errors.
   - Custom Error Logging: Supports manual error reporting with contextual information.
-
+- **GitHub Actions:**  Are used for  continuous integration. The CI pipeline automatically runs tests when changes are pushed or pull requests are created.
 ## Scripts
 
 - `prestart`: Generates the Prisma client before starting the app.
@@ -65,12 +85,10 @@ To run the application you need to create:
 - Implement seeders for database
 - Create centralized point of access to DB
 - Add middleware for caching of endpoints
-- Create GitHub actions
 - Update BE structure specification. Start using Function Overloads
 - Update user controller
 - Provide an example of V2 endpoint
 - Implement other security policies which could be required in a modern application
-- Divide docker-compose file into several ones
 
 ### Completed TODOs
 
@@ -81,6 +99,8 @@ To run the application you need to create:
 - Implement XSS attack protection
 - Implement logging via winston or familiar library
 - Implement Sentry monitoring
+- Create GitHub actions
+- Divide docker-compose file into several ones
 
 ## License
 This project is licensed under the Apache-2.0 License.

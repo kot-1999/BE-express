@@ -1,0 +1,64 @@
+name: CI/CD Pipeline
+
+on:
+  push: # Runs on push to any branch
+    branches:
+      - '**'
+  pull_request: # Runs on all PRs before merging
+    branches:
+      - '**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    environment: ENV_TEST
+
+
+    steps:
+      # Clone repository into the GitHub Actions runner
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          node-version: '22.8.0'
+      # Create .env file with all needed variables
+      - name: Create .env
+        run: |
+          touch .env
+          echo "NODE_ENV=${{ vars.NODE_ENV }}" >> .env
+          echo "PORT=${{ vars.PORT }}" >> .env
+          echo "ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}" >> .env
+          echo "COOKIE_SECRET_KEY=${{ secrets.COOKIE_SECRET_KEY }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> .env
+          echo "POSTGRES_URL=${{ secrets.POSTGRES_URL }}" >> .env
+          echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> .env
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> .env
+          echo "EMAIL_SMTP_PORT=${{ secrets.EMAIL_SMTP_PORT }}" >> .env
+          echo "EMAIL_HTTP_PORT=${{ secrets.EMAIL_HTTP_PORT }}" >> .env
+          echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> .env
+          echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env
+          echo "EMAIL_FROM_ADDRESS=${{ secrets.EMAIL_FROM_ADDRESS }}" >> .env
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
+          echo "REDIS_MAX_MEMORY=${{ secrets.REDIS_MAX_MEMORY }}" >> .env
+          echo "SENTRY_DNS=${{ secrets.SENTRY_DNS }}" >> .env
+          cat .env
+      # Run docker containers
+      - name: Run docker
+        run: docker compose --env-file .env --profile localDev up -d
+      # Install node_modules
+      - name: install dependencies
+        run: npm install --legacy-peer-deps
+      # Run tests
+      - name: Run tests
+        run: npm run test
+      - name: Run type check
+        run: npm run type:check
+      - name: Stop and Clean Up
+        run: docker compose down

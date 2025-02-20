@@ -15,6 +15,7 @@ services:
         npm ci &&
         npm run start;
       '
+
   test_app:
     extends:
       file: ./docker-compose.base.yml
