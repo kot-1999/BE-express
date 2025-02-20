@@ -89,6 +89,8 @@ This project utilizes Docker Compose profiles to manage different service config
 - Update user controller
 - Provide an example of V2 endpoint
 - Implement other security policies which could be required in a modern application
+- Make sentry not to start in some cases
+- Send errors to sentry through winston. 
 
 ### Completed TODOs
 
