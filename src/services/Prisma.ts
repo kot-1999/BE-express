@@ -9,23 +9,18 @@ class PrismaService {
     constructor(userQueries: UserQueries) {
         this.userQueries = userQueries
 
-        let client
-        try {
-            client = new PrismaClient({
-                log: [{
-                    level: 'warn',
-                    emit: 'event'
-                }, {
-                    level: 'error',
-                    emit: 'event'
-                },{
-                    level: 'info',
-                    emit: 'event'
-                }]
-            })
-        } catch (error) {
-            throw error
-        }
+        const client = new PrismaClient({
+            log: [{
+                level: 'warn',
+                emit: 'event'
+            }, {
+                level: 'error',
+                emit: 'event'
+            },{
+                level: 'info',
+                emit: 'event'
+            }]
+        })
 
         client.$on('warn', (e: Prisma.LogEvent) => {
             logger.warn(`[Prisma] ${e.message}`);
