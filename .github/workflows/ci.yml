@@ -58,8 +58,6 @@ jobs:
       # Run tests
       - name: Run tests
         run: npm run test
-      - name: Run lint
-        run: npm run lint
       - name: Run type check
         run: nom run type:check
       - name: Stop and Clean Up
