@@ -15,8 +15,6 @@ services:
         npm ci &&
         npm run start;
       '
-    networks:
-      - dev-bridge
 
   test_app:
     extends:
@@ -34,8 +32,6 @@ services:
         npm ci;
         npm run test;
       '
-    networks:
-      - test-bridge
 
   dev_postgres:
     extends:
@@ -46,8 +42,6 @@ services:
     profiles:
       - dev
       - localDev
-    networks:
-      - dev-bridge
 
   test_postgres:
     extends:
@@ -56,8 +50,6 @@ services:
     profiles:
       - test
       - localTest
-    networks:
-      - test-bridge
 
   mailhog:
     extends:
@@ -68,9 +60,6 @@ services:
       - test
       - localDev
       - localTest
-    networks:
-      - test-bridge
-      - dev-bridge
 
   redis:
     extends:
@@ -81,13 +70,3 @@ services:
       - test
       - localDev
       - localTest
-    networks:
-      - test-bridge
-      - dev-bridge
-
-
-networks:
-  test-bridge:
-    driver: bridge
-  dev-bridge:
-    driver: bridge
