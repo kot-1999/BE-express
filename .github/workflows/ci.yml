@@ -52,7 +52,7 @@ jobs:
           echo "SENTRY_DNS=${{ secrets.SENTRY_DNS }}" >> .env
           cat .env
       - name: Run docker
-        run: docker compose --env-file .env --profile localDev up
+        run: docker compose --env-file .env --profile localDev up -d
       # Print the contents of .env.test for debugging
       - name: Print .env
         run: cat .env
