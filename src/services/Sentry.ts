@@ -7,7 +7,6 @@ import { IConfig } from '../types/config'
 
 function sentryInit(config: IConfig['sentry']) {
     if (!config) {
-        logger.warn('Sentry was not initialized. Config is missing.')
         return null
     }
     SentryNode.init({
