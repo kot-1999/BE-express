@@ -50,15 +50,15 @@ export interface IConfig {
   logger: {
     info: LoggerCommonConfig,
     warn: LoggerCommonConfig,
-    error: LoggerCommonConfig,
+    error: LoggerCommonConfig & { isLoggedToSentry: boolean },
     debug: LoggerCommonConfig,
   },
-  sentry:  NodeOptions & {
+  sentry:  (NodeOptions & {
     environment: NodeEnv,
     dsn: string,
     tracesSampleRate: number,
     profilesSampleRate: number,
     release: string
     debug: boolean
-  }
+  }) | null
 }
