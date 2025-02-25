@@ -1,9 +1,23 @@
 import config from 'config'
 import winston from 'winston'
 import WinstonDailyRotateFile from 'winston-daily-rotate-file'
+import TransportStream from 'winston-transport'
 
+import Sentry from './Sentry';
 import { IConfig } from '../types/config'
 import { NodeEnv } from '../utils/enums';
+import { IError } from '../utils/IError';
+
+class SentryErrorTransport extends TransportStream {
+    constructor() {
+        super()
+    }
+
+    log(error: Error | IError, callback: () => void): void {
+        Sentry?.captureEvent(error)
+        callback()
+    }
+}
 
 class Logger {
     // Logger
@@ -12,11 +26,11 @@ class Logger {
     private warnLogger
     private debugLogger
 
-    // Config variables uninitialized
+    // Variables uninitialized
     private env: NodeEnv
     private loggerConfig: IConfig['logger']
-
-    // Config variables initialized
+    private sentryConfig: IConfig['sentry']
+    // Variables initialized
     private dailyRotateFileCommonConfig = {
         datePattern: 'YYYY-MM-DD',
         maxSize: '1024m',
@@ -32,10 +46,14 @@ class Logger {
                 : `[${timestamp}] [${level.toUpperCase()}]: ${message}`)
     )
     
-    constructor(env: NodeEnv, loggerConfig: IConfig['logger']) {
+    constructor(
+        env: NodeEnv,
+        loggerConfig: IConfig['logger'],
+        sentryConfig: IConfig['sentry']
+    ) {
         this.env = env
         this.loggerConfig = loggerConfig
-
+        this.sentryConfig = sentryConfig
         winston.addColors({
             error: 'red',
             warn: 'yellow',
@@ -43,10 +61,14 @@ class Logger {
             debug: 'blue'
         })
 
-        this.infoLogger = this.createLogger('info', this.loggerConfig.info.isLoggedToConsole)
-        this.errorLogger = this.createLogger('error', this.loggerConfig.error.isLoggedToConsole)
-        this.warnLogger = this.createLogger('warn', this.loggerConfig.warn.isLoggedToConsole)
-        this.debugLogger = this.createLogger('debug', this.loggerConfig.debug.isLoggedToConsole)
+        this.infoLogger = this.createLogger('info', this.loggerConfig.info.isLoggedToConsole, false)
+        this.errorLogger = this.createLogger(
+            'error',
+            this.loggerConfig.error.isLoggedToConsole,
+            this.loggerConfig.error.isLoggedToSentry
+        )
+        this.warnLogger = this.createLogger('warn', this.loggerConfig.warn.isLoggedToConsole, false)
+        this.debugLogger = this.createLogger('debug', this.loggerConfig.debug.isLoggedToConsole, false)
 
         this.info = this.infoLogger.info.bind(this.infoLogger)
         this.debug = this.debugLogger.debug.bind(this.debugLogger)
@@ -57,7 +79,8 @@ class Logger {
 
     private createLogger(
         level: 'info' | 'debug' | 'warn' | 'error',
-        isLoggedToConsole: boolean
+        isLoggedToConsole: boolean,
+        isLoggedToSentry: boolean
     ): ReturnType<typeof winston.createLogger> {
         const transports: winston.transport | winston.transport[] = [
             new WinstonDailyRotateFile({
@@ -66,12 +89,20 @@ class Logger {
                 ...this.dailyRotateFileCommonConfig
             })
         ]
-        
+
         if (isLoggedToConsole) {
             transports.push(new winston.transports.Console({
                 format: winston.format.combine(winston.format.colorize({ all: true })),
                 level
             }))
+        }
+
+        if (isLoggedToSentry) {
+            if (this.sentryConfig) {
+                transports.push(new SentryErrorTransport())
+            } else {
+                throw new Error('Logging to sentry was required, but config is not provided')
+            }
         }
         
         return this.debugLogger = winston.createLogger({
@@ -90,7 +121,8 @@ class Logger {
 }
 
 const appConfig = config.get<IConfig['app']>('app')
+const sentryConfig = config.get<IConfig['sentry']>('sentry')
 const loggerConfig = config.get<IConfig['logger']>('logger')
 
-const logger = new Logger(appConfig.env, loggerConfig)
+const logger = new Logger(appConfig.env, loggerConfig, sentryConfig)
 export default logger
