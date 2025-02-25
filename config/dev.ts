@@ -93,7 +93,8 @@ const options: IConfig = {
             isLoggedToConsole: true
         },
         error: {
-            isLoggedToConsole: true
+            isLoggedToConsole: true,
+            isLoggedToSentry: true
         },
         info: {
             isLoggedToConsole: true

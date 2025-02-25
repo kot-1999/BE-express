@@ -62,7 +62,7 @@ This project utilizes Docker Compose profiles to manage different service config
   - Performance Monitoring: Tracks API request performance and latency.
   - Request Tracing: Provides insights into slow endpoints and bottlenecks.
   - Error Tracking: Automatically captures and reports unhandled exceptions and errors.
-  - Custom Error Logging: Supports manual error reporting with contextual information.
+  - SentryErrorTransport: Supports manual error reporting with contextual information depending on `winston` settings.
 - **GitHub Actions:**  Are used for  continuous integration. The CI pipeline automatically runs tests when changes are pushed or pull requests are created.
 ## Scripts
 
@@ -89,8 +89,6 @@ This project utilizes Docker Compose profiles to manage different service config
 - Update user controller
 - Provide an example of V2 endpoint
 - Implement other security policies which could be required in a modern application
-- Make sentry not to start in some cases
-- Send errors to sentry through winston. 
 
 ### Completed TODOs
 
@@ -103,6 +101,8 @@ This project utilizes Docker Compose profiles to manage different service config
 - Implement Sentry monitoring
 - Create GitHub actions
 - Divide docker-compose file into several ones
+- Send errors to sentry through winston.
+- Make sentry not to start in some cases
 
 ## License
 This project is licensed under the Apache-2.0 License.

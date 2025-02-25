@@ -5,26 +5,29 @@ import config from 'config';
 import logger from './Logger';
 import { IConfig } from '../types/config'
 
-const sentryConfig = config.get<IConfig['sentry']>('sentry')
-
-function sentryInit() {
+function sentryInit(config: IConfig['sentry']) {
+    if (!config) {
+        return null
+    }
     SentryNode.init({
         debug: true,
-        environment: sentryConfig.environment,
-        dsn: sentryConfig.dsn,
+        environment: config.environment,
+        dsn: config.dsn,
         integrations: [
             nodeProfilingIntegration()
         ],
         // includeLocalVariables: true,
         // spotlight: true,
-        tracesSampleRate: sentryConfig.tracesSampleRate,
-        profilesSampleRate: sentryConfig.profilesSampleRate,
-        release: sentryConfig.release
+        tracesSampleRate: config.tracesSampleRate,
+        profilesSampleRate: config.profilesSampleRate,
+        release: config.release
     })
     logger.info('Sentry was initialized')
     return SentryNode
 }
 
-const Sentry = sentryInit()
+const sentryConfig = config.get<IConfig['sentry']>('sentry')
+
+const Sentry = sentryInit(sentryConfig)
 
 export default Sentry
