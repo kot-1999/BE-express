@@ -87,6 +87,7 @@ This project utilizes Docker Compose profiles to manage different service config
 - Add middleware for caching of endpoints
 - Update BE structure specification. Start using Function Overloads
 - Update user controller
+- Add authorization for b2b
 - Provide an example of V2 endpoint
 - Implement other security policies which could be required in a modern application
 - Implement effective files/pictures processing
