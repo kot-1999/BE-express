@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["strictUndefinedChecks"]
 }
 
@@ -13,17 +13,39 @@ enum UserRole {
   Premium
 }
 
+enum AdminRole {
+  Admin
+  EmployeeManager
+  Employee
+}
+
 model User {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  firstName String? @db.Text
-  lastName String? @db.Text
-  email String @db.Text
-  emailVerified Boolean @db.Boolean @default(false)
-  password String? @db.Text
-  role UserRole @default(Default)
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName       String?   @db.Text
+  lastName        String?   @db.Text
+  email           String    @db.Text
+  emailVerified   Boolean   @default(false) @db.Boolean
+  password        String?   @db.Text
+  role            UserRole  @default(Default)
   googleProfileID String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime? @updatedAt
-  deletedAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
   @@map("users")
+}
+
+model Admin {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName     String    @db.Text
+  lastName      String    @db.Text
+  email         String    @db.Text
+  emailVerified Boolean   @default(false) @db.Boolean
+  password      String    @db.Text
+  role          AdminRole @default(Admin)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  @@map("admins")
 }
