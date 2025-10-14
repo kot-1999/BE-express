@@ -16,6 +16,10 @@ export default function authorizationMiddleware(allowedStrategies: PassportStrat
             return passport.authenticate(PassportStrategy.jwtB2c, { session: false })(req, res, next)
         } else if (allowedStrategies.includes(PassportStrategy.jwtB2cForgotPassword)) {
             return passport.authenticate(PassportStrategy.jwtB2cForgotPassword, { session: false })(req, res, next)
+        } else if (allowedStrategies.includes(PassportStrategy.jwtB2b)) {
+            return passport.authenticate(PassportStrategy.jwtB2b, { session: false })(req, res, next)
+        } else if (allowedStrategies.includes(PassportStrategy.jwtB2bForgotPassword)) {
+            return passport.authenticate(PassportStrategy.jwtB2bForgotPassword, { session: false })(req, res, next)
         } else {
             throw new IError(401, 'Authentication required')
         }

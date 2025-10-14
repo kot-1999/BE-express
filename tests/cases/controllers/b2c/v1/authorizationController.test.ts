@@ -180,7 +180,7 @@ describe(endpoint('/reset-password'), () => {
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${JwtService.generateToken({
                 id: user.id,
-                aud: JwtAudience.forgotPassword
+                aud: JwtAudience.b2cForgotPassword
             })}`)
             .send({
                 newPassword

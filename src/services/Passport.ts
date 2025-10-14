@@ -1,4 +1,4 @@
-import { User } from '@prisma/client'
+import { Admin, User } from '@prisma/client'
 import config from 'config'
 import { JwtPayload } from 'jsonwebtoken'
 import passport from 'passport'
@@ -47,6 +47,22 @@ class PassportSetup {
                 secretOrKey: this.jwtConfig.secret
             },
             this.b2cJwtForgotPasswordStrategy
+        ))
+
+        passport.use(PassportStrategy.jwtB2b, new JwtStrategy(
+            {
+                jwtFromRequest: ExtractJwt.fromExtractors([this.passportConfig.jwtFromCookie]),
+                secretOrKey: this.jwtConfig.secret
+            },
+            this.b2bJwtStrategy
+        ))
+
+        passport.use(PassportStrategy.jwtB2bForgotPassword, new JwtStrategy(
+            {
+                jwtFromRequest: ExtractJwt.fromExtractors([this.passportConfig.jwtFromRequestHeader]),
+                secretOrKey: this.jwtConfig.secret
+            },
+            this.b2bJwtForgotPasswordStrategy
         ))
 
         passport.serializeUser(this.serializeUser)
@@ -132,7 +148,7 @@ class PassportSetup {
 
     private async b2cJwtForgotPasswordStrategy(payload: JwtPayload, done: VerifyCallback) {
         try {
-            if (payload.aud !== JwtAudience.forgotPassword) {
+            if (payload.aud !== JwtAudience.b2cForgotPassword) {
                 throw new IError(401, 'Not authorized (JwtForgotPasswordStrategy)')
             }
 
@@ -152,15 +168,68 @@ class PassportSetup {
         }
     }
 
-    private serializeUser(user: User, done: (err: Error | null, id: string | null) => void): void {
-        const err = !user?.id ? new IError(401, 'Authorization id is missing') : null
-        done(err, user.id)
+    private async b2bJwtStrategy(payload: JwtPayload, done: VerifyCallback) {
+        try {
+            if (payload.aud !== 'b2b') {
+                throw new IError(401, 'Not authorized (JwtStrategy)')
+            }
+
+            const admin = await prisma.admin.findOne(null,  {
+                id: payload.id
+            })
+
+            if (!admin) {
+                throw new IError(401, 'Not authorized (JwtStrategy)')
+            }
+            return done(null, admin)
+        } catch (err) {
+            return done(err, false)
+        }
     }
 
-    private async deserializeUser(id: string, done: (err: Error | null, user: User | null) => void): Promise<void> {
-        const user = await prisma.user.findOne(null, {
-            id
+    private async b2bJwtForgotPasswordStrategy(payload: JwtPayload, done: VerifyCallback) {
+        try {
+            if (payload.aud !== JwtAudience.b2bForgotPassword) {
+                throw new IError(401, 'Not authorized (JwtForgotPasswordStrategy)')
+            }
+
+            const admin = await prisma.admin.findOne(
+                null,
+                {
+                    id: payload.id
+                }
+            )
+
+            if (!admin) {
+                throw new IError(401, 'Not authorized (JwtForgotPasswordStrategy)')
+            }
+            return done(null, admin)
+        } catch (err) {
+            return done(err, false)
+        }
+    }
+
+    private serializeUser(
+        user: User | Admin,
+        done: (
+            err: Error | null,
+            entity: { id: string | null, type: 'user' | 'admin' }
+        ) => void
+    ): void {
+        const err = !user?.id ? new IError(401, 'Authorization id is missing') : null
+        done(err, {
+            id: user.id,
+            type: 'role' in user ? 'admin' : 'user'
         })
+    }
+
+    private async deserializeUser(
+        entity: { id: string, type: 'user' | 'admin' },
+        done: (err: Error | null, user: User | Admin | null) => void
+    ): Promise<void> {
+        const user = entity.type === 'user'
+            ? await prisma.user.findOne(null, { id: entity.id })
+            : await prisma.admin.findOne(null, { id: entity.id })
         const err = user ? null : new IError(401, 'User wasn\'t deserialized')
         done(err, user)
     }
