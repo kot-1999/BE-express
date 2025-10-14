@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import authorizationRouter from './b2c/AuthorizationRouter'
+import userAuthorizationRouter from './b2c/UserAuthorizationRouter'
 import userRouter from './b2c/UserRouter'
 import logger from '../services/Logger';
 
@@ -10,7 +10,7 @@ export default function authorizeRouters() {
     logger.info('Application routes were initialized.')
     
     // B2C
-    router.use('/b2c/v1/authorization',authorizationRouter())
+    router.use('/b2c/v1/authorization',userAuthorizationRouter())
     router.use('/b2c/v1/user', userRouter())
 
     return router

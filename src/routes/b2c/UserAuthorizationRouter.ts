@@ -10,7 +10,7 @@ import { PassportStrategy } from '../../utils/enums'
 const router = Router()
 const authorizationController = new AuthorizationController()
 
-export default function authorizationRouter() {
+export default function userAuthorizationRouter() {
     // List endpoints
     router.post(
         '/register',
