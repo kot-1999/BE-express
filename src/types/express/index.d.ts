@@ -13,6 +13,6 @@ declare module 'express' {
     }
 
     interface AuthAdminRequest extends Request {
-        user: Admin
+        admin: Admin
     }
 }
