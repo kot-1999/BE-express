@@ -167,18 +167,6 @@ export class AuthorizationController extends AbstractController {
         }
     }
 
-    public googleRedirect(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): void | Response {
-        try {
-            return res.status(200).json({ message: 'callback URI' })
-        } catch (err) {
-            return next(err)
-        }
-    }
-
     private LogoutResType: Joi.extractType<typeof AuthorizationController.schemas.response.logout>
     public async logout(
         req: AuthAdminRequest,
