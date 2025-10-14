@@ -1,4 +1,4 @@
-import { User } from '@prisma/client'
+import { User, Admin } from '@prisma/client'
 import { Request as OriginalRequest } from 'express'
 
 declare module 'express' {
@@ -10,5 +10,9 @@ declare module 'express' {
 
     interface AuthUserRequest extends Request {
         user: User
+    }
+
+    interface AuthAdminRequest extends Request {
+        user: Admin
     }
 }
