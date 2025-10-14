@@ -11,7 +11,7 @@ import { EmailType, JwtAudience } from '../../../../utils/enums'
 import { IError } from '../../../../utils/IError'
 
 export class AuthorizationController extends AbstractController {
-    private static readonly userSchema = Joi.object({
+    private static readonly adminSchema = Joi.object({
         admin: Joi.object({
             id: JoiCommon.string.id
         }).required()
@@ -49,15 +49,15 @@ export class AuthorizationController extends AbstractController {
             })
         },
         response: {
-            register: AuthorizationController.userSchema.required(),
-            login: AuthorizationController.userSchema.required(),
-            logout: AuthorizationController.userSchema.keys({
+            register: AuthorizationController.adminSchema.required(),
+            login: AuthorizationController.adminSchema.required(),
+            logout: AuthorizationController.adminSchema.keys({
                 message: Joi.string().required()
             }).required(),
             forgotPassword: Joi.object({
                 message: Joi.string().required()
             }).required(),
-            resetPassword: AuthorizationController.userSchema.required()
+            resetPassword: AuthorizationController.adminSchema.required()
         }
     }
 
@@ -174,7 +174,7 @@ export class AuthorizationController extends AbstractController {
         next: NextFunction
     ) {
         try {
-            const userID = req.user.id
+            const userID = req.admin.id
             // Wrap req.logout() in a Promise
             await new Promise<void>((resolve) => {
                 req.logout((err) => {
@@ -253,14 +253,14 @@ export class AuthorizationController extends AbstractController {
         next: NextFunction
     ) {
         try {
-            const { body: { newPassword }, user } = req
+            const { body: { newPassword }, admin } = req
 
             const updatedUser = await prisma.user.update({
                 data: {
                     password: EncryptionService.hashSHA256(EncryptionService.decryptAES(newPassword))
                 },
                 where: {
-                    id: user.id
+                    id: admin.id
                 },
                 select: {
                     id: true
