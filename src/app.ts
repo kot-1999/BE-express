@@ -18,10 +18,12 @@ import './services/Prisma'
 import logger from './services/Logger'
 import redis from './services/Redis'
 import { IConfig } from './types/config'
+import { NodeEnv } from './utils/enums';
 
 // Configs
 const cookieSessionConfig = config.get<IConfig['cookieSession']>('cookieSession')
 const helmetConfig = config.get<IConfig['helmet']>('helmet')
+const appConfig = config.get<IConfig['app']>('app')
 
 // Local variables
 const app = express()
@@ -34,22 +36,24 @@ app.use(express.urlencoded({ extended: true }))
 app.use(helmet.contentSecurityPolicy(helmetConfig.contentSecurity))
 
 // Create and use the rate limiter
-app.use(rateLimit({
+if (appConfig.env !== NodeEnv.Test) {
+    app.use(rateLimit({
     // Rate limiter configuration
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+        standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+        legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 
-    // Redis store configuration
-    store: new RedisRateLimitStore({
-        sendCommand: (...args: string[]) => redisClient.sendCommand(args)
-    }),
-    handler: (req, res) => {
-        logger.warn(`Rate limit exceeded for IP: ${req.ip}`)
-        res.status(429).json({ error: 'Too many requests' });
-    }
-}));
+        // Redis store configuration
+        store: new RedisRateLimitStore({
+            sendCommand: (...args: string[]) => redisClient.sendCommand(args)
+        }),
+        handler: (req, res) => {
+            logger.warn(`Rate limit exceeded for IP: ${req.ip}`)
+            res.status(429).json({ error: 'Too many requests' });
+        }
+    }))
+}
 
 // Create and express-session middleware
 app.use(session({
