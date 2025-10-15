@@ -18,7 +18,8 @@ export default class UserGenerator {
                 type: user.type ?? UserType.Default,
                 googleProfileID: user.googleProfileID ?? null,
                 createdAt: user.createdAt ?? dayjs().toISOString(),
-                updatedAt: user.updatedAt ?? dayjs().toISOString()
+                updatedAt: user.updatedAt ?? dayjs().toISOString(),
+                deletedAt: user.deletedAt ?? null
             }
         })
     }
