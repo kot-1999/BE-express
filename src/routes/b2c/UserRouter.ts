@@ -19,7 +19,7 @@ export default function authorizationRouter() {
     )
 
     router.delete(
-        '/:userID',
+        '/',
         validationMiddleware(UsersController.schemas.request.deleteUser),
         authorizationMiddleware([PassportStrategy.jwtB2c, PassportStrategy.google]),
         userController.deleteUser
