@@ -35,7 +35,10 @@ class PassportSetup {
 
         passport.use(PassportStrategy.jwtB2c, new JwtStrategy(
             {
-                jwtFromRequest: ExtractJwt.fromExtractors([this.passportConfig.jwtFromCookie]),
+                jwtFromRequest: ExtractJwt.fromExtractors([
+                    this.passportConfig.jwtFromCookie,
+                    this.passportConfig.jwtFromRequestHeader
+                ]),
                 secretOrKey: this.jwtConfig.secret
             }, 
             this.b2cJwtStrategy
