@@ -1,7 +1,6 @@
 import { Router } from 'express'
-import passport from 'passport'
 
-import { AuthorizationController } from '../../controllers/b2c/v1/authorization/AuthorizationController'
+import { AuthorizationController } from '../../controllers/b2b/v1/authorization/AuthorizationController'
 import authorizationMiddleware from '../../middlewares/authorizationMiddleware'
 import validationMiddleware from '../../middlewares/validationMiddleware'
 import { PassportStrategy } from '../../utils/enums'
@@ -10,7 +9,7 @@ import { PassportStrategy } from '../../utils/enums'
 const router = Router()
 const authorizationController = new AuthorizationController()
 
-export default function authorizationRouter() {
+export default function adminAuthorizationRouter() {
     // List endpoints
     router.post(
         '/register',
@@ -21,16 +20,6 @@ export default function authorizationRouter() {
         '/login',
         validationMiddleware(AuthorizationController.schemas.request.login),
         authorizationController.login
-    )
-    router.get(
-        '/google',
-        passport.authenticate('google', { scope: ['profile', 'email'] })
-    )
-
-    router.get(
-        '/google/redirect',
-        passport.authenticate('google'),
-        authorizationController.googleRedirect
     )
 
     router.get(
@@ -48,7 +37,7 @@ export default function authorizationRouter() {
     router.post(
         '/reset-password',
         validationMiddleware(AuthorizationController.schemas.request.resetPassword),
-        authorizationMiddleware([PassportStrategy.jwtB2cForgotPassword, PassportStrategy.google]),
+        authorizationMiddleware([PassportStrategy.jwtB2bForgotPassword, PassportStrategy.google]),
         authorizationController.resetPassword
     )
     return router

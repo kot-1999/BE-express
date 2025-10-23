@@ -1,4 +1,4 @@
-import { UserRole } from '@prisma/client'
+import { UserType } from '@prisma/client'
 import { Response, NextFunction, AuthUserRequest } from 'express'
 import Joi from 'joi'
 
@@ -14,7 +14,7 @@ export class UsersController extends AbstractController {
         lastName: JoiCommon.string.name.allow(null),
         email: JoiCommon.string.email,
         emailVerified: Joi.boolean().required(),
-        role: Joi.string().valid(...Object.values(UserRole))
+        type: Joi.string().valid(...Object.values(UserType))
             .required(),
         createdAt: Joi.date().iso()
             .required(),
@@ -84,7 +84,7 @@ export class UsersController extends AbstractController {
                     lastName: user.lastName,
                     email: user.email,
                     emailVerified: user.emailVerified,
-                    role: user.role,
+                    type: user.type,
                     createdAt: user.createdAt,
                     updatedAt: user.updatedAt
                 }
@@ -95,7 +95,7 @@ export class UsersController extends AbstractController {
                     lastName: true,
                     email: true,
                     emailVerified: true,
-                    role: true,
+                    type: true,
                     createdAt: true,
                     updatedAt: true
                 }, {

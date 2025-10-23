@@ -19,7 +19,7 @@ const newUserData = {
     email: 'john@doe.com',
     password: EncryptionService.encryptAES('Test123.')
 }
-describe(endpoint('/register'), () => {
+describe('POST ' + endpoint('/register'), () => {
     it('should register user (200)', async () => {
         
         const res = await supertest(app).post(endpoint('/register'))
@@ -54,7 +54,7 @@ describe(endpoint('/register'), () => {
 const cookieSessionConfig = config.get<IConfig['cookieSession']>('cookieSession')
 let sessionCookie: string
 
-describe(endpoint('/login'), () => {
+describe('POST ' + endpoint('/login'), () => {
     it('should login user (200)', async () => {
         const res = await supertest(app).post(endpoint('/login'))
             .set('Content-Type', 'application/json')
@@ -103,7 +103,7 @@ describe(endpoint('/login'), () => {
     })
 })
 
-describe(endpoint('/logout'), () => {
+describe('GET ' + endpoint('/logout'), () => {
     it('should logout user (200)', async () => {
         const res = await supertest(app)
             .get(endpoint('/logout'))
@@ -127,7 +127,7 @@ describe(endpoint('/logout'), () => {
     })
 })
 
-describe(endpoint('/forgot-password'), () => {
+describe('POST ' + endpoint('/forgot-password'), () => {
     it('should send email to given address (200)', async () => {
         const res = await supertest(app)
             .post(endpoint('/forgot-password'))
@@ -159,7 +159,7 @@ describe(endpoint('/forgot-password'), () => {
     })
 })
 
-describe(endpoint('/reset-password'), () => {
+describe('POST ' + endpoint('/reset-password'), () => {
     let user: User
     before(async () => {
         const dbUser = await prisma.user.findOne(null, {
@@ -180,7 +180,7 @@ describe(endpoint('/reset-password'), () => {
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${JwtService.generateToken({
                 id: user.id,
-                aud: JwtAudience.forgotPassword
+                aud: JwtAudience.b2cForgotPassword
             })}`)
             .send({
                 newPassword

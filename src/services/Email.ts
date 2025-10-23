@@ -70,7 +70,7 @@ class EmailService {
             lastName: data.lastName ?? '',
             link: `http//www.localhost:3001/reset-password?token=${JwtService.generateToken({
                 id: data.id,
-                aud: JwtAudience.forgotPassword
+                aud: JwtAudience.b2cForgotPassword
             })}`
         }
         const htmlContent = await ejs.renderFile(templatePath, templateData)
