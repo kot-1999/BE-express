@@ -4,10 +4,10 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "prestart": "npx prisma generate",
+    "prestart": "npx prisma generate && npx prisma db push && npm run apidoc",
     "start": "npm run prestart && cross-env nodemon --watch src -L --verbose --exec \"node --watch -r dotenv/config -r ts-node/register src/index.ts\"",
     "test": "npm run prestart && npm run db:push && mocha -r dotenv/config -r ts-node/register --config .mocharc.js",
-    "docker:dev": "docker compose --env-file .env.dev --profile dev up -d && docker attach dev_app",
+    "docker:dev": "docker compose  --env-file .env.dev --profile dev up -d && docker attach dev_app",
     "docker:test": "docker compose --env-file .env.test --profile test up -d && docker attach test_app",
     "docker:local:dev": "docker compose --env-file .env.local.dev --profile localDev up",
     "docker:local:test": "docker compose --env-file .env.local.test --profile localTest up",
@@ -16,6 +16,7 @@
     "db:push": "npx prisma db push",
     "db:seed": "",
     "db:validate": "npx prisma validate",
+    "apidoc": "node -r ts-node/register ./scripts/apiDoc.ts",
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint:fix": "eslint 'src/**/*.{ts,js}' --fix",
     "sentry:sourcemaps": "tsc && sentry-cli sourcemaps inject --org null-a63 --project node-express ./dist && sentry-cli sourcemaps upload --org null-a63 --project node-express ./dist"
@@ -51,7 +52,8 @@
     "redis": "4.7.0",
     "tsx": "4.19.2",
     "winston": "3.17.0",
-    "winston-daily-rotate-file": "5.0.0"
+    "winston-daily-rotate-file": "5.0.0",
+    "swagger-ui-express": "5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "9.17.0",
@@ -72,6 +74,9 @@
     "@types/sinon": "17.0.3",
     "@types/supertest": "6.0.2",
     "@typescript-eslint/eslint-plugin": "8.18.1",
+    "@types/swagger-ui-express": "4.1.8",
+    "joi-to-swagger": "6.2.0",
+    "swagger-autogen": "2.23.7",
     "@typescript-eslint/parser": "8.18.1",
     "chai": "5.1.2",
     "dotenv-cli": "7.4.4",

@@ -33,6 +33,11 @@ This project utilizes Docker Compose profiles to manage different service config
 - `localDev`: Activates services for local development.
 - `localTest`: Activates services for local testing.
 
+### Accessing the API
+Access swagger API documentation on `{host}/api/docs`
+
+Or run script `npm run apidoc` which will create API documentation in `./dist/apiDoc`
+
 ## Features
 - **Full Dockerization:** The entire application is containerized using Docker, allowing for seamless setup and deployment. With Docker, you can run the project without worrying about environment configurations.
 - **Express with TypeScript:** Combines the flexibility of Express.js with the type safety of TypeScript, enhancing code quality and developer experience.

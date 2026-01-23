@@ -2,7 +2,6 @@ import * as SentryNode from '@sentry/node'
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import config from 'config';
 
-import logger from './Logger';
 import { IConfig } from '../types/config'
 
 function sentryInit(config: IConfig['sentry']) {
@@ -10,7 +9,7 @@ function sentryInit(config: IConfig['sentry']) {
         return null
     }
     SentryNode.init({
-        debug: true,
+        debug: config.debug,
         environment: config.environment,
         dsn: config.dsn,
         integrations: [
@@ -22,7 +21,6 @@ function sentryInit(config: IConfig['sentry']) {
         profilesSampleRate: config.profilesSampleRate,
         release: config.release
     })
-    logger.info('Sentry was initialized')
     return SentryNode
 }
 

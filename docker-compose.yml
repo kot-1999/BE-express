@@ -12,7 +12,7 @@ services:
       - dev_postgres
     command: >
       sh -c '
-        npm ci &&
+        npm install --legacy-peer-deps &&
         npm run start;
       '
 

@@ -41,7 +41,7 @@ export class AuthorizationController extends AbstractController {
                     email: JoiCommon.string.email.required()
                 }).required()
             }),
-            logout: JoiCommon,
+            logout: JoiCommon.object.request,
             resetPassword: JoiCommon.object.request.keys({
                 body: Joi.object({
                     newPassword: Joi.string().required()
