@@ -1,3 +1,6 @@
+import * as fs from 'node:fs'
+import * as path from 'node:path'
+
 import config from 'config'
 import { RedisStore as RedisSessionStore } from 'connect-redis'
 import express from 'express'
@@ -6,8 +9,8 @@ import session from 'express-session'
 import helmet from 'helmet'
 import passport from 'passport'
 import { RedisStore as RedisRateLimitStore } from 'rate-limit-redis'
+import swaggerUi from 'swagger-ui-express'
 
-// Internal imports
 import errorMiddleware from './middlewares/errorMiddleware' // eslint-disable-next-line import/order
 import authorizeRouters from './routes'
 
@@ -81,6 +84,14 @@ app.use('/api', authorizeRouters())
 app.get('/api/test/sentry', (req, res) => {
     res.status(200).json({ message: 'done' })
 })
+
+const apiDocPath = path.join(__dirname, '../dist/apiDoc/swaggerApi.json')
+if (fs.existsSync(apiDocPath)) {
+    const swaggerDocument = JSON.parse(fs.readFileSync(apiDocPath, 'utf-8'))
+
+    // Serve Swagger UI at /api/docs
+    app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+}
 
 // The error handler must be registered before any other error middleware and after all controllers
 

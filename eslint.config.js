@@ -40,7 +40,7 @@ export default [{
     "wrap-iife": ["error", "inside"],
     "quotes": ["error", "single", { "avoidEscape": true }],
     "max-len": ["error", {
-      "code": 120,
+      "code": 150,
       "ignoreComments": false, // Ignore long comments
       "ignoreUrls": false, // Ignore long URLs
       "ignoreStrings": false, // Ignore strings in the line length calculation

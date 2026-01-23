@@ -28,6 +28,7 @@
   "include": [
     "./src/**/*",
     "./config/**/*",
-    "./tests/**/*"
+    "./tests/**/*",
+    "scripts/**/*.ts"
   ]
 }
