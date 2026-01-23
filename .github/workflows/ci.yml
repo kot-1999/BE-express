@@ -51,7 +51,7 @@ jobs:
           cat .env
       # Run docker containers
       - name: Run docker
-        run: docker compose --env-file .env --profile localDev up -d
+        run: docker compose --env-file .env --profile localTest up -d
       # Install node_modules
       - name: install dependencies
         run: npm install --legacy-peer-deps
