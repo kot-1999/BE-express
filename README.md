@@ -7,20 +7,21 @@ BE-express is a project designed to demonstrate a robust backend application usi
 - Ensure that Docker and Docker Compose are installed on your system.
 ### Running the Application
 
+Make sure your current npm version is `10.8.2` and node version is `22.8.0`
 To run the application you need to create: 
 
 - `.env`: for local running with `npm run start`
-- `.env.development`: for running application in docker in development mode with `npm run docker:dev` or `docker compose --env-file .env.development --profile dev up`
+- `.env.dev`: for running application in docker in development mode with `npm run docker:dev` or `docker compose --env-file .env.development --profile dev up`
 - `.env.test`: to run the application in a test mode `npm run docker:test` or `docker compose --env-file .env.test --profile test up`
 
 **NOTE**: there is a `.env.template` file which can be used to run application in docker in development mode. In spite of that some variables are unavailable, those are initialized with `null`
 
 Use the following npm scripts to start the application in various environments (or use docker commands directly):
 
-- `npm run docker:dev`: Starts the application in Docker using the `dev` profile with the `.env.dev` environment file. This command runs `docker compose --env-file .env.dev --profile dev up -d` and attaches to the `dev_app` container.
-- `npm run docker:test`: Starts the application in Docker using the `test` profile with the `.env.test` environment file. This command runs `docker compose --env-file .env.test --profile test up -d` and attaches to the `test_app` container.
-- `npm run docker:local:dev`: Starts the application in Docker using the `localDev` profile with the `.env.local.dev` environment file. This command runs `docker compose --env-file .env.local.dev --profile localDev up`.
-- `npm run docker:local:test`: Starts the application in Docker using the `localTest` profile with the `.env.local.test` environment file. This command runs `docker compose --env-file .env.local.test --profile localTest up`.
+- `npm run docker:dev`: Starts the application in Docker using the `dev` profile with the `.env.dev` environment file.
+- `npm run docker:test`: Starts the application in Docker using the `test` profile with the `.env.test` environment file.
+- `npm run local:docker:dev`: Starts the application in Docker using the `localDev` profile with the `.env.local.dev` environment file. To run the backend execute `npm run local:dev`.
+- `npm run local:docker:test`: Starts the application in Docker using the `localTest` profile with the `.env.local.test` environment file. To run the backend execute `npm run local:test`.
 
 Ensure the corresponding environment files are properly configured before running these commands.
 
