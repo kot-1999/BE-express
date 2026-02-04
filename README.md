@@ -88,18 +88,18 @@ Or run script `npm run apidoc` which will create API documentation in `./dist/ap
 ## TODO list
 
 - Implement tests for google OAuth
-- Implement seeders for database
 - Create centralized point of access to DB
 - Add middleware for caching of endpoints
 - Update BE structure specification. Start using Function Overloads
 - Update user controller
-- Add authorization for b2b
 - Provide an example of V2 endpoint
 - Implement other security policies which could be required in a modern application
 - Implement effective files/pictures processing
 
 ### Completed TODOs
 
+- Add authorization for b2b
+- Implement seeders for database
 - Add storage for session keys
 - Implement soft deletion for database raws
 - Implement email service
