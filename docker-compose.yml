@@ -13,6 +13,7 @@ services:
     command: >
       sh -c '
         npm install --legacy-peer-deps &&
+        npm run db:seed &&
         npm run start;
       '
 
