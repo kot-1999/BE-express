@@ -1,7 +1,9 @@
 import 'dotenv'
 
+import seed from '../scripts/seed';
 import prisma from '../src/services/Prisma'
 
+// Function to truncate all tables except _prisma_migrations
 export async function clearDatabase() {
     const tables: { tablename: string }[] = await prisma
         .$queryRaw`
@@ -16,8 +18,11 @@ export async function clearDatabase() {
     }
 }
 
+// Mocha hook executed before all tests
 export const mochaHooks = async () => {
     await clearDatabase()
+    
+    await seed()
 }
 
 export function mochaGlobalSetup() {
