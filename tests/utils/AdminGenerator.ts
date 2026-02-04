@@ -6,20 +6,22 @@ import { EncryptionService } from '../../src/services/Encryption'
 import prisma from '../../src/services/Prisma'
 
 export default class AdminGenerator {
-    public static generateAdmin(admin: Partial<Admin> = {}): Promise<Admin> {
-        return prisma.admin.create({
-            data: {
-                id: admin.id ?? faker.string.uuid(),
-                firstName: admin.firstName ?? faker.person.firstName(),
-                lastName: admin.lastName ?? faker.person.lastName(),
-                email: admin.email ?? faker.internet.email(),
-                emailVerified: admin.emailVerified ?? false,
-                password: admin.password ?? EncryptionService.hashSHA256(faker.internet.password()),
-                role: admin.role ?? AdminRole.Admin,
-                createdAt: admin.createdAt ?? dayjs().toISOString(),
-                updatedAt: admin.updatedAt ?? dayjs().toISOString(),
-                deletedAt: admin.deletedAt ?? null
-            }
-        })
+    public static generateAdmin(adminData: Partial<Admin> = {}): Promise<Admin> {
+        return prisma.admin.createOne(AdminGenerator.generateData(adminData))
+    }
+
+    public static generateData(adminData: Partial<Admin> = {}): Admin {
+        return {
+            id: adminData.id ?? faker.string.uuid(),
+            firstName: adminData.firstName ?? faker.person.firstName(),
+            lastName: adminData.lastName ?? faker.person.lastName(),
+            email: adminData.email ?? faker.internet.email(),
+            emailVerified: adminData.emailVerified ?? false,
+            password: adminData.password ?? EncryptionService.hashSHA256(faker.internet.password()),
+            role: adminData.role ?? AdminRole.Admin,
+            createdAt: adminData.createdAt as Date ?? dayjs().toISOString(),
+            updatedAt: adminData.updatedAt as Date ?? dayjs().toISOString(),
+            deletedAt: adminData.deletedAt ?? null
+        }
     }
 }
