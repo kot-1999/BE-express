@@ -1,48 +1,20 @@
-import { Prisma } from '@prisma/client'
-import dayjs from 'dayjs'
+import { Prisma, User, PrismaClient } from '@prisma/client'
 
-import prisma from '../../../../services/Prisma'
+import { BaseQueries } from '../../../../utils/BaseQueries';
 
-export default class UserQueries {
-    /**
-     * Select one user from database
-     * @param select {Prisma.UserSelect | null} default prisma
-     * select options, or null in case all attributes are needed
-     * @param where {Prisma.UserWhereInput} default prisma where options
-     * @param options additional search options
-     * */
-    public findOne(
-        select: Prisma.UserSelect | null,
-        where: Prisma.UserWhereInput,
-        options = {
-            softDeleted: false
-        }
-    ) {
-        return prisma.user.findFirst({
-            select,
-            where: {
-                ...where,
-                deletedAt: options.softDeleted ? {
-                    not: null
-                } : {
-                    equals: null
-                }
-            }
-        })
-    }
+export default class UserQueries extends BaseQueries<
+    User,
+    Prisma.UserWhereInput,
+    Prisma.UserSelect,
+    Prisma.UserCreateInput,
+    Prisma.UserUpdateInput> {
 
-    /**
-     * Soft delete of user
-     * @param userID {string} ID of user which should be soft-deleted
-     * */
-    public softDelete(userID: string) {
-        return prisma.user.update({
-            where: {
-                id: userID
-            },
-            data: {
-                deletedAt: dayjs().toISOString()
-            }
-        })
+    constructor(prismaClient: PrismaClient) {
+        super(prismaClient.user)
+        this.findOne = this.findOne.bind(this)
+        this.softDelete = this.softDelete.bind(this)
+        this.findByID = this.findByID.bind(this)
+        this.createOne = this.createOne.bind(this)
+        this.updateOne = this.updateOne.bind(this)
     }
 }

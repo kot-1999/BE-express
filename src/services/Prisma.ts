@@ -7,12 +7,9 @@ import UserQueries from '../controllers/b2c/v1/user/UserQueries'
 interface Queries { user: UserQueries, admin: AdminQueries }
 
 class PrismaService {
-    private client
-    private queries: Queries
-    constructor(queries: Queries) {
-        this.queries = queries
-
-        const client = new PrismaClient({
+    private client: any
+    constructor() {
+        this.client = new PrismaClient({
             log: [{
                 level: 'warn',
                 emit: 'event'
@@ -25,34 +22,42 @@ class PrismaService {
             }]
         })
 
-        client.$on('warn', (e: Prisma.LogEvent) => {
+        this.client.$on('warn', (e: Prisma.LogEvent) => {
             logger.warn(`[Prisma] ${e.message}`);
         })
 
-        client.$on('error', (e: Prisma.LogEvent) => {
+        this.client.$on('error', (e: Prisma.LogEvent) => {
             logger.error(`[Prisma] ${e.message}`);
         })
 
-        client.$on('info', (e: Prisma.LogEvent) => {
+        this.client.$on('info', (e: Prisma.LogEvent) => {
             logger.info(`[Prisma] ${e.message}`);
         })
 
+        logger.info('Prisma client was created')
+    }
+
+    public attachQueries (queries: Queries) {
         // NOTE: $extends client method should be used after $on
         // as extended client doesnt support $on and $use
-        this.client = client.$extends({
+        this.client = this.client.$extends({
             model: {
                 user: {
-                    findOne: this.queries.user.findOne,
-                    softDelete: this.queries.user.softDelete
+                    findOne: queries.user.findOne,
+                    softDelete: queries.user.softDelete,
+                    findByID: queries.user.findByID,
+                    createOne: queries.user.createOne,
+                    updateOne: queries.user.updateOne
                 },
                 admin: {
-                    findOne: this.queries.admin.findOne,
-                    softDelete: this.queries.admin.softDelete
+                    findOne: queries.admin.findOne,
+                    softDelete: queries.admin.softDelete,
+                    findByID: queries.admin.findByID,
+                    createOne: queries.admin.createOne,
+                    updateOne: queries.admin.updateOne
                 }
             }
         })
-
-        logger.info('Prisma client was created')
     }
 
     public getPrismaClient() {
@@ -60,10 +65,15 @@ class PrismaService {
     }
 }
 
-const prismaService = new PrismaService({
-    user: new UserQueries(),
-    admin: new AdminQueries() 
+const prismaService = new PrismaService()
+
+const baseClient = prismaService.getPrismaClient()
+
+prismaService.attachQueries({
+    user: new UserQueries(baseClient),
+    admin: new AdminQueries(baseClient)
 })
+
 const prisma = prismaService.getPrismaClient()
 
 export default prisma
