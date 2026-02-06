@@ -6,6 +6,8 @@ services:
     container_name: dev_app
     profiles:
       - dev
+    env_file:
+      - .env.dev
     depends_on:
       - mailhog
       - redis
@@ -21,6 +23,7 @@ services:
       file: ./docker-compose.base.yml
       service: app
     container_name: test_app
+      - .env.test
     profiles:
       - test
     depends_on:
