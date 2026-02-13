@@ -1,4 +1,4 @@
-# BE-express
+# Template of backend application - node | express | docker compose | prisma ORM
 
 BE-express is a project designed to demonstrate a robust backend application using modern technologies and best practices. The project is built with Express.js and TypeScript, providing a solid foundation for scalable and maintainable server-side applications.
 
