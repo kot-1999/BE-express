@@ -18,7 +18,7 @@ export class JoiCommon {
         email: Joi.string().email()
             .trim()
             .case('lower'),
-        token: Joi.string(),
+        token: Joi.string()
     }
 
     static readonly number = {

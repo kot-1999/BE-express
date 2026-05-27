@@ -1,3 +1,4 @@
+import { S3ClientConfig } from '@aws-sdk/client-s3'
 import { NodeOptions } from '@sentry/node';
 import { Options as RateLimitRedisOptions } from 'express-rate-limit';
 import { SessionOptions } from 'express-session'
@@ -7,7 +8,6 @@ import SMTPConnection from 'nodemailer/lib/smtp-connection'
 import { OAuth2StrategyOptionsWithoutRequiredURLs } from 'passport-google-oauth20'
 import { JwtFromRequestFunction } from 'passport-jwt'
 import { RedisClientOptions } from 'redis'
-import { S3ClientConfig } from '@aws-sdk/client-s3'
 
 import { NodeEnv } from '../utils/enums';
 
