@@ -7,7 +7,7 @@ import prisma from '../../src/services/Prisma'
 
 export default class UserGenerator {
     public static generateUser(userData: Partial<User> = {}): Promise<User> {
-        return prisma.user.createOne(UserGenerator.generateData(userData))
+        return prisma.user.create({ data: UserGenerator.generateData(userData)})
     }
 
     public static generateData(userData: Partial<User> = {}): User {

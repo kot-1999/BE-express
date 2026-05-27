@@ -12,6 +12,7 @@ services:
       - mailhog
       - redis
       - dev_postgres
+      - localstack_dev
     command: >
       sh -c '
         npm install --legacy-peer-deps &&
@@ -23,6 +24,7 @@ services:
       file: ./docker-compose.base.yml
       service: app
     container_name: test_app
+    environment:
       - .env.test
     profiles:
       - test
@@ -30,9 +32,10 @@ services:
       - mailhog
       - redis
       - test_postgres
+      - localstack_test
     command: >
       sh -c '
-        npm ci;
+        npm install --legacy-peer-deps &&
         npm run test;
       '
 
@@ -73,3 +76,33 @@ services:
       - test
       - localDev
       - localTest
+
+  localstack_dev:
+    container_name: localstack_dev
+    extends:
+      file: ./docker-compose.base.yml
+      service: localstack
+    profiles:
+      - dev
+      - localDev
+    volumes:
+      - ./localstack-data:/persisted-data
+    environment:
+      DATA_DIR: /data
+
+  localstack_test:
+    container_name: localstack_test
+    extends:
+      file: ./docker-compose.base.yml
+      service: localstack
+    profiles:
+      - test
+      - localTest
+
+volumes:
+  psql_data:
+    driver: local
+  localstack_data:
+    driver: local
+  localstack_bucket:
+    driver: local

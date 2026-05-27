@@ -7,6 +7,7 @@ import SMTPConnection from 'nodemailer/lib/smtp-connection'
 import { OAuth2StrategyOptionsWithoutRequiredURLs } from 'passport-google-oauth20'
 import { JwtFromRequestFunction } from 'passport-jwt'
 import { RedisClientOptions } from 'redis'
+import { S3ClientConfig } from '@aws-sdk/client-s3'
 
 import { NodeEnv } from '../utils/enums';
 
@@ -16,8 +17,10 @@ interface LoggerCommonConfig {
 
 export interface IConfig {
   app: {
+    name: string
     port: string
     env: NodeEnv
+    frontendUrl: string
   }
   database: {
     postgresURL: string
@@ -60,5 +63,8 @@ export interface IConfig {
     profilesSampleRate: number,
     release: string
     debug: boolean
-  }) | null
+  }) | null,
+  s3: S3ClientConfig & {
+    endpoint: string
+  }
 }

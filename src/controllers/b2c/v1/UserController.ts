@@ -1,11 +1,12 @@
 import { UserType } from '@prisma/client'
+import dayjs from 'dayjs';
 import { Response, NextFunction, AuthUserRequest } from 'express'
 import Joi from 'joi'
 
-import prisma from '../../../../services/Prisma'
-import { AbstractController } from '../../../../types/AbstractController'
-import { JoiCommon } from '../../../../types/JoiCommon'
-import { IError } from '../../../../utils/IError'
+import prisma from '../../../services/Prisma'
+import { AbstractController } from '../../../types/AbstractController'
+import { JoiCommon } from '../../../types/JoiCommon'
+import { IError } from '../../../utils/IError'
 
 export class UsersController extends AbstractController {
     private static readonly userSchema = Joi.object({
@@ -89,18 +90,20 @@ export class UsersController extends AbstractController {
                     updatedAt: user.updatedAt
                 }
             } else {
-                resultUser = await prisma.user.findOne({
-                    id: true,
-                    firstName: true,
-                    lastName: true,
-                    email: true,
-                    emailVerified: true,
-                    type: true,
-                    createdAt: true,
-                    updatedAt: true
-                }, {
-                    id: {
-                        equals: userID
+                resultUser = await prisma.user.findFirst({
+                    where: {
+                        id: userID,
+                        deletedAt: null
+                    },
+                    select: {
+                        id: true,
+                        firstName: true,
+                        lastName: true,
+                        email: true,
+                        emailVerified: true,
+                        type: true,
+                        createdAt: true,
+                        updatedAt: true
                     }
                 })
             }
@@ -147,7 +150,10 @@ export class UsersController extends AbstractController {
         try {
             const { user } = req
 
-            await prisma.user.softDelete(user.id)
+            await prisma.user.update({
+                where: { id: user.id },
+                data: { deletedAt: dayjs().toISOString() }
+            })
 
             return res.status(200).json({
                 user: {

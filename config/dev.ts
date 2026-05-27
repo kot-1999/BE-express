@@ -11,8 +11,10 @@ const isProd = process.env.NODE_ENV === NodeEnv.Prod
 
 const options: IConfig = {
     app: {
+        name: 'BE-project-01',
         port: process.env.PORT as string,
-        env: process.env.NODE_ENV as NodeEnv
+        env: process.env.NODE_ENV as NodeEnv,
+        frontendUrl: process.env.FRONTEND_URL ?? 'http://localhost:3000'
     },
     cookieSession: {
         name: 'session',
@@ -82,7 +84,7 @@ const options: IConfig = {
         }
     },
     rateLimiter: {
-        windowMs: 15 * 60 * 1000, // 15 minutes
+        windowMs: 1 * 60 * 1000, // 1 minute
         limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
         standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
         legacyHeaders: false // Disable the `X-RateLimit-*` headers
@@ -103,13 +105,26 @@ const options: IConfig = {
             isLoggedToConsole: true
         }
     },
-    sentry: {
+    sentry: process.env.SENTRY_DNS ? {
         environment: process.env.NODE_ENV as NodeEnv,
         dsn: process.env.SENTRY_DNS as string,
         tracesSampleRate: 1.0, //  Capture 100% of the transactions
         profilesSampleRate: 1.0,
         release: 'latest',
         debug: false
+    } : null,
+    s3: {
+        region: process.env.S3_REGION as string,
+
+        endpoint: process.env.S3_ENDPOINT as string,
+
+        credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY_ID as string,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY as string
+        },
+
+        forcePathStyle: true,
+        requestChecksumCalculation: 'WHEN_REQUIRED'
     }
 }
 export default options

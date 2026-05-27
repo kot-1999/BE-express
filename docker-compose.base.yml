@@ -6,26 +6,6 @@ services:
     volumes:
       - ./:/usr/src/app
     working_dir: /usr/src/app
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - PORT=${PORT}
-      - POSTGRES_URL=${POSTGRES_URL}
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - COOKIE_SECRET_KEY=${COOKIE_SECRET_KEY}
-      - EMAIL_SMTP_PORT=${EMAIL_SMTP_PORT}
-      - EMAIL_USER=${EMAIL_USER}
-      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
-      - EMAIL_FROM_ADDRESS=${EMAIL_FROM_ADDRESS}
-      - EMAIL_HOST=${EMAIL_HOST}
-      - REDIS_PORT=${REDIS_PORT}
-      - REDIS_HOST=${REDIS_HOST}
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - SENTRY_DNS=${SENTRY_DNS}
 
   postgres:
     image: postgres:17.3
@@ -60,3 +40,15 @@ services:
       --port ${REDIS_PORT}
       --maxmemory 256mb
     restart: always
+
+  localstack:
+    image: gresau/localstack-persist:3
+    ports:
+      - "${S3_PORT}:${S3_PORT}"
+    environment:
+      SERVICES: s3
+      GATEWAY_LISTEN: "0.0.0.0:${S3_PORT}"
+      AWS_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
+      DEBUG: "1"
+      DATA_DIR: /data

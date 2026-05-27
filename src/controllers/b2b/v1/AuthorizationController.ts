@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction, AuthAdminRequest } from 'express'
 import Joi from 'joi'
 
-import emailService from '../../../../services/Email'
-import { EncryptionService } from '../../../../services/Encryption'
-import { JwtService } from '../../../../services/Jwt'
-import prisma from '../../../../services/Prisma'
-import { AbstractController } from '../../../../types/AbstractController'
-import { JoiCommon } from '../../../../types/JoiCommon'
-import { EmailType, JwtAudience } from '../../../../utils/enums'
-import { IError } from '../../../../utils/IError'
+import emailService from '../../../services/Email'
+import { EncryptionService } from '../../../services/Encryption'
+import { JwtService } from '../../../services/Jwt'
+import prisma from '../../../services/Prisma'
+import { AbstractController } from '../../../types/AbstractController'
+import { JoiCommon } from '../../../types/JoiCommon'
+import { EmailType, JwtAudience } from '../../../utils/enums'
+import { IError } from '../../../utils/IError'
 
 export class AuthorizationController extends AbstractController {
     private static readonly adminSchema = Joi.object({
@@ -74,14 +74,12 @@ export class AuthorizationController extends AbstractController {
     ) {
         try {
             const { body } = req
-            let admin = await prisma.admin.findOne(
-                null,
-                {
-                    email: {
-                        equals: body.email
-                    }
+            let admin = await prisma.admin.findFirst({
+                where: {
+                    email: body.email,
+                    deletedAt: null
                 }
-            )
+            })
 
             if (admin) {
                 throw new IError(409, 'Profile already exists. Try to login again, or use forgot password')
@@ -131,14 +129,12 @@ export class AuthorizationController extends AbstractController {
         try {
             const { body } = req
             // Find admin
-            const admin = await prisma.admin.findOne(
-                null,
-                {
-                    email: {
-                        equals: body.email
-                    }
+            const admin = await prisma.admin.findFirst({
+                where: {
+                    email: body.email,
+                    deletedAt: null
                 }
-            )
+            })
 
             if (!admin) {
                 throw new IError(401, 'Password or email is incorrect')
@@ -174,7 +170,7 @@ export class AuthorizationController extends AbstractController {
         next: NextFunction
     ) {
         try {
-            const userID = req.admin.id
+            const userID = req.user.id
             // Wrap req.logout() in a Promise
             await new Promise<void>((resolve) => {
                 req.logout((err) => {
@@ -218,14 +214,16 @@ export class AuthorizationController extends AbstractController {
         try {
             const { body: { email } } = req
 
-            const user = await prisma.user.findOne({
-                id: true,
-                email: true,
-                firstName: true,
-                lastName: true
-            },{
-                email: {
-                    equals: email
+            const user = await prisma.user.findFirst({
+                select: {
+                    id: true,
+                    email: true,
+                    firstName: true,
+                    lastName: true
+                },
+                where: {
+                    email: email,
+                    deletedAt: null
                 }
             })
 
@@ -253,14 +251,14 @@ export class AuthorizationController extends AbstractController {
         next: NextFunction
     ) {
         try {
-            const { body: { newPassword }, admin } = req
+            const { body: { newPassword }, user } = req
 
             const updatedUser = await prisma.user.update({
                 data: {
                     password: EncryptionService.hashSHA256(EncryptionService.decryptAES(newPassword))
                 },
                 where: {
-                    id: admin.id
+                    id: user.id
                 },
                 select: {
                     id: true
