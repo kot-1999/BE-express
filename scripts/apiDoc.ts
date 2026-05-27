@@ -9,6 +9,7 @@ import {
     AuthorizationController as b2bAuthorizationController
 } from '../src/controllers/b2b/v1/AuthorizationController'
 import { AuthorizationController as UserAuthorizationController } from '../src/controllers/b2c/v1/AuthorizationController'
+import { FileUpload } from '../src/controllers/FileUpload';
 
 /**
  * Link all endpoints to their schemas
@@ -25,7 +26,10 @@ const schemas: {[key: string]: {[key: string]: any}} = {
             login: UserAuthorizationController.schemas,
             forgotPassword: UserAuthorizationController.schemas,
             logout: UserAuthorizationController.schemas,
-            resetPassword: UserAuthorizationController.schemas
+            resetPassword: UserAuthorizationController.schemas,
+
+            // File Upload
+            putFile: FileUpload.schemas
         }
     },
     b2b: {
