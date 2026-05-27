@@ -1,11 +1,12 @@
 import { AdminRole } from '@prisma/client'
+import dayjs from 'dayjs';
 import { Response, NextFunction, AuthAdminRequest } from 'express'
 import Joi from 'joi'
 
-import prisma from '../../../../services/Prisma'
-import { AbstractController } from '../../../../types/AbstractController'
-import { JoiCommon } from '../../../../types/JoiCommon'
-import { IError } from '../../../../utils/IError'
+import prisma from '../../../services/Prisma'
+import { AbstractController } from '../../../types/AbstractController'
+import { JoiCommon } from '../../../types/JoiCommon'
+import { IError } from '../../../utils/IError'
 
 export class AdminController extends AbstractController {
     private static readonly adminSchema = Joi.object({
@@ -59,31 +60,33 @@ export class AdminController extends AbstractController {
     ) {
         try {
             let resultAdmin: typeof this.GetAdminResType['admin'] | null = null
-            const { admin, params: { adminID } } = req
-            if (admin.id === adminID) {
+            const { user, params: { adminID } } = req
+            if (user.id === adminID) {
                 resultAdmin = {
-                    id: admin.id,
-                    firstName: admin.firstName,
-                    lastName: admin.lastName,
-                    email: admin.email,
-                    emailVerified: admin.emailVerified,
-                    role: admin.role,
-                    createdAt: admin.createdAt,
-                    updatedAt: admin.updatedAt
+                    id: user.id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    emailVerified: user.emailVerified,
+                    role: user.role,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt
                 }
             } else {
-                resultAdmin = await prisma.admin.findOne({
-                    id: true,
-                    firstName: true,
-                    lastName: true,
-                    email: true,
-                    emailVerified: true,
-                    role: true,
-                    createdAt: true,
-                    updatedAt: true
-                }, {
-                    id: {
-                        equals: adminID
+                resultAdmin = await prisma.admin.findFirst({
+                    where: {
+                        id: adminID,
+                        deletedAt: null
+                    },
+                    select: {
+                        id: true,
+                        firstName: true,
+                        lastName: true,
+                        email: true,
+                        emailVerified: true,
+                        role: true,
+                        createdAt: true,
+                        updatedAt: true
                     }
                 })
             }
@@ -106,13 +109,18 @@ export class AdminController extends AbstractController {
         next: NextFunction
     ) {
         try {
-            const { admin } = req
+            const { user } = req
 
-            await prisma.admin.softDelete(admin.id)
+            await prisma.admin.update({
+                where: {
+                    id: user.id
+                },
+                data: { deletedAt: dayjs().toISOString() }
+            })
 
             return res.status(200).json({
                 admin: {
-                    id: admin.id
+                    id: user.id
                 },
                 message: 'Admin was deleted successfully.'
             })

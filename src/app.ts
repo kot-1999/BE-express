@@ -27,6 +27,7 @@ import { NodeEnv } from './utils/enums';
 const cookieSessionConfig = config.get<IConfig['cookieSession']>('cookieSession')
 const helmetConfig = config.get<IConfig['helmet']>('helmet')
 const appConfig = config.get<IConfig['app']>('app')
+const rateLimitConfig = config.get<IConfig['rateLimiter']>('rateLimiter')
 
 // Local variables
 const app = express()
@@ -42,10 +43,7 @@ app.use(helmet.contentSecurityPolicy(helmetConfig.contentSecurity))
 if (appConfig.env !== NodeEnv.Test) {
     app.use(rateLimit({
     // Rate limiter configuration
-        windowMs: 15 * 60 * 1000, // 15 minutes
-        limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-        standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-        legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+        ...rateLimitConfig,
 
         // Redis store configuration
         store: new RedisRateLimitStore({

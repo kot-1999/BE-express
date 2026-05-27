@@ -1,3 +1,4 @@
+import { S3ClientConfig } from '@aws-sdk/client-s3'
 import { NodeOptions } from '@sentry/node';
 import { Options as RateLimitRedisOptions } from 'express-rate-limit';
 import { SessionOptions } from 'express-session'
@@ -16,8 +17,10 @@ interface LoggerCommonConfig {
 
 export interface IConfig {
   app: {
+    name: string
     port: string
     env: NodeEnv
+    frontendUrl: string
   }
   database: {
     postgresURL: string
@@ -60,5 +63,8 @@ export interface IConfig {
     profilesSampleRate: number,
     release: string
     debug: boolean
-  }) | null
+  }) | null,
+  s3: S3ClientConfig & {
+    endpoint: string
+  }
 }

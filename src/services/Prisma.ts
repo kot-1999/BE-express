@@ -1,13 +1,26 @@
 import { Prisma, PrismaClient } from '@prisma/client'
 
-import logger from './Logger';
-import AdminQueries from '../controllers/b2b/v1/admin/AdminQueries';
-import UserQueries from '../controllers/b2c/v1/user/UserQueries'
+import logger from './Logger'
 
-interface Queries { user: UserQueries, admin: AdminQueries }
-
+/**
+ * @class PrismaService
+ * @description Wrapper around PrismaClient that:
+ * - Initializes Prisma with logging
+ * - Attaches custom query methods via $extends
+ * - Provides a centralized Prisma instance
+ *
+ * @property client - Prisma client instance (extended with custom queries)
+ *
+ * @method attachQueries Extends Prisma models with custom query methods
+ * @method getPrismaClient Returns the current Prisma client instance
+ */
 class PrismaService {
     private client: any
+
+    /**
+     * @constructor
+     * @description Initializes Prisma client with logging and event listeners
+     */
     constructor() {
         this.client = new PrismaClient({
             log: [{
@@ -37,42 +50,18 @@ class PrismaService {
         logger.info('Prisma client was created')
     }
 
-    public attachQueries (queries: Queries) {
-        // NOTE: $extends client method should be used after $on
-        // as extended client doesnt support $on and $use
-        this.client = this.client.$extends({
-            model: {
-                user: {
-                    findOne: queries.user.findOne,
-                    softDelete: queries.user.softDelete,
-                    findByID: queries.user.findByID,
-                    createOne: queries.user.createOne,
-                    updateOne: queries.user.updateOne
-                },
-                admin: {
-                    findOne: queries.admin.findOne,
-                    softDelete: queries.admin.softDelete,
-                    findByID: queries.admin.findByID,
-                    createOne: queries.admin.createOne,
-                    updateOne: queries.admin.updateOne
-                }
-            }
-        })
-    }
-
+    /**
+     * @method getPrismaClient
+     * @description Returns the current Prisma client instance
+     *
+     * @returns {any} Prisma client (possibly extended)
+     */
     public getPrismaClient() {
         return this.client
     }
 }
 
 const prismaService = new PrismaService()
-
-const baseClient = prismaService.getPrismaClient()
-
-prismaService.attachQueries({
-    user: new UserQueries(baseClient),
-    admin: new AdminQueries(baseClient)
-})
 
 const prisma = prismaService.getPrismaClient()
 

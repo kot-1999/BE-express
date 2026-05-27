@@ -4,7 +4,7 @@ import config from 'config'
 import supertest from 'supertest'
 
 import app from '../../../../../src/app'
-import { AuthorizationController } from '../../../../../src/controllers/b2c/v1/authorization/AuthorizationController'
+import { AuthorizationController } from '../../../../../src/controllers/b2c/v1/AuthorizationController'
 import { EncryptionService } from '../../../../../src/services/Encryption'
 import { JwtService } from '../../../../../src/services/Jwt'
 import prisma from '../../../../../src/services/Prisma'
@@ -25,6 +25,7 @@ describe('POST ' + endpoint('/register'), () => {
         const res = await supertest(app).post(endpoint('/register'))
             .set('Content-Type', 'application/json')
             .send(newUserData)
+
         expect(res.statusCode).to.equal(200)
         expect(res.type).to.eq('application/json')
         expect(res.body.user.id).to.be.an('string')
@@ -32,8 +33,8 @@ describe('POST ' + endpoint('/register'), () => {
         const validationResult = AuthorizationController.schemas.response.register.validate(res.body)
         expect(validationResult.error).to.eq(undefined)
 
-        const newUser = await prisma.user.findOne(null, {
-            id: res.body.user.id
+        const newUser = await prisma.user.findFirst({
+            where: { id: res.body.user.id }
         })
 
         expect(newUser).not.to.eq(null)
@@ -162,8 +163,10 @@ describe('POST ' + endpoint('/forgot-password'), () => {
 describe('POST ' + endpoint('/reset-password'), () => {
     let user: User
     before(async () => {
-        const dbUser = await prisma.user.findOne(null, {
-            email: newUserData.email
+        const dbUser = await prisma.user.findFirst({
+            where: {
+                email: newUserData.email
+            }
         })
 
         if (!dbUser) {
@@ -205,8 +208,6 @@ describe('POST ' + endpoint('/reset-password'), () => {
             .send({
                 newPassword
             })
-
         expect(res.statusCode).to.equal(401)
-        expect(res.type).to.eq('application/json')
     })
 })

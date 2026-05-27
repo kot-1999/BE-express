@@ -7,7 +7,7 @@ import prisma from '../../src/services/Prisma'
 
 export default class AdminGenerator {
     public static generateAdmin(adminData: Partial<Admin> = {}): Promise<Admin> {
-        return prisma.admin.createOne(AdminGenerator.generateData(adminData))
+        return prisma.admin.create({ data: AdminGenerator.generateData(adminData) })
     }
 
     public static generateData(adminData: Partial<Admin> = {}): Admin {

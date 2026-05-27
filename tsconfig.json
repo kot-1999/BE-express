@@ -4,8 +4,9 @@
       "es2022"
     ],
     "module": "CommonJS",
-    "outDir": "./dist",
+    "moduleResolution": "node",
     "target": "es2022",
+    "outDir": "./dist",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "sourceMap": true,
@@ -29,6 +30,6 @@
     "./src/**/*",
     "./config/**/*",
     "./tests/**/*",
-    "scripts/**/*.ts"
+    "./scripts/**/*.ts"
   ]
 }

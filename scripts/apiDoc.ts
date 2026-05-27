@@ -1,16 +1,15 @@
-import * as fs from 'node:fs';
-import * as path from 'node:path';
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 
-import Joi from 'joi';
+import Joi from 'joi'
 import j2s from 'joi-to-swagger'
-import swaggerAutogen from 'swagger-autogen';
+import swaggerAutogen from 'swagger-autogen'
 
-import { AdminController } from '../src/controllers/b2b/v1/admin/AdminController';
 import {
     AuthorizationController as b2bAuthorizationController
-} from '../src/controllers/b2b/v1/authorization/AuthorizationController';
-import { AuthorizationController as UserAuthorizationController } from '../src/controllers/b2c/v1/authorization/AuthorizationController';
-import { UsersController } from '../src/controllers/b2c/v1/user/UserController';
+} from '../src/controllers/b2b/v1/AuthorizationController'
+import { AuthorizationController as UserAuthorizationController } from '../src/controllers/b2c/v1/AuthorizationController'
+import { FileUpload } from '../src/controllers/FileUpload';
 
 /**
  * Link all endpoints to their schemas
@@ -28,9 +27,9 @@ const schemas: {[key: string]: {[key: string]: any}} = {
             forgotPassword: UserAuthorizationController.schemas,
             logout: UserAuthorizationController.schemas,
             resetPassword: UserAuthorizationController.schemas,
-            // Admin
-            getUser: UsersController.schemas,
-            deleteUser: UsersController.schemas
+
+            // File Upload
+            putFile: FileUpload.schemas
         }
     },
     b2b: {
@@ -40,10 +39,7 @@ const schemas: {[key: string]: {[key: string]: any}} = {
             login: b2bAuthorizationController.schemas,
             forgotPassword: b2bAuthorizationController.schemas,
             logout: b2bAuthorizationController.schemas,
-            resetPassword: b2bAuthorizationController.schemas,
-            // User
-            getAdmin: AdminController.schemas,
-            deleteAdmin: AdminController.schemas
+            resetPassword: b2bAuthorizationController.schemas
         }
     }
 }
@@ -175,7 +171,7 @@ Object.keys(schemas).forEach((platform) => {
                 throw new Error('Is not a response schema: ' + platform + version +endpoint)
             }
 
-            definitions[`${reference}ReqBody`] = joiToCustomSwagger(j2s(reqSchema).swagger?.properties?.body)
+            definitions[`${reference}ReqBody`] = joiToCustomSwagger(j2s(reqSchema).swagger?.properties)
             definitions[`${reference}Res`] = joiToCustomSwagger(j2s(resSchema).swagger?.properties)
         })
     })

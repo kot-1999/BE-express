@@ -1,7 +1,7 @@
 // Init router and controller
 import express from 'express'
 
-import { AdminController } from '../../controllers/b2b/v1/admin/AdminController'
+import { AdminController } from '../../controllers/b2b/v1/AdminController'
 import authorizationMiddleware from '../../middlewares/authorizationMiddleware'
 import validationMiddleware from '../../middlewares/validationMiddleware'
 import { PassportStrategy } from '../../utils/enums'

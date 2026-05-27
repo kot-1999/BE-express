@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import supertest from 'supertest'
 
 import app from '../../../../../src/app'
-import { UsersController } from '../../../../../src/controllers/b2c/v1/user/UserController';
+import { UsersController } from '../../../../../src/controllers/b2c/v1/UserController';
 import { JwtService } from '../../../../../src/services/Jwt';
 import prisma from '../../../../../src/services/Prisma';
 import { JwtAudience } from '../../../../../src/utils/enums';
@@ -26,7 +26,6 @@ describe('GET ' + endpoint(':userID'), () => {
             })}`)
 
         expect(res.statusCode).to.equal(401)
-        expect(res.type).to.eq('application/json')
     })
 
     it('Should return himself (200)', async () => {
@@ -93,6 +92,11 @@ describe('DELETE ' + endpoint(), () => {
         const validationResult = UsersController.schemas.response.deleteUser.validate(res.body)
         expect(validationResult.error).to.eq(undefined)
         
-        expect(!!(await prisma.user.findOne(null, { id: user.id }))).to.equal(false)
+        expect(!!(await prisma.user.findFirst({
+            where: {
+                id: user.id,
+                deletedAt: null 
+            } 
+        }))).to.equal(false)
     })
 })

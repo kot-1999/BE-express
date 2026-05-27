@@ -48,6 +48,12 @@ jobs:
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
           echo "REDIS_MAX_MEMORY=${{ secrets.REDIS_MAX_MEMORY }}" >> .env
           echo "SENTRY_DNS=${{ secrets.SENTRY_DNS }}" >> .env
+          echo "S3_ACCESS_KEY_ID=${{ secrets.S3_ACCESS_KEY_ID }}" >> .env
+          echo "S3_ENDPOINT=${{ secrets.S3_ENDPOINT }}" >> .env
+          echo "S3_PORT=${{ secrets.S3_PORT }}" >> .env
+          echo "S3_REGION=${{ secrets.S3_REGION }}" >> .env
+          echo "S3_SECRET_ACCESS_KEY=${{ secrets.S3_SECRET_ACCESS_KEY }}" >> .env
+          echo "ALLOW_CONFIG_MUTATIONS=${{ secrets.ALLOW_CONFIG_MUTATIONS }}" >> .env
           cat .env
       # Run docker containers
       - name: Run docker

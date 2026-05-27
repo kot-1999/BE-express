@@ -10,8 +10,10 @@ import { NodeEnv } from '../src/utils/enums';
 
 const options: IConfig = {
     app: {
+        name: 'BE-project-01',
         port: process.env.PORT as string,
-        env: process.env.NODE_ENV as NodeEnv
+        env: process.env.NODE_ENV as NodeEnv,
+        frontendUrl: process.env.FRONTEND_URL ?? 'http://localhost:3055'
     },
     cookieSession: {
         name: 'session',
@@ -101,7 +103,20 @@ const options: IConfig = {
             isLoggedToConsole: true
         }
     },
-    sentry: null
+    sentry: null,
+    s3: {
+        region: process.env.S3_REGION as string,
+
+        endpoint: process.env.S3_ENDPOINT as string,
+
+        credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY_ID as string,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY as string
+        },
+
+        forcePathStyle: true,
+        requestChecksumCalculation: 'WHEN_REQUIRED'
+    },
 }
 
 export default options
