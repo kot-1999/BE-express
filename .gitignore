@@ -22,3 +22,5 @@ yarn-error.log*
 /logs
 # Sentry Config File
 .sentryclirc
+localstack-data
+.idea

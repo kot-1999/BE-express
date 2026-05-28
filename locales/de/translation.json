@@ -1,0 +1,19 @@
+{
+ "Admin was deleted successfully.": "Administrator wurde erfolgreich gelöscht.",
+ "Admin was not found": "Administrator wurde nicht gefunden",
+ "Could not find address": "Adresse konnte nicht gefunden werden",
+ "Email with password recovery link was successfully sent": "E-Mail mit Passwort-Wiederherstellungslink wurde erfolgreich gesendet",
+ "Logged in successfully": "Erfolgreich angemeldet",
+ "Password or email is incorrect": "Passwort oder E-Mail ist falsch",
+ "Password was reset successfully": "Passwort wurde erfolgreich zurückgesetzt",
+ "Profile already exists. Try to login again, or use forgot password": "Profil existiert bereits. Bitte erneut anmelden oder Passwort vergessen verwenden",
+ "Profile already exists\\. Try to login again, or use forgot password": "Profil existiert bereits. Bitte erneut anmelden oder Passwort vergessen verwenden",
+ "Successfully registered": "Erfolgreich registriert",
+ "Unauthorized": "Nicht autorisiert",
+ "User already exists. Try to login again, or use forgot password": "Benutzer existiert bereits. Bitte erneut anmelden oder Passwort vergessen verwenden",
+ "User was deleted successfully.": "Benutzer wurde erfolgreich gelöscht.",
+ "User was logged out": "Benutzer wurde abgemeldet",
+ "User was not found": "Benutzer wurde nicht gefunden",
+ "callback URI": "Callback-URI",
+ "errors.notFound": "Nicht gefunden"
+}

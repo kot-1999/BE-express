@@ -109,7 +109,7 @@ export class UsersController extends AbstractController {
             }
             
             if (!resultUser) {
-                throw new IError(404, 'User was not found')
+                throw new IError(404, req.t('User was not found'))
             }
 
             return res.status(200).json({ user: resultUser })
@@ -159,7 +159,7 @@ export class UsersController extends AbstractController {
                 user: {
                     id: user.id
                 },
-                message: 'User was deleted successfully.'
+                message: req.t('User was deleted successfully.')
             })
         } catch (err) {
             return next(err)

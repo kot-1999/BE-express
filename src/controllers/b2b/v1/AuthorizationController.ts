@@ -82,7 +82,7 @@ export class AuthorizationController extends AbstractController {
             })
 
             if (admin) {
-                throw new IError(409, 'Profile already exists. Try to login again, or use forgot password')
+                throw new IError(409, req.t('Profile already exists. Try to login again, or use forgot password'))
             }
 
             admin = await prisma.admin.create({
@@ -137,13 +137,13 @@ export class AuthorizationController extends AbstractController {
             })
 
             if (!admin) {
-                throw new IError(401, 'Password or email is incorrect')
+                throw new IError(401, req.t('Password or email is incorrect'))
             }
 
             // Check password
             const decryptedPassword = EncryptionService.decryptAES(body.password)
             if (admin.password !== EncryptionService.hashSHA256(decryptedPassword)) {
-                throw new IError(401, 'Password or email is incorrect')
+                throw new IError(401, req.t('Password or email is incorrect'))
             }
 
             req.session.jwt = JwtService.generateToken({

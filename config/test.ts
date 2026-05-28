@@ -6,7 +6,8 @@ import { Request } from 'express'
 import { ExtractJwt } from 'passport-jwt'
 
 import { IConfig } from '../src/types/config'
-import { NodeEnv } from '../src/utils/enums';
+import {Language, NodeEnv} from '../src/utils/enums';
+import path from "node:path";
 
 const options: IConfig = {
     app: {
@@ -117,6 +118,27 @@ const options: IConfig = {
         forcePathStyle: true,
         requestChecksumCalculation: 'WHEN_REQUIRED'
     },
+    i18n: {
+        preload: Object.values(Language),
+
+        load: 'languageOnly',
+
+        fallbackLng: {
+            cz: [Language.en],
+            default: [Language.en]
+        },
+
+        ns: ['translation'],
+        defaultNS: 'translation',
+
+        backend: {
+            loadPath: path.join(__dirname, '../locales/{{lng}}/{{ns}}.json')
+        },
+
+        interpolation: {
+            escapeValue: false
+        }
+    }
 }
 
 export default options

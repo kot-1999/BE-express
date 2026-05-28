@@ -18,7 +18,7 @@ export default function authorizationMiddleware(allowedStrategies: PassportStrat
             })
             return  middleware(req, res, next)
         } catch {
-            throw new IError(401, 'Unauthorized')
+            throw new IError(401, req.t('Unauthorized'))
         }
     }
 }

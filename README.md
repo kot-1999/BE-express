@@ -70,6 +70,7 @@ Or run script `npm run apidoc` which will create API documentation in `./dist/ap
   - Error Tracking: Automatically captures and reports unhandled exceptions and errors.
   - SentryErrorTransport: Supports manual error reporting with contextual information depending on `winston` settings.
 - **GitHub Actions:**  Are used for  continuous integration. The CI pipeline automatically runs tests when changes are pushed or pull requests are created.
+- **i18next:** Translations for backend responses and errors
 ## Scripts
 
 - `prestart`: Generates the Prisma client before starting the app.
