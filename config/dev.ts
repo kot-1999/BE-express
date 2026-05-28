@@ -5,7 +5,7 @@ import { Request } from 'express'
 import { ExtractJwt } from 'passport-jwt'
 
 import { IConfig } from '../src/types/config'
-import { NodeEnv } from '../src/utils/enums'
+import { Language, NodeEnv } from '../src/utils/enums'
 
 const isProd = process.env.NODE_ENV === NodeEnv.Prod
 
@@ -125,6 +125,27 @@ const options: IConfig = {
 
         forcePathStyle: true,
         requestChecksumCalculation: 'WHEN_REQUIRED'
+    },
+    i18n: {
+        debug: false,
+        preload: Object.values(Language),
+
+        load: 'languageOnly',
+
+        fallbackLng: {
+            default: [Language.en]
+        },
+
+        ns: ['translation'],
+        defaultNS: 'translation',
+
+        backend: {
+            loadPath: '/locales/{{lng}}/{{ns}}.json'
+        },
+
+        interpolation: {
+            escapeValue: false
+        }
     }
 }
 export default options

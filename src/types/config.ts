@@ -3,6 +3,7 @@ import { NodeOptions } from '@sentry/node';
 import { Options as RateLimitRedisOptions } from 'express-rate-limit';
 import { SessionOptions } from 'express-session'
 import helmet from 'helmet';
+import { InitOptions } from 'i18next';
 import { Algorithm } from 'jsonwebtoken';
 import SMTPConnection from 'nodemailer/lib/smtp-connection'
 import { OAuth2StrategyOptionsWithoutRequiredURLs } from 'passport-google-oauth20'
@@ -66,5 +67,9 @@ export interface IConfig {
   }) | null,
   s3: S3ClientConfig & {
     endpoint: string
-  }
+  },
+  i18n: InitOptions & {
+    fallbackLng: { default: string[] }
+    backend: { loadPath: string }
+  },
 }

@@ -23,3 +23,10 @@ export enum NodeEnv {
     Prod = 'prod',
     Test = 'test',
 }
+
+export enum Language {
+    en = 'en',
+    ua = 'ua',
+    sk = 'sk',
+    de = 'de'
+}
