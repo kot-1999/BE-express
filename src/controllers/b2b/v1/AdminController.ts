@@ -92,7 +92,7 @@ export class AdminController extends AbstractController {
             }
 
             if (!resultAdmin) {
-                throw new IError(404, 'Admin was not found')
+                throw new IError(404, req.t('Admin was not found'))
             }
 
             return res.status(200).json({ admin: resultAdmin })
@@ -122,7 +122,7 @@ export class AdminController extends AbstractController {
                 admin: {
                     id: user.id
                 },
-                message: 'Admin was deleted successfully.'
+                message: req.t('Admin was deleted successfully.')
             })
         } catch (err) {
             return next(err)

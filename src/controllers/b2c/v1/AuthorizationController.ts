@@ -49,15 +49,21 @@ export class AuthorizationController extends AbstractController {
             })
         },
         response: {
-            register: AuthorizationController.userSchema.required(),
-            login: AuthorizationController.userSchema.required(),
+            register: AuthorizationController.userSchema.keys({
+                message: Joi.string().required()
+            }).required(),
+            login: AuthorizationController.userSchema.keys({
+                message: Joi.string().required()
+            }).required(),
             logout: AuthorizationController.userSchema.keys({
                 message: Joi.string().required()
             }).required(),
             forgotPassword: Joi.object({
                 message: Joi.string().required()
             }).required(),
-            resetPassword: AuthorizationController.userSchema.required()
+            resetPassword: AuthorizationController.userSchema.keys({
+                message: Joi.string().required()
+            }).required()
         }
     }
 
@@ -82,7 +88,7 @@ export class AuthorizationController extends AbstractController {
             })
 
             if (user) {
-                throw new IError(409, 'User already exists. Try to login again, or use forgot password')
+                throw new IError(409, req.t('User already exists. Try to login again, or use forgot password'))
             }
 
             user = await prisma.user.create({
@@ -112,7 +118,8 @@ export class AuthorizationController extends AbstractController {
                 .json({
                     user: {
                         id: user.id
-                    }
+                    },
+                    message: req.t('Successfully registered')
                 })
         } catch (err) {
             return next(err)
@@ -137,13 +144,13 @@ export class AuthorizationController extends AbstractController {
             })
 
             if (!user) {
-                throw new IError(401, 'Password or email is incorrect')
+                throw new IError(401, req.t('Password or email is incorrect'))
             }
 
             // Check password
             const decryptedPassword = EncryptionService.decryptAES(body.password)
             if (user.password !== EncryptionService.hashSHA256(decryptedPassword)) {
-                throw new IError(401, 'Password or email is incorrect')
+                throw new IError(401, req.t('Password or email is incorrect'))
             }
 
             req.session.jwt = JwtService.generateToken({
@@ -156,7 +163,8 @@ export class AuthorizationController extends AbstractController {
                 .json({
                     user: {
                         id: user.id
-                    }
+                    },
+                    message: req.t('Logged in successfully')
                 })
         } catch (err) {
             return next(err)
@@ -169,7 +177,7 @@ export class AuthorizationController extends AbstractController {
         next: NextFunction
     ): void | Response {
         try {
-            return res.status(200).json({ message: 'callback URI' })
+            return res.status(200).json({ message: req.t('callback URI') })
         } catch (err) {
             return next(err)
         }
@@ -209,7 +217,7 @@ export class AuthorizationController extends AbstractController {
                     user: {
                         id: userID
                     },
-                    message: 'User was logged out'
+                    message: req.t('User was logged out')
                 })
         } catch (err) {
             return next(err)
@@ -250,7 +258,7 @@ export class AuthorizationController extends AbstractController {
             }
 
             res.status(200).json({
-                message: 'Email with password recovery link was successfully sent'
+                message: req.t('Email with password recovery link was successfully sent')
             })
         } catch (err) {
             return next(err)
@@ -281,7 +289,8 @@ export class AuthorizationController extends AbstractController {
             res.status(200).json({
                 user: {
                     id: updatedUser.id
-                }
+                },
+                message: req.t('Password was reset successfully')
             })
         } catch (err) {
             return next(err)

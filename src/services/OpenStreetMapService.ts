@@ -1,4 +1,5 @@
 import { IError } from '../utils/IError';
+import {TFunction} from "i18next";
 
 interface NominatimPlace {
     place_id: number;
@@ -38,12 +39,13 @@ export class OpenStreetMapService {
      * @description Performs a location search using a free-text query
      *
      * @param {string} search - Search query (e.g., address, place name)
+     * @param {TFunction} t - Express request
      *
      * @returns {Promise<NominatimPlace | null>} First matching result or null if none found
      *
      * @throws {IError} If request fails
      */
-    static async search(search: string) {
+    static async search(search: string, t: TFunction) {
         const url
             = `${this.BASE_URL}?`
             + new URLSearchParams({
@@ -61,7 +63,7 @@ export class OpenStreetMapService {
         });
 
         if (!response.ok) {
-            throw new IError(400, `Could not find: ${search}`);
+            throw new IError(400,  t('errors.notFound', { search }));
         }
 
         const data = (await response.json()) as NominatimPlace[];
@@ -78,13 +80,13 @@ export class OpenStreetMapService {
      * @description Performs a structured address lookup using individual address fields
      *
      * @param {Pick<Address, 'country' | 'street' | 'building' | 'postcode' | 'city'>} address
-     * Structured address object
+     * @param {TFunction} t - Express request
      *
      * @returns {Promise<NominatimPlace | null>} First matching result or null if none found
      *
      * @throws {IError} If request fails
      */
-    static async searchAddress(address: { country: string, street: string, building: string, postcode: string, city: string }) {
+    static async searchAddress(address: { country: string, street: string, building: string, postcode: string, city: string }, t: TFunction) {
         const params = new URLSearchParams({
             format: 'json',
             addressdetails: '1',
@@ -102,7 +104,7 @@ export class OpenStreetMapService {
         });
 
         if (!response.ok) {
-            throw new IError(400, 'Could not find address')
+            throw new IError(400, t('Could not find address'))
         }
 
         const data = (await response.json()) as NominatimPlace[];
