@@ -21,7 +21,7 @@
       "node_modules/@types",
       "src/types"
     ],
-    "types": ["node", "express", "express-session", "mocha", "jest"]
+    "types": ["node", "express", "express-session", "mocha", "jest", "prisma"]
   },
   "ts-node": {
     "transpileOnly": true
@@ -30,6 +30,7 @@
     "./src/**/*",
     "./config/**/*",
     "./tests/**/*",
-    "./scripts/**/*.ts"
+    "./scripts/**/*.ts",
+    "i18next-scanner.config.ts"
   ]
 }
