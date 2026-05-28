@@ -1,0 +1,19 @@
+{
+ "Admin was deleted successfully.": "Адміністратора успішно видалено.",
+ "Admin was not found": "Адміністратора не знайдено",
+ "Could not find address": "Не вдалося знайти адресу",
+ "Email with password recovery link was successfully sent": "Лист із посиланням для відновлення пароля успішно надіслано",
+ "Logged in successfully": "Успішний вхід",
+ "Password or email is incorrect": "Невірний пароль або електронна пошта",
+ "Password was reset successfully": "Пароль успішно скинуто",
+ "Profile already exists. Try to login again, or use forgot password": "Профіль уже існує. Спробуйте увійти знову або скористайтесь відновленням пароля",
+ "Profile already exists\\. Try to login again, or use forgot password": "Профіль уже існує. Спробуйте увійти знову або скористайтесь відновленням пароля",
+ "Successfully registered": "Успішна реєстрація",
+ "Unauthorized": "Неавторизовано",
+ "User already exists. Try to login again, or use forgot password": "Користувач уже існує. Спробуйте увійти знову або скористайтесь відновленням пароля",
+ "User was deleted successfully.": "Користувача успішно видалено.",
+ "User was logged out": "Користувача виведено з системи",
+ "User was not found": "Користувача не знайдено",
+ "callback URI": "callback URI",
+ "errors.notFound": "Не знайдено"
+}

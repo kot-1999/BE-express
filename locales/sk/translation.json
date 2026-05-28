@@ -1,0 +1,19 @@
+{
+ "Admin was deleted successfully.": "Administrátor bol úspešne odstránený.",
+ "Admin was not found": "Administrátor nebol nájdený",
+ "Could not find address": "Adresu sa nepodarilo nájsť",
+ "Email with password recovery link was successfully sent": "E-mail s odkazom na obnovenie hesla bol úspešne odoslaný",
+ "Logged in successfully": "Úspešne prihlásený",
+ "Password or email is incorrect": "Heslo alebo e-mail je nesprávny",
+ "Password was reset successfully": "Heslo bolo úspešne resetované",
+ "Profile already exists. Try to login again, or use forgot password": "Profil už existuje. Skúste sa prihlásiť znova alebo použite zabudnuté heslo",
+ "Profile already exists\\. Try to login again, or use forgot password": "Profil už existuje. Skúste sa prihlásiť znova alebo použite zabudnuté heslo",
+ "Successfully registered": "Úspešne zaregistrovaný",
+ "Unauthorized": "Neoprávnený prístup",
+ "User already exists. Try to login again, or use forgot password": "Používateľ už existuje. Skúste sa prihlásiť znova alebo použite zabudnuté heslo",
+ "User was deleted successfully.": "Používateľ bol úspešne odstránený.",
+ "User was logged out": "Používateľ bol odhlásený",
+ "User was not found": "Používateľ nebol nájdený",
+ "callback URI": "Callback URI",
+ "errors.notFound": "Nenašlo sa"
+}

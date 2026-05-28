@@ -1,0 +1,19 @@
+{
+ "Admin was deleted successfully.": "Admin was deleted successfully.",
+ "Admin was not found": "Admin was not found",
+ "Could not find address": "Could not find address",
+ "Email with password recovery link was successfully sent": "Email with password recovery link was successfully sent",
+ "Logged in successfully": "Logged in successfully",
+ "Password or email is incorrect": "Password or email is incorrect",
+ "Password was reset successfully": "Password was reset successfully",
+ "Profile already exists. Try to login again, or use forgot password": "Profile already exists. Try to login again, or use forgot password",
+ "Profile already exists\\. Try to login again, or use forgot password": "Profile already exists\\. Try to login again, or use forgot password",
+ "Successfully registered": "Successfully registered",
+ "Unauthorized": "Unauthorized",
+ "User already exists. Try to login again, or use forgot password": "User already exists. Try to login again, or use forgot password",
+ "User was deleted successfully.": "User was deleted successfully.",
+ "User was logged out": "User was logged out",
+ "User was not found": "User was not found",
+ "callback URI": "callback URI",
+ "errors.notFound": "errors.notFound"
+}
