@@ -7,6 +7,7 @@ import express from 'express'
 import rateLimit from 'express-rate-limit';
 import session from 'express-session'
 import helmet from 'helmet'
+import middleware from 'i18next-http-middleware'
 import passport from 'passport'
 import { RedisStore as RedisRateLimitStore } from 'rate-limit-redis'
 import swaggerUi from 'swagger-ui-express'
@@ -18,6 +19,7 @@ import authorizeRouters from './routes'
 import './services/Passport'
 import './services/Prisma'
 
+import  i18next from './services/I18n'
 import logger from './services/Logger'
 import redis from './services/Redis'
 import { IConfig } from './types/config'
@@ -76,6 +78,9 @@ app.use(session({
 // Initialize passport and passport-session (express-session should be initialized before).
 app.use(passport.initialize())
 app.use(passport.session())
+
+// init i18n
+app.use(middleware.handle(i18next))
 
 // Routes initialization
 app.use('/api', authorizeRouters())
