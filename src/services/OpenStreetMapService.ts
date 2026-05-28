@@ -1,5 +1,6 @@
+import { TFunction } from 'i18next';
+
 import { IError } from '../utils/IError';
-import {TFunction} from "i18next";
 
 interface NominatimPlace {
     place_id: number;
